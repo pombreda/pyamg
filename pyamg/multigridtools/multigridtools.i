@@ -8,6 +8,7 @@
 #define SWIG_FILE_WITH_INIT
 #include "numpy/arrayobject.h"
 
+#include "complex_ops.h"
 #include "ruge_stuben.h"
 #include "smoothed_aggregation.h"
 #include "relaxation.h"
@@ -173,6 +174,8 @@ DECLARE_INDEX_TYPE( int )
 DECLARE_DATA_TYPE( int    )
 DECLARE_DATA_TYPE( float  )
 DECLARE_DATA_TYPE( double )
+DECLARE_DATA_TYPE( npy_cfloat_wrapper  )
+DECLARE_DATA_TYPE( npy_cdouble_wrapper )
 
 
 %include "ruge_stuben.h"
@@ -210,8 +213,6 @@ INSTANTIATE_INDEX(rs_cf_splitting)
 INSTANTIATE_INDEX(rs_direct_interpolation_pass1)
 INSTANTIATE_BOTH(rs_direct_interpolation_pass2)
 
-INSTANTIATE_BOTH(fit_candidates)
-
 INSTANTIATE_BOTH(satisfy_constraints_helper)
 INSTANTIATE_BOTH(invert_BtB)
 INSTANTIATE_BOTH(min_blocks)
@@ -240,4 +241,11 @@ INSTANTIATE_INDEX(connected_components)
 
 INSTANTIATE_ALL(bellman_ford)
 INSTANTIATE_ALL(lloyd_cluster)
+
+
+%template(fit_candidates)   fit_candidates_real<int,float>;
+%template(fit_candidates)   fit_candidates_real<int,double>;
+%template(fit_candidates)   fit_candidates_complex<int,float,npy_cfloat_wrapper>;
+%template(fit_candidates)   fit_candidates_complex<int,double,npy_cdouble_wrapper>;
+/*INSTANTIATE_BOTH()*/
 

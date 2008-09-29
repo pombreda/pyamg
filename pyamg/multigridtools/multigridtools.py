@@ -103,15 +103,6 @@ def rs_direct_interpolation_pass2(*args):
     """
   return _multigridtools.rs_direct_interpolation_pass2(*args)
 
-def fit_candidates(*args):
-  """
-    fit_candidates(int n_row, int n_col, int K1, int K2, int Ap, int Ai, 
-        float Ax, float B, float R, float tol)
-    fit_candidates(int n_row, int n_col, int K1, int K2, int Ap, int Ai, 
-        double Ax, double B, double R, double tol)
-    """
-  return _multigridtools.fit_candidates(*args)
-
 def satisfy_constraints_helper(*args):
   """
     satisfy_constraints_helper(int RowsPerBlock, int ColsPerBlock, int num_blocks, 
@@ -267,4 +258,19 @@ def lloyd_cluster(*args):
         double x, int y, int z)
     """
   return _multigridtools.lloyd_cluster(*args)
+
+def fit_candidates(*args):
+  """
+    fit_candidates(int n_row, int n_col, int K1, int K2, int Ap, int Ai, 
+        float Ax, float B, float R, float tol)
+    fit_candidates(int n_row, int n_col, int K1, int K2, int Ap, int Ai, 
+        double Ax, double B, double R, double tol)
+    fit_candidates(int n_row, int n_col, int K1, int K2, int Ap, int Ai, 
+        npy_cfloat_wrapper Ax, npy_cfloat_wrapper B, 
+        npy_cfloat_wrapper R, float tol)
+    fit_candidates(int n_row, int n_col, int K1, int K2, int Ap, int Ai, 
+        npy_cdouble_wrapper Ax, npy_cdouble_wrapper B, 
+        npy_cdouble_wrapper R, double tol)
+    """
+  return _multigridtools.fit_candidates(*args)
 

@@ -177,17 +177,19 @@ I standard_aggregation(const I n_row,
 
 
 
-template <class I, class T>
-void fit_candidates(const I n_row,
-                    const I n_col,
-                    const I   K1,
-                    const I   K2,
-                    const I Ap[], 
-                    const I Ai[],
-                          T Ax[],
-                    const T  B[],
-                          T  R[],
-                    const T  tol)
+template <class I, class S, class T, class DOT, class NORM>
+void fit_candidates_common(const I n_row,
+                           const I n_col,
+                           const I   K1,
+                           const I   K2,
+                           const I Ap[], 
+                           const I Ai[],
+                                 T Ax[],
+                           const T  B[],
+                                 T  R[],
+                           const S  tol,
+                           const DOT& dot,
+                           const NORM& norm)
 {
     std::fill(R, R + (n_col*K2*K2), 0);
 
@@ -218,18 +220,18 @@ void fit_candidates(const I n_row,
         
         for(I bj = 0; bj < K2; bj++){
             //compute norm of block column
-            T norm = 0;
+            S norm_j = 0;
 
             {
                 T * Ax_col = Ax_start + bj;
                 while(Ax_col < Ax_end){
-                    norm   += (*Ax_col) * (*Ax_col);
+                    norm_j += norm(*Ax_col);
                     Ax_col += K2;
                 }
-                norm = std::sqrt(norm);
+                norm_j = std::sqrt(norm_j);
             }
             
-            const T threshold = tol * norm;
+            const S threshold_j = tol * norm_j;
     
             //orthogonalize bj against previous columns
             for(I bi = 0; bi < bj; bi++){
@@ -241,7 +243,7 @@ void fit_candidates(const I n_row,
                     T * Ax_bi = Ax_start + bi;
                     T * Ax_bj = Ax_start + bj;
                     while(Ax_bi < Ax_end){
-                        dot_prod += (*Ax_bi) * (*Ax_bj);
+                        dot_prod += dot(*Ax_bj,*Ax_bi);
                         Ax_bi    += K2;
                         Ax_bj    += K2;
                     }
@@ -263,14 +265,14 @@ void fit_candidates(const I n_row,
 
 
             //compute norm of column bj
-            norm = 0;
+            norm_j = 0;
             {
                 T * Ax_bj = Ax_start + bj;
                 while(Ax_bj < Ax_end){
-                    norm  += (*Ax_bj) * (*Ax_bj);
-                    Ax_bj += K2;
+                    norm_j += norm(*Ax_bj);
+                    Ax_bj  += K2;
                 }
-                norm = std::sqrt(norm);
+                norm_j = std::sqrt(norm_j);
             }
            
 
@@ -278,9 +280,9 @@ void fit_candidates(const I n_row,
             //euclidean norm exceeds the threshold. otherwise set 
             //column bj to 0.
             T scale;
-            if(norm > threshold){
-                scale = 1.0/norm;
-                R_start[K2 * bj + bj] = norm;
+            if(norm_j > threshold_j){
+                scale = 1.0/norm_j;
+                R_start[K2 * bj + bj] = norm_j;
             } else {
                 scale = 0;
                 R_start[K2 * bj + bj] = 0;
@@ -296,6 +298,56 @@ void fit_candidates(const I n_row,
         } // end orthogonalizing block column j
     }
 }
+
+template<class T>
+struct real_norm
+{
+    T operator()(const T& a) const { return a*a; }
+};
+
+template<class T>
+struct real_dot
+{
+    T operator()(const T& a, const T& b) const { return b*a; }
+};
+
+template<class T>
+struct complex_dot
+{
+    T operator()(const T& a, const T& b) const { return T(b.real,-b.imag) * a; }
+};
+
+template<class S, class T>
+struct complex_norm
+{
+    S operator()(const T& a) const { return a.real * a.real + a.imag * a.imag; }
+};
+
+template <class I, class T>
+void fit_candidates_real(const I n_row,
+                         const I n_col,
+                         const I   K1,
+                         const I   K2,
+                         const I Ap[], 
+                         const I Ai[],
+                               T Ax[],
+                         const T  B[],
+                               T  R[],
+                         const T  tol)
+{ fit_candidates_common(n_row, n_col, K1, K2, Ap, Ai, Ax, B, R, tol, real_dot<T>(), real_norm<T>()); }
+
+template <class I, class S, class T>
+void fit_candidates_complex(const I n_row,
+                            const I n_col,
+                            const I   K1,
+                            const I   K2,
+                            const I Ap[], 
+                            const I Ai[],
+                                  T Ax[],
+                            const T  B[],
+                                  T  R[],
+                            const S  tol)
+{ fit_candidates_common(n_row, n_col, K1, K2, Ap, Ai, Ax, B, R, tol, complex_dot<T>(), complex_norm<S,T>()); }
 
 
 /*
