@@ -6,6 +6,7 @@ from warnings import warn
 
 from numpy import empty_like, asarray, arange, ravel, ones_like, zeros
 
+from pyamg.utils import type_prep, get_diagonal
 from pyamg import multigridtools
 from scipy.sparse import isspmatrix_csr, isspmatrix_csc, isspmatrix_bsr, \
         csr_matrix, coo_matrix, bsr_matrix, SparseEfficiencyWarning
@@ -164,6 +165,9 @@ def jacobi(A, x, b, iterations=1, omega=1.0):
         return
 
     temp = empty_like(x)
+    
+    # Create uniform type, and convert possibly complex scalars to length 1 arrays
+    [omega] = type_prep(A.dtype, [omega])
 
     for iter in xrange(iterations):
         multigridtools.jacobi(A.indptr, A.indices, A.data,
@@ -330,14 +334,17 @@ def kaczmarz_jacobi(A, x, b, iterations=1, omega=1.0):
         warn('implicit conversion to CSR', SparseEfficiencyWarning)
         A = csr_matrix(A)
     
-    temp = zeros(x.shape)
-    # D for A*A.T
-    D = (A.multiply(A))*ones_like(x)
-    D_inv = 1.0 / D
-    D_inv[D == 0] = 0.0
+    temp = zeros(x.shape).astype(A.dtype)
+    
+    # Dinv for A*A.H
+    Dinv = get_diagonal(A, norm_eq=True, inv=True)
+    
+    
+    # Create uniform type, and convert possibly complex scalars to length 1 arrays
+    [omega] = type_prep(A.dtype, [omega])
     
     for i in range(iterations):
-        delta = ravel(asarray((b - A*x))*asarray(D_inv))
+        delta = (ravel(b - A*x)*ravel(Dinv)).astype(A.dtype)
         multigridtools.kaczmarz_jacobi(A.indptr, A.indices, A.data,
                                        x, b, delta, temp, row_start,
                                        row_stop, row_step, omega)  
@@ -396,9 +403,12 @@ def kaczmarz_richardson(A, x, b, iterations=1, omega=1.0):
         warn('implicit conversion to CSR', SparseEfficiencyWarning)
         A = csr_matrix(A)
     
-    temp = zeros(x.shape)
+    # Create uniform type, and convert possibly complex scalars to length 1 arrays
+    [omega] = type_prep(A.dtype, [omega])
+    
+    temp = zeros(x.shape).astype(A.dtype)
     for i in range(iterations):
-        delta = ravel(asarray((b - A*x)))
+        delta = ravel(b - A*x).astype(A.dtype)
         multigridtools.kaczmarz_jacobi(A.indptr, A.indices, A.data,
                                            x, b, delta, temp, row_start,
                                            row_stop, row_step, omega)
@@ -464,15 +474,13 @@ def kaczmarz_gauss_seidel(A, x, b, iterations=1, sweep='forward'):
         warn('implicit conversion to CSR', SparseEfficiencyWarning)
         A = csr_matrix(A)
         
-    # D for A*A.T
-    D = (A.multiply(A))*ones_like(x)
-    D_inv = 1.0 / D
-    D_inv[D == 0] = 0.0
+    # Dinv for A*A.H
+    Dinv = get_diagonal(A, norm_eq=True, inv=True)
     
     for i in range(iterations):
         multigridtools.kaczmarz_gauss_seidel(A.indptr, A.indices, A.data,
                                            x, b, row_start,
-                                           row_stop, row_step, ravel(D_inv))
+                                           row_stop, row_step, Dinv)
 
 #from pyamg.utils import dispatcher
 #dispatch = dispatcher( dict([ (fn,eval(fn)) for fn in __all__ ]) )

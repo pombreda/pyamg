@@ -65,7 +65,8 @@
     const ctype  y [ ],
     const ctype  z [ ],
     const ctype  b [ ],
-    const ctype  B [ ]    
+    const ctype  B [ ],
+    const ctype omega[ ]
 };
 %enddef
 
@@ -201,6 +202,13 @@ DECLARE_DATA_TYPE( npy_cdouble_wrapper )
 %template(f_name)   f_name<int,double>;
 %enddef
 
+%define INSTANTIATE_COMPLEX( f_name )
+%template(f_name)   f_name<int,float>;
+%template(f_name)   f_name<int,double>;
+%template(f_name)   f_name<int,npy_cfloat_wrapper>;
+%template(f_name)   f_name<int,npy_cdouble_wrapper>;
+%enddef
+
 %define INSTANTIATE_ALL( f_name )
 %template(f_name)   f_name<int,int>;
 %template(f_name)   f_name<int,float>;
@@ -222,12 +230,12 @@ INSTANTIATE_BOTH(symmetric_strength_of_connection)
 INSTANTIATE_BOTH(apply_distance_filter)
 INSTANTIATE_BOTH(ode_strength_helper)
 
-INSTANTIATE_BOTH(block_gauss_seidel)
-INSTANTIATE_BOTH(gauss_seidel)
-INSTANTIATE_BOTH(jacobi)
+INSTANTIATE_COMPLEX(block_gauss_seidel)
+INSTANTIATE_COMPLEX(gauss_seidel)
+INSTANTIATE_COMPLEX(jacobi)
 INSTANTIATE_BOTH(gauss_seidel_indexed)
-INSTANTIATE_BOTH(kaczmarz_jacobi)
-INSTANTIATE_BOTH(kaczmarz_gauss_seidel)
+INSTANTIATE_COMPLEX(kaczmarz_jacobi)
+INSTANTIATE_COMPLEX(kaczmarz_gauss_seidel)
 
 %template(maximal_independent_set_serial)     maximal_independent_set_serial<int,int>;
 %template(maximal_independent_set_parallel)   maximal_independent_set_parallel<int,int,double>;

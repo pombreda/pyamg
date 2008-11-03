@@ -1,5 +1,5 @@
 __all__ = ['approximate_spectral_radius', 'infinity_norm', 'diag_sparse',
-        'norm', 'profile_solver']
+        'norm', 'profile_solver', 'to_type', 'type_prep', 'get_diagonal']
 __all__ += ['UnAmal', 'Coord2RBM', 'BSR_Get_Row', 'BSR_Row_WriteScalar', 
         'BSR_Row_WriteVect' ]
 
@@ -7,7 +7,7 @@ import numpy
 import scipy
 from numpy import fromfile, ascontiguousarray, mat, int32, inner, dot, \
                   ravel, arange, concatenate, tile, asarray, sqrt, diff, \
-                  zeros, ones, empty, asmatrix, array
+                  zeros, ones, empty, asmatrix, array, isscalar
 from scipy import rand, real                  
 from scipy.linalg import eigvals
 from scipy.lib.blas import get_blas_funcs
@@ -264,6 +264,68 @@ def symmetric_rescaling(A,copy=True):
     else:
         return symmetric_rescaling(csr_matrix(A))
 
+
+def type_prep(upcast_type, varlist):
+    '''
+    Loop over all elements of varlist and convert them to dtype
+    The elements of varlist may be arrays, mat's, sparse matrices, or scalars (either float or int)
+    Returns upcasted varlist, with caveat that all scalars are now length 1-arrays
+    '''
+    varlist = to_type(upcast_type, varlist)
+    for i in range(len(varlist)):
+        if isscalar(varlist[i]):
+            varlist[i] = array([varlist[i]])
+    
+    return varlist
+
+
+def to_type(upcast_type, varlist):
+    '''
+    Loop over all elements of varlist and convert them to dtype
+    The elements of varlist may be arrays, mat's, sparse matrices, or scalars (either float or int)
+    Returns upcasted varlist
+    '''
+
+    #convert_type = type(array([0], upcast_type)[0])
+        
+    for i in range(len(varlist)):
+
+        # convert scalars to complex
+        if isscalar(varlist[i]):
+            varlist[i] = array([varlist[i]], upcast_type)[0]
+        else:
+            # convert sparse and dense mats to complex
+            try:
+                if varlist[i].dtype != upcast_type:
+                    varlist[i] = varlist[i].astype(upcast_type)
+            except AttributeError:
+                warn('Failed to cast in to_type')
+                pass
+
+    return varlist
+
+
+def get_diagonal(A, norm_eq=False, inv=False):
+    ''' return the diagonal of sparse matrix A
+        if norm_eq=True, return the diagonal of diag(A A.H)
+        if inv=True, return 1.0/D
+    '''
+    
+    if not isspmatrix(A):
+        warn('Implicit conversion to sparse matrix')
+        A = csr_matrix(A)
+
+    if norm_eq:
+        D = (A.multiply(A.conjugate().copy()))*ones((A.shape[0],))
+    else:
+        D = A.diagonal()
+        
+    if inv:
+        Dinv = 1.0 / D
+        Dinv[D == 0] = 0.0
+        return Dinv
+    else:
+        return D
 
 #from functools import partial, update_wrapper
 #def dispatcher(name_to_handle):

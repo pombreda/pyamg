@@ -6,10 +6,11 @@ import scipy
 import numpy
 from numpy import ones, zeros, zeros_like, array, asarray, empty, asanyarray, ravel
 from scipy.sparse import csc_matrix
+from scipy.sparse.sputils import upcast
 
 #from pyamg import relaxation
 from pyamg.relaxation import *
-from utils import symmetric_rescaling, diag_sparse, norm
+from utils import symmetric_rescaling, diag_sparse, norm, to_type
 
 __all__ = ['multilevel_solver', 'coarse_grid_solver']
 
@@ -73,7 +74,7 @@ class multilevel_solver:
         """
         TODO
         """
-
+        
         if x0 is None:
             x = zeros_like(b)
         else:
@@ -81,6 +82,12 @@ class multilevel_solver:
 
         if self.preprocess is not None:
             x,b = self.preprocess(x,b)
+
+        # Create uniform types for A, x and b
+        # Clearly, this logic doesn't handle the case of A being real and b complex
+        tp = upcast(b.dtype, x.dtype, self.levels[0].A.dtype)
+        [b, x] = to_type(tp, [b, x])
+        
 
         #TODO change use of tol (relative tolerance) to agree with other iterative solvers
         A = self.levels[0].A

@@ -1,6 +1,17 @@
 #ifndef LINALG_H
 #define LINALG_H
 
+// Overloaded complex routines for conjugate
+float conjugate(const float& x)
+    { return x; }
+double conjugate(const double& x)
+    { return x; }
+npy_cfloat_wrapper conjugate(const npy_cfloat_wrapper& x)
+    { return npy_cfloat_wrapper(x.real, -x.imag); }
+npy_cdouble_wrapper conjugate(const npy_cdouble_wrapper& x)
+    { return npy_cdouble_wrapper(x.real, -x.imag); }
+
+
 //Dense Algebra Routines
 
 /*
