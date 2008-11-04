@@ -3,7 +3,7 @@
 __docformat__ = "restructuredtext en"
 
 from numpy import array, arange, ones, zeros, sqrt, asarray, \
-        empty, empty_like, diff
+        empty, empty_like, diff, abs
 
 from scipy.sparse import csr_matrix, coo_matrix, \
         isspmatrix_csr, bsr_matrix, isspmatrix_bsr
@@ -226,6 +226,11 @@ def extend_hierarchy(levels, strength, aggregate, smooth):
         C = A
     else:
         raise ValueError('unrecognized strength of connection method: %s' % str(fn))
+
+    # In SA, strength represents "distance", so we take magnitude of complex values
+    if C.dtype == complex:
+        C.data = abs(C.data)
+
 
     ##
     # aggregation

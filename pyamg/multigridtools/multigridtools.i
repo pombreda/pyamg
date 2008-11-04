@@ -203,10 +203,10 @@ DECLARE_DATA_TYPE( npy_cdouble_wrapper )
 %enddef
 
 %define INSTANTIATE_COMPLEX( f_name )
-%template(f_name)   f_name<int,float>;
-%template(f_name)   f_name<int,double>;
-%template(f_name)   f_name<int,npy_cfloat_wrapper>;
-%template(f_name)   f_name<int,npy_cdouble_wrapper>;
+%template(f_name)   f_name<int,float,float>;
+%template(f_name)   f_name<int,double,double>;
+%template(f_name)   f_name<int,npy_cfloat_wrapper,float>;
+%template(f_name)   f_name<int,npy_cdouble_wrapper,double>;
 %enddef
 
 %define INSTANTIATE_ALL( f_name )
@@ -225,8 +225,8 @@ INSTANTIATE_BOTH(satisfy_constraints_helper)
 INSTANTIATE_BOTH(invert_BtB)
 INSTANTIATE_BOTH(min_blocks)
 
-INSTANTIATE_BOTH(classical_strength_of_connection)
-INSTANTIATE_BOTH(symmetric_strength_of_connection)
+INSTANTIATE_COMPLEX(classical_strength_of_connection)
+INSTANTIATE_COMPLEX(symmetric_strength_of_connection)
 INSTANTIATE_BOTH(apply_distance_filter)
 INSTANTIATE_BOTH(ode_strength_helper)
 

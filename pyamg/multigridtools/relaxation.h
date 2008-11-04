@@ -3,7 +3,7 @@
 
 #include "linalg.h"
 
-template<class I, class T>
+template<class I, class T, class F>
 void gauss_seidel(const I Ap[], 
                   const I Aj[], 
                   const T Ax[],
@@ -35,7 +35,7 @@ void gauss_seidel(const I Ap[],
 }
 
 
-template<class I, class T>
+template<class I, class T, class F>
 void block_gauss_seidel(const I Ap[], 
                         const I Aj[], 
                         const T Ax[],
@@ -85,7 +85,7 @@ void block_gauss_seidel(const I Ap[],
     }
 }
 
-template<class I, class T>
+template<class I, class T, class F>
 void jacobi(const I Ap[], 
             const I Aj[], 
             const T Ax[],
@@ -128,7 +128,7 @@ void jacobi(const I Ap[],
 //
 // Guass Seidel Indexed will relax a specific index field Id
 //
-template<class I, class T>
+template<class I, class T, class F>
 void gauss_seidel_indexed(const I Ap[], 
                           const I Aj[], 
                           const T Ax[],
@@ -165,7 +165,7 @@ void gauss_seidel_indexed(const I Ap[],
 //
 // weighted-Jacobi on the normal equations, i.e. Kaczmarz type iteration
 //
-template<class I, class T>
+template<class I, class T, class F>
 void kaczmarz_jacobi(const I Ap[], 
                      const I Aj[], 
                      const T Ax[],
@@ -200,7 +200,7 @@ void kaczmarz_jacobi(const I Ap[],
 //
 // Gauss Seidel on the normal equations, i.e. Kaczmarz type iteration
 //
-template<class I, class T>
+template<class I, class T, class F>
 void kaczmarz_gauss_seidel(const I Ap[], 
                      const I Aj[], 
                      const T Ax[],

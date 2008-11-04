@@ -136,6 +136,10 @@ def classical_strength_of_connection(*args):
         int Sj, float Sx)
     classical_strength_of_connection(int n_row, double theta, int Ap, int Aj, double Ax, 
         int Sp, int Sj, double Sx)
+    classical_strength_of_connection(int n_row, float theta, int Ap, int Aj, npy_cfloat_wrapper Ax, 
+        int Sp, int Sj, npy_cfloat_wrapper Sx)
+    classical_strength_of_connection(int n_row, double theta, int Ap, int Aj, npy_cdouble_wrapper Ax, 
+        int Sp, int Sj, npy_cdouble_wrapper Sx)
     """
   return _multigridtools.classical_strength_of_connection(*args)
 
@@ -145,6 +149,10 @@ def symmetric_strength_of_connection(*args):
         int Sj, float Sx)
     symmetric_strength_of_connection(int n_row, double theta, int Ap, int Aj, double Ax, 
         int Sp, int Sj, double Sx)
+    symmetric_strength_of_connection(int n_row, float theta, int Ap, int Aj, npy_cfloat_wrapper Ax, 
+        int Sp, int Sj, npy_cfloat_wrapper Sx)
+    symmetric_strength_of_connection(int n_row, double theta, int Ap, int Aj, npy_cdouble_wrapper Ax, 
+        int Sp, int Sj, npy_cdouble_wrapper Sx)
     """
   return _multigridtools.symmetric_strength_of_connection(*args)
 
@@ -212,15 +220,6 @@ def jacobi(*args):
         int row_step, npy_cdouble_wrapper omega)
     """
   return _multigridtools.jacobi(*args)
-
-def gauss_seidel_indexed(*args):
-  """
-    gauss_seidel_indexed(int Ap, int Aj, float Ax, float x, float b, int Id, 
-        int row_start, int row_stop, int row_step)
-    gauss_seidel_indexed(int Ap, int Aj, double Ax, double x, double b, int Id, 
-        int row_start, int row_stop, int row_step)
-    """
-  return _multigridtools.gauss_seidel_indexed(*args)
 
 def kaczmarz_jacobi(*args):
   """

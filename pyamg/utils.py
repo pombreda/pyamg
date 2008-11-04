@@ -314,9 +314,11 @@ def get_diagonal(A, norm_eq=False, inv=False):
     if not isspmatrix(A):
         warn('Implicit conversion to sparse matrix')
         A = csr_matrix(A)
-
+    
+    # critical to sort the indices of A
+    A.sort_indices()
     if norm_eq:
-        D = (A.multiply(A.conjugate().copy()))*ones((A.shape[0],))
+        D = (A.multiply(A.conjugate()))*ones((A.shape[0],))
     else:
         D = A.diagonal()
         

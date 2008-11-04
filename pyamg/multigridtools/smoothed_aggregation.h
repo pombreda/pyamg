@@ -11,25 +11,25 @@
 
 #include "linalg.h"
  
-template<class I, class T>
+template<class I, class T, class F>
 void symmetric_strength_of_connection(const I n_row, 
-                                      const T theta,
+                                      const F theta,
                                       const I Ap[], const I Aj[], const T Ax[],
                                             I Sp[],       I Sj[],       T Sx[])
 {
     //Sp,Sj form a CSR representation where the i-th row contains
     //the indices of all the strong connections from node i
-    std::vector<T> diags(n_row);
+    std::vector<F> diags(n_row);
 
-    //compute diagonal values
+    //compute norm of diagonal values
     for(I i = 0; i < n_row; i++){
-        T diag = 0;
+        T diag = 0.0;
         for(I jj = Ap[i]; jj < Ap[i+1]; jj++){
             if(Aj[jj] == i){
                 diag += Ax[jj]; //gracefully handle duplicates
             }
         }    
-        diags[i] = std::abs(diag);
+        diags[i] = mynorm(diag);
     }
 
     I nnz = 0;
@@ -37,7 +37,7 @@ void symmetric_strength_of_connection(const I n_row,
 
     for(I i = 0; i < n_row; i++){
 
-        T eps_Aii = theta*theta*diags[i];
+        F eps_Aii = theta*theta*diags[i];
 
         for(I jj = Ap[i]; jj < Ap[i+1]; jj++){
             const I   j = Aj[jj];
@@ -46,7 +46,7 @@ void symmetric_strength_of_connection(const I n_row,
             if(i == j){continue;}  //skip diagonal
 
             //  |A(i,j)| >= theta * sqrt(|A(i,i)|*|A(j,j)|) 
-            if(Aij*Aij >= eps_Aii * diags[j]){    
+            if(mynormsq(Aij) >= eps_Aii * diags[j]){    
                 Sj[nnz] =   j;
                 Sx[nnz] = Aij;
                 nnz++;
