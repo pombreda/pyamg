@@ -48,7 +48,30 @@ class TestAdaptiveSA(TestCase):
         #print "ASA convergence",conv_asa
         #print "SA convergence",conv_sa
         #assert( conv_asa < 1.1 * conv_sa ) 
-        
+       
+
+#class TestComplexAdaptiveSA(TestCase):
+#    def setUp(self):
+#        from numpy.random import seed
+#        seed(0)
+#
+#    def test_poisson(self):
+#        A = poisson( (100,100), format='csr' )
+#        A.data = A.data + 1e-5j*rand(A.nnz)
+#
+#        asa = adaptive_sa_solver(A, num_candidates = 1)
+#        sa  = smoothed_aggregation_solver(A, B = ones((A.shape[0],1)) )
+#
+#        b = rand(A.shape[0])
+#
+#        sol0,residuals0 = asa.solve(b, maxiter=20, tol=1e-10, return_residuals=True)
+#        sol1,residuals1 =  sa.solve(b, maxiter=20, tol=1e-10, return_residuals=True)
+#       
+#        conv_asa = (residuals0[-1]/residuals0[0])**(1.0/len(residuals0))
+#        conv_sa  = (residuals1[-1]/residuals1[0])**(1.0/len(residuals1))
+#        
+#        #assert( conv_asa < 1.1 * conv_sa )
+
 #class TestAugmentCandidates(TestCase):
 #    def setUp(self):
 #        self.cases = []
@@ -97,4 +120,6 @@ class TestAdaptiveSA(TestCase):
 #                assert_almost_equal(fine_candidates[:,:i+1],Q_result*R_result)
 #                assert_almost_equal(Q_result*(Q_result.T*fine_candidates[:,:i+1]),fine_candidates[:,:i+1])
 #
+
+
 

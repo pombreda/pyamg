@@ -124,7 +124,7 @@ def lloyd_aggregation(C, ratio=0.03, distance='unit', maxiter=10):
         raise TypeError('expected csr_matrix or csc_matrix')
 
     if distance == 'unit':
-        data = ones_like(C.data)
+        data = ones_like(C.data).astype(float)
     elif distance == 'abs':
         data = abs(C.data)
     elif distance == 'inv':

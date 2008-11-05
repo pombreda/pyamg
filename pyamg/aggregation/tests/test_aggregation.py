@@ -1,6 +1,7 @@
 from pyamg.testing import *
 
 import numpy
+import scipy.sparse
 from numpy import sqrt, ones, arange, array
 from scipy import rand
 from scipy.sparse import csr_matrix
@@ -59,6 +60,66 @@ class TestParameters(TestCase):
         solvers.append('splu')
         solvers.append('lu')
         solvers.append('cg')
+
+        for solver in solvers:
+            self.run_cases( {'coarse_solver' : solver} )
+
+class TestComplexParameters(TestCase):
+    def setUp(self):
+        self.cases = []
+        
+        # Consider "helmholtz" like problems with an imaginary shift so that the operator 
+        #   should still be SPD in a sense and SA should perform well.
+        # There are better near nullspace vectors than the default, 
+        #   but a constant should give a convergent solver, nonetheless.
+        A = poisson( (100,),  format='csr'); A = A + 1.0j*scipy.sparse.eye(A.shape[0], A.shape[1])
+        self.cases.append((A, None))
+        A = poisson( (10,10),  format='csr'); A = A + 1.0j*scipy.sparse.eye(A.shape[0], A.shape[1])
+        self.cases.append((A, None))
+
+    def run_cases(self, opts):
+        for A,B in self.cases:
+            ml = smoothed_aggregation_solver(A, B, max_coarse=5, **opts)
+
+            numpy.random.seed(0) #make tests repeatable
+
+            x = rand(A.shape[0]) + 1.0j*rand(A.shape[0])
+            b = A*rand(A.shape[0])
+
+            x_sol,residuals = ml.solve(b, x0=x, maxiter=30, tol=1e-10, return_residuals=True)
+            convergence_ratio = (residuals[-1]/residuals[0])**(1.0/len(residuals))
+            print convergence_ratio
+            assert(convergence_ratio < 0.9)
+
+
+    def test_strength_of_connection(self): 
+        for strength in ['classical', 'symmetric']:                 #,'ode']:
+            self.run_cases( {'strength' : strength} )
+    
+    def test_aggregation_method(self): 
+        for aggregate in ['standard','lloyd']:
+            self.run_cases( {'aggregate' : aggregate} )
+    
+    def test_prolongation_smoother(self): 
+        for smooth in ['jacobi','richardson','kaczmarz_jacobi']:    #, 'energy']:
+            self.run_cases( {'smooth' : smooth} )
+
+    def test_smoothers(self): 
+        smoothers = []
+        smoothers.append('gauss_seidel')
+        smoothers.append( ('gauss_seidel',{'sweep' : 'symmetric'}) )
+        smoothers.append( ('kaczmarz_gauss_seidel',{'sweep' : 'symmetric'}) )
+
+        for pre in smoothers:
+            for post in smoothers:
+                self.run_cases( {'presmoother' : pre, 'postsmoother' : post} )
+    
+    def test_coarse_solvers(self): 
+        solvers = []
+        solvers.append('splu')
+        solvers.append('lu')
+        solvers.append('cg')
+        solvers.append('pinv2')
 
         for solver in solvers:
             self.run_cases( {'coarse_solver' : solver} )

@@ -107,16 +107,17 @@ def kaczmarz_jacobi_prolongation_smoother(S, T, omega=4.0/3.0, degree=1):
     ST = S.T.asformat(D_inv_S.format)
     class matvec_mat:
     
-        def __init__(self, matvec, shape):
+        def __init__(self, matvec, shape, dtype):
             self.shape = shape
             self.matvec = matvec
             self.__mul__ = matvec
+            self.dtype = dtype
     
     def matmul(A,B,x):
         return A*(B*x)
     
     StDS_matmul = lambda x:matmul(ST, D_inv_S, x)
-    StDS = matvec_mat(StDS_matmul, S.shape)
+    StDS = matvec_mat(StDS_matmul, S.shape, S.dtype)
     omega = omega/approximate_spectral_radius(StDS)
 
     P = T

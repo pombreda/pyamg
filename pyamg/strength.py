@@ -3,7 +3,7 @@
 __docformat__ = "restructuredtext en"
 
 from numpy import ones, empty_like, diff
-
+from warnings import warn
 from scipy.sparse import csr_matrix, isspmatrix_csr, isspmatrix_bsr
 import multigridtools
 
@@ -13,13 +13,15 @@ __all__ = ['classical_strength_of_connection', 'symmetric_strength_of_connection
 
 #TODO improve docstrings
 
-def classical_strength_of_connection(A,theta):
+def classical_strength_of_connection(A,theta=0.0):
     """Return a strength of connection matrix using the classical AMG measure
 
     An off-diagonal entry A[i.j] is a strong connection iff
         -A[i,j] >= theta * max( -A[i,k] )   where k != i
     """
-    if not isspmatrix_csr(A): raise TypeError('expected csr_matrix')
+    if not isspmatrix_csr(A): 
+        warn("Efficiency Warning, Implicit conversion of A to csr")
+        A = csr_matrix(A)
 
     Sp = empty_like(A.indptr)
     Sj = empty_like(A.indices)
