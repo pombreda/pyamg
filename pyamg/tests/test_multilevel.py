@@ -30,3 +30,28 @@ class TestMultilevel(TestCase):
                 assert_almost_equal( A*x, b)
 
 
+class TestComplexMultilevel(TestCase):
+    def test_coarse_grid_solver(self):
+        cases = []
+
+        cases.append( csr_matrix(diag(arange(1,5))) )
+        cases.append( poisson( (4,),  format='csr') )
+        cases.append( poisson( (4,4), format='csr') )
+        
+        # Make cases complex
+        cases = [ G+1e-5j*G for G in cases ]
+        cases = [ 0.5*(G + G.H) for G in cases ]
+        
+        # method should be almost exact for small matrices
+        for A in cases:
+            for solver in ['splu','pinv','pinv2','lu','cholesky','cg']:
+                s = coarse_grid_solver(solver)
+
+                b = arange(A.shape[0],dtype=A.dtype)
+
+                x = s(A,b)
+                assert_almost_equal( A*x, b)
+
+                # subsequent calls use cached data
+                x = s(A,b)  
+                assert_almost_equal( A*x, b)
