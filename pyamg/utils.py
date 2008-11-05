@@ -5,9 +5,10 @@ __all__ += ['UnAmal', 'Coord2RBM', 'BSR_Get_Row', 'BSR_Row_WriteScalar',
 
 import numpy
 import scipy
+from warnings import warn
 from numpy import fromfile, ascontiguousarray, mat, int32, inner, dot, \
                   ravel, arange, concatenate, tile, asarray, sqrt, diff, \
-                  zeros, ones, empty, asmatrix, array, isscalar
+                  zeros, ones, empty, asmatrix, array, isscalar, conjugate
 from scipy import rand, real                  
 from scipy.linalg import eigvals
 from scipy.lib.blas import get_blas_funcs
@@ -19,7 +20,7 @@ from scipy.sparse.linalg import eigen, eigen_symmetric
 def norm(x):
     #currently 40x faster than scipy.linalg.norm(x)
     x = ravel(x)
-    return real(sqrt(inner(x,x)))
+    return sqrt(inner(conjugate(x),x))
 
 def axpy(x,y,a=1.0):
     fn = get_blas_funcs(['axpy'], [x,y])[0]
@@ -90,9 +91,12 @@ def approximate_spectral_radius(A,tol=0.1,maxiter=10,symmetric=None):
     numpy.random.seed(0)  #make results deterministic
 
     v0  = rand(A.shape[1],1)
+    if A.dtype == complex:
+        v0 = v0 + 1.0j*rand(A.shape[1],1)
+
     v0 /= norm(v0)
 
-    H  = zeros((maxiter+1,maxiter))
+    H  = zeros((maxiter+1,maxiter), dtype=A.dtype)
     V = [v0]
 
     for j in range(maxiter):
@@ -103,14 +107,15 @@ def approximate_spectral_radius(A,tol=0.1,maxiter=10,symmetric=None):
                 H[j-1,j] = beta
                 w -= beta * V[-2]
 
-            alpha = dot(ravel(w),ravel(V[-1]))
+            alpha = dot(conjugate(ravel(w)),ravel(V[-1]))
             H[j,j] = alpha
             w -= alpha * V[-1]  #axpy(V[-1],w,-alpha) 
             
             beta = norm(w)
             H[j+1,j] = beta
 
-            if (H[j+1,j] < 1e-10): break
+            if (H[j+1,j] < 1e-10): 
+                break
             
             w /= beta
 
@@ -120,12 +125,15 @@ def approximate_spectral_radius(A,tol=0.1,maxiter=10,symmetric=None):
         else:
             #orthogonalize against Vs
             for i,v in enumerate(V):
-                H[i,j] = dot(ravel(w),ravel(v))
-                w -= H[i,j]*v #axpy(v,w,-H[i,j])
-            H[j+1,j] = norm(w)
-            if (H[j+1,j] < 1e-10): break
+                H[i,j] = dot(conjugate(ravel(v)),ravel(w))
+                w = w - H[i,j]*v
+
+            H[j+1,j] = real(norm(w))
             
-            w /= H[j+1,j] 
+            if (H[j+1,j] < 1e-10): 
+                break
+            
+            w = w/H[j+1,j] 
             V.append(w)
    
             # if upper 2x2 block of Hessenberg matrix H is almost symmetric,
@@ -140,8 +148,9 @@ def approximate_spectral_radius(A,tol=0.1,maxiter=10,symmetric=None):
             #        beta = H[2,1]
     
     #print "Approximated spectral radius in %d iterations" % (j + 1)
-
-    return max([norm(x) for x in eigvals(H[:j+1,:j+1])])      
+     
+    e = eigvals(H[:j+1,:j+1])
+    return max(abs(e))        
 
 
 def profile_solver(ml, accel=None, **kwargs):
@@ -252,7 +261,12 @@ def symmetric_rescaling(A,copy=True):
         D = diag_sparse(A)
         mask = D == 0
 
-        D_sqrt = sqrt(abs(D))
+        if A.dtype != complex:
+            D_sqrt = sqrt(abs(D))
+        else:
+            # We can take square roots of negative numbers
+            D_sqrt = sqrt(D)
+        
         D_sqrt_inv = 1.0/D_sqrt
         D_sqrt_inv[mask] = 0
 
