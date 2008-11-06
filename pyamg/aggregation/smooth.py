@@ -3,7 +3,7 @@
 __docformat__ = "restructuredtext en"
 
 from numpy import ones
-from pyamg.utils import approximate_spectral_radius, scale_rows
+from pyamg.utils import approximate_spectral_radius, scale_rows, get_diagonal
 
 __all__ = ['jacobi_prolongation_smoother', 'richardson_prolongation_smoother', 
         'energy_prolongation_smoother', 'kaczmarz_richardson_prolongation_smoother',
@@ -97,14 +97,12 @@ def kaczmarz_jacobi_prolongation_smoother(S, T, omega=4.0/3.0, degree=1):
         Smoothed (final) prolongator
     """
 
-    # Form Dinv for S*S.T
-    D = (S.multiply(S))*ones((S.shape[0],1))
-    D_inv = 1.0 / D
-    D_inv[D == 0] = 0
+    # Form Dinv for S*S.H
+    D_inv = get_diagonal(S, norm_eq=True, inv=True)
     D_inv_S = scale_rows(S, D_inv, copy=True)
 
     # Approximate Spectral radius by defining a matvec for S.T*D_inv_S
-    ST = S.T.asformat(D_inv_S.format)
+    ST = S.conjugate().T.asformat(D_inv_S.format)
     class matvec_mat:
     
         def __init__(self, matvec, shape, dtype):
@@ -146,13 +144,24 @@ def kaczmarz_richardson_prolongation_smoother(S, T, omega=4.0/3.0, degree=1):
         Smoothed (final) prolongator 
     """
 
-    # Use the square of the spectral radius of Dinv*S as 
-    # the Jacobi weight, as opposed to explicitly forming S*S.T
-    rho = approximate_spectral_radius(S)
-    omega = omega/(rho*rho) 
+    # Approximate Spectral radius by defining a matvec for S*S.H
+    ST = S.conjugate().T.asformat(S.format)
+    class matvec_mat:
+    
+        def __init__(self, matvec, shape, dtype):
+            self.shape = shape
+            self.matvec = matvec
+            self.__mul__ = matvec
+            self.dtype = dtype
+    
+    def matmul(A,B,x):
+        return A*(B*x)
+    
+    SSt_matmul = lambda x:matmul(S, ST, x)
+    SSt = matvec_mat(SSt_matmul, S.shape, S.dtype)
+    omega = omega/approximate_spectral_radius(SSt)
 
     P = T
-    ST = S.T
     for i in range(degree):
         P = P - omega*(ST*(S*P))
 

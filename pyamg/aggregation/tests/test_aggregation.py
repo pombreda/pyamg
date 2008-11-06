@@ -101,7 +101,7 @@ class TestComplexParameters(TestCase):
             self.run_cases( {'aggregate' : aggregate} )
     
     def test_prolongation_smoother(self): 
-        for smooth in ['jacobi','richardson','kaczmarz_jacobi']:    #, 'energy']:
+        for smooth in ['jacobi','richardson','kaczmarz_jacobi', 'kaczmarz_richardson']:    #, 'energy']:
             self.run_cases( {'smooth' : smooth} )
 
     def test_smoothers(self): 
