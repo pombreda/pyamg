@@ -157,9 +157,9 @@ def kaczmarz_richardson_prolongation_smoother(S, T, omega=4.0/3.0, degree=1):
     def matmul(A,B,x):
         return A*(B*x)
     
-    SSt_matmul = lambda x:matmul(S, ST, x)
-    SSt = matvec_mat(SSt_matmul, S.shape, S.dtype)
-    omega = omega/approximate_spectral_radius(SSt)
+    StS_matmul = lambda x:matmul(ST, S, x)
+    StS = matvec_mat(StS_matmul, S.shape, S.dtype)
+    omega = omega/approximate_spectral_radius(StS)
 
     P = T
     for i in range(degree):

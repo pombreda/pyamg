@@ -42,7 +42,7 @@ class multilevel_solver:
 
         for level in levels[:-1]:
             if not hasattr(level, 'R'):
-                level.R = level.P.T
+                level.R = level.P.H
 
     def __repr__(self):
         output = 'multilevel_solver\n'

@@ -2,7 +2,7 @@
 
 __docformat__ = "restructuredtext en"
 
-from numpy import ones, empty_like, diff
+from numpy import ones, empty_like, diff, conjugate
 from warnings import warn
 from scipy.sparse import csr_matrix, isspmatrix_csr, isspmatrix_bsr
 import multigridtools
@@ -67,6 +67,7 @@ def symmetric_strength_of_connection(A, theta=0):
         R,C = A.blocksize
 
         if R != C:
+            import pdb; pdb.set_trace()
             raise ValueError('matrix must have square blocks')
 
         if theta == 0:
@@ -75,7 +76,7 @@ def symmetric_strength_of_connection(A, theta=0):
         else:
             # the strength of connection matrix is based on the 
             # Frobenius norms of the blocks
-            data = (A.data*A.data).reshape(-1,R*C).sum(axis=1) 
+            data = (conjugate(A.data)*A.data).reshape(-1,R*C).sum(axis=1) 
             A = csr_matrix((data,A.indices,A.indptr),shape=(M/R,N/C))
             return symmetric_strength_of_connection(A, theta)
     else:

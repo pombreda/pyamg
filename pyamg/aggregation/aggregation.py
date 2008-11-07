@@ -3,7 +3,7 @@
 __docformat__ = "restructuredtext en"
 
 from numpy import array, arange, ones, zeros, sqrt, asarray, \
-        empty, empty_like, diff, abs
+        empty, empty_like, diff, abs, conjugate
 
 from scipy.sparse import csr_matrix, coo_matrix, \
         isspmatrix_csr, bsr_matrix, isspmatrix_bsr
@@ -231,7 +231,6 @@ def extend_hierarchy(levels, strength, aggregate, smooth):
     if C.dtype == complex:
         C.data = abs(C.data)
 
-
     ##
     # aggregation
     fn, kwargs = unpack_arg(aggregate)
@@ -268,7 +267,7 @@ def extend_hierarchy(levels, strength, aggregate, smooth):
    
 
     
-    R = P.T.asformat(P.format)
+    R = P.H
 
     levels[-1].C     = C       # strength of connection matrix
     levels[-1].AggOp = AggOp   # aggregation operator

@@ -7,7 +7,7 @@ from scipy import rand, pi, exp, hstack
 from scipy.sparse import csr_matrix, spdiags, coo_matrix
 
 from pyamg.utils import diag_sparse
-from pyamg.gallery import poisson, linear_elasticity
+from pyamg.gallery import poisson, linear_elasticity, gauge_laplacian
 
 from pyamg.aggregation.aggregation import smoothed_aggregation_solver
 
@@ -183,88 +183,29 @@ class TestComplexSolverPerformance(TestCase):
     def setUp(self):
         self.cases = []
 
+        # Test 1
         A = poisson( (10000,),  format='csr'); A = A + 1.0j*scipy.sparse.eye(A.shape[0], A.shape[1])
-        self.cases.append(( A, None, 0.1, 0.08))
+        self.cases.append(( A, None, 0.1))
         
+        # Test 2
         A = poisson( (100,100),  format='csr'); A = A + (0.625/0.01)*1.0j*scipy.sparse.eye(A.shape[0], A.shape[1])
-        self.cases.append(( A, None, 1e-4, 0.08))
+        self.cases.append(( A, None, 1e-4))
 
+        # Test 3
         A = poisson( (100,100),  format='csr'); A = 1.0j*A;
-        self.cases.append(( A, None, 0.22, 0.08))
+        self.cases.append(( A, None, 0.22))
 
+        # Test 4
         # Use an "inherently" imaginary problem, the Gauge Laplacian in 2D from Quantum Chromodynamics,
-        #  Note that if beta = 0, we get the semidefinite Laplacian with periodic BC's
-        N = 100; beta = 0.15
-        A = poisson( (N,N),  format='coo', dtype=complex)
-        alpha_x = 1.0j*2.0*pi*beta*numpy.random.randn(N*N)
-        alpha_y = 1.0j*2.0*pi*beta*numpy.random.randn(N*N)
-        for i in range(A.nnz):
-            r = A.row[i]; c = A.col[i]
-            diff = abs(r - c)
-            index = min(r, c)
-            if r > c:
-                s = -1.0
-            else:
-                s = 1.0
-            if diff == 1:
-                # differencing in the x-direction
-                A.data[i] = -1.0*exp(s*alpha_x[index]) 
-            if diff == N:
-                # differencing in the y-direction
-                A.data[i] = -1.0*exp(s*alpha_y[index])
-
-        # Handle periodic BCs
-        alpha_x = 1.0j*2.0*pi*beta*numpy.random.randn(N*N)
-        alpha_y = 1.0j*2.0*pi*beta*numpy.random.randn(N*N)
-        new_r = []; new_c = []; new_data = []; new_diff = []
-        for i in range(0, N):
-            new_r.append(i)
-            new_c.append(i + N*N - N)
-            new_diff.append(N)
-        
-        for i in range(N*N - N, N*N):
-            new_r.append(i)
-            new_c.append(i - N*N + N)
-            new_diff.append(N)
-        
-        for i in range(0, N*N-1, N):
-            new_r.append(i)
-            new_c.append(i + N - 1)
-            new_diff.append(1)
-        
-        for i in range(N-1, N*N, N):
-            new_r.append(i)
-            new_c.append(i - N + 1)
-            new_diff.append(1)
-        
-        for i in range(len(new_r)):
-            r = new_r[i]; c = new_c[i]; diff = new_diff[i]
-            index = min(r, c)
-            if r > c:
-                s = -1.0
-            else:
-                s = 1.0
-            if diff == 1:
-                # differencing in the x-direction
-                new_data.append(-1.0*exp(s*alpha_x[index])) 
-            if diff == N:
-                # differencing in the y-direction
-                new_data.append(-1.0*exp(s*alpha_y[index]))
-        
-        # Construct Final Matrix
-        A = coo_matrix( ( hstack((A.data, array(new_data))), (hstack((A.row, array(new_r))), hstack((A.col, array(new_c))) ) ), shape=(N*N,N*N) ).tocsr()
-        #import pdb; from scipy.linalg import eigvals; from scipy import imag, real
-        #e = eigvals(A.todense()); print min(real(e)); print max(abs(imag(e)))
-        #print (A-A.conjugate().transpose()).data
-        #pdb.set_trace();
-        self.cases.append(( A, None, 0.3, 0.05))
+        A = gauge_laplacian(100, spacing=1.0, beta=0.41)
+        self.cases.append(( A, None, 0.3))
 
 
     def test_basic(self):
         """check that method converges at a reasonable rate"""
 
-        for A,B,c_factor,theta in self.cases:
-            ml = smoothed_aggregation_solver(A, B, max_coarse=10, strength=('symmetric', {'theta' : theta}))
+        for A,B,c_factor in self.cases:
+            ml = smoothed_aggregation_solver(A, B, max_coarse=10)
 
             numpy.random.seed(0) #make tests repeatable
 
@@ -275,6 +216,6 @@ class TestComplexSolverPerformance(TestCase):
 
             avg_convergence_ratio = (residuals[-1]/residuals[0])**(1.0/len(residuals))
             
-            print avg_convergence_ratio
-            #assert(avg_convergence_ratio < c_factor)
+            assert(avg_convergence_ratio < c_factor)
+
 
