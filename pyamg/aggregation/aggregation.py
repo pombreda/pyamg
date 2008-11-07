@@ -22,6 +22,7 @@ __all__ = ['smoothed_aggregation_solver']
 
 
 def smoothed_aggregation_solver(A, B=None, 
+        mat_flag='hermitian',
         strength='symmetric', 
         aggregate='standard', 
         smooth=('jacobi', {'omega': 4.0/3.0}),
@@ -37,6 +38,11 @@ def smoothed_aggregation_solver(A, B=None,
     B : {None, array_like}
         Near-nullspace candidates stored in the columns of an NxK array.
         The default value B=None is equivalent to B=ones((N,1))
+    mat_flag : {string}
+        'symmetric' refers to both real and complex symmetric
+        'hermitian' refers to both complex Hermitian and real Hermitian
+        Note that for the strictly real case, these two options are the same
+        Note that this flag does not denote definiteness of the operator
     strength : ['symmetric', 'classical', 'ode', None]
         Method used to determine the strength of connection between unknowns
         of the linear system.  Method-specific parameters may be passed in
@@ -80,8 +86,6 @@ def smoothed_aggregation_solver(A, B=None,
 
     Unused Parameters
     -----------------
-    symmetric: {boolean} : default True
-        True if A is symmetric, False otherwise
     rescale: {boolean} : default True
         If True, symmetrically rescale A by the diagonal
         i.e. A -> D * A * D,  where D is diag(A)^-0.5
@@ -109,6 +113,7 @@ def smoothed_aggregation_solver(A, B=None,
     """
 
     A = A.asfptype()
+    A.symmetry = mat_flag
 
     if not (isspmatrix_csr(A) or isspmatrix_bsr(A)):
         raise TypeError('argument A must have type csr_matrix or bsr_matrix')
@@ -265,9 +270,13 @@ def extend_hierarchy(levels, strength, aggregate, smooth):
     else:
         raise ValueError('unrecognized prolongation smoother method %s' % str(fn))
    
-
-    
-    R = P.H
+    ##
+    # Choice of R reflects A's structure
+    symmetry = A.symmetry
+    if symmetry == 'hermitian':
+        R = P.H
+    elif symmetry == 'symmetric':
+        R = P.T
 
     levels[-1].C     = C       # strength of connection matrix
     levels[-1].AggOp = AggOp   # aggregation operator
@@ -276,6 +285,7 @@ def extend_hierarchy(levels, strength, aggregate, smooth):
     levels[-1].R     = R       # restriction operator 
 
     A = R * A * P              # galerkin operator
+    A.symmetry = symmetry
     
     levels.append( multilevel_solver.level() )
     levels[-1].A = A

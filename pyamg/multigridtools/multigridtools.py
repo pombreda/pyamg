@@ -111,6 +111,14 @@ def satisfy_constraints_helper(*args):
     satisfy_constraints_helper(int RowsPerBlock, int ColsPerBlock, int num_blocks, 
         int num_block_rows, double x, double y, double z, 
         int Sp, int Sj, double Sx)
+    satisfy_constraints_helper(int RowsPerBlock, int ColsPerBlock, int num_blocks, 
+        int num_block_rows, npy_cfloat_wrapper x, npy_cfloat_wrapper y, 
+        npy_cfloat_wrapper z, int Sp, 
+        int Sj, npy_cfloat_wrapper Sx)
+    satisfy_constraints_helper(int RowsPerBlock, int ColsPerBlock, int num_blocks, 
+        int num_block_rows, npy_cdouble_wrapper x, npy_cdouble_wrapper y, 
+        npy_cdouble_wrapper z, 
+        int Sp, int Sj, npy_cdouble_wrapper Sx)
     """
   return _multigridtools.satisfy_constraints_helper(*args)
 
@@ -120,15 +128,14 @@ def invert_BtB(*args):
         int BsqCols, float x, int Sp, int Sj)
     invert_BtB(int NullDim, int Nnodes, int ColsPerBlock, double b, 
         int BsqCols, double x, int Sp, int Sj)
+    invert_BtB(int NullDim, int Nnodes, int ColsPerBlock, npy_cfloat_wrapper b, 
+        int BsqCols, npy_cfloat_wrapper x, 
+        int Sp, int Sj)
+    invert_BtB(int NullDim, int Nnodes, int ColsPerBlock, npy_cdouble_wrapper b, 
+        int BsqCols, npy_cdouble_wrapper x, 
+        int Sp, int Sj)
     """
   return _multigridtools.invert_BtB(*args)
-
-def min_blocks(*args):
-  """
-    min_blocks(int n_blocks, int blocksize, float Sx, float Tx)
-    min_blocks(int n_blocks, int blocksize, double Sx, double Tx)
-    """
-  return _multigridtools.min_blocks(*args)
 
 def classical_strength_of_connection(*args):
   """
@@ -171,6 +178,13 @@ def ode_strength_helper(*args):
         double b, int BDBCols, int NullDim)
     """
   return _multigridtools.ode_strength_helper(*args)
+
+def min_blocks(*args):
+  """
+    min_blocks(int n_blocks, int blocksize, float Sx, float Tx)
+    min_blocks(int n_blocks, int blocksize, double Sx, double Tx)
+    """
+  return _multigridtools.min_blocks(*args)
 
 def block_gauss_seidel(*args):
   """

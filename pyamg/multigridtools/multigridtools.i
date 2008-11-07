@@ -221,14 +221,14 @@ INSTANTIATE_INDEX(rs_cf_splitting)
 INSTANTIATE_INDEX(rs_direct_interpolation_pass1)
 INSTANTIATE_BOTH(rs_direct_interpolation_pass2)
 
-INSTANTIATE_BOTH(satisfy_constraints_helper)
-INSTANTIATE_BOTH(invert_BtB)
-INSTANTIATE_BOTH(min_blocks)
+INSTANTIATE_COMPLEX(satisfy_constraints_helper)
+INSTANTIATE_COMPLEX(invert_BtB)
 
 INSTANTIATE_COMPLEX(classical_strength_of_connection)
 INSTANTIATE_COMPLEX(symmetric_strength_of_connection)
 INSTANTIATE_BOTH(apply_distance_filter)
 INSTANTIATE_BOTH(ode_strength_helper)
+INSTANTIATE_BOTH(min_blocks)
 
 INSTANTIATE_COMPLEX(block_gauss_seidel)
 INSTANTIATE_COMPLEX(gauss_seidel)

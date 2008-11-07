@@ -382,7 +382,7 @@ void fit_candidates_complex(const I n_row,
  *  
  */          
 
-template<class I, class T>
+template<class I, class T, class F>
 void satisfy_constraints_helper(const I RowsPerBlock,   const I ColsPerBlock, const I num_blocks,
                                 const I num_block_rows, const T x[], const T y[], const T z[], const I Sp[], const I Sj[], T Sx[])
 {
@@ -457,7 +457,7 @@ void satisfy_constraints_helper(const I RowsPerBlock,   const I ColsPerBlock, co
  *              column indices for block row i in S
  */          
 
-template<class I, class T>
+template<class I, class T, class F>
 void invert_BtB(const I NullDim, const I Nnodes,  const I ColsPerBlock, 
                 const T b[],     const I BsqCols, T x[], 
                 const I Sp[],    const I Sj[])
@@ -467,7 +467,7 @@ void invert_BtB(const I NullDim, const I Nnodes,  const I ColsPerBlock,
     T * BtBinv = x;
     
     //Declare workspace
-    const I NullDimLoc = NullDim;
+    //const I NullDimLoc = NullDim;
     const I NullDimSq  = NullDim*NullDim;
     const I work_size  = 5*NullDim + 10;
 
@@ -491,7 +491,7 @@ void invert_BtB(const I NullDim, const I Nnodes,  const I ColsPerBlock,
         for(I k = 0; k < NullDimSq; k++)
         {   BtB[k] = 0.0; }
         
-        //Loop over row i in order to calculate B_i^T*B_i, where B_i is B 
+        //Loop over row i in order to calculate B_i^H*B_i, where B_i is B 
         // with the rows restricted only to the nonzero column indices of row i of S
         for(I j = rowstart; j < rowend; j++)
         {
@@ -530,13 +530,20 @@ void invert_BtB(const I NullDim, const I Nnodes,  const I ColsPerBlock,
         } // end j loop
 
         // pseudo_inverse(BtB) ==> blockinverse
-        // since BtB is symmetric theres no need to convert to row major
-        T * blockinverse = BtBinv + i*NullDimSq; //pseudoinverse output
+        // since BtB is symmetric there's no need to convert to row major
+        // pseudoinverse output begins at the ptr location BtBinv offset by i*NullDimSq
+        T * blockinverse = BtBinv + i*NullDimSq; 
+        
+        /*  svd_solve doesn't work for imaginary 
+         *  Should uncomment the NullDimLoc declaration above
+         *   for(I k = 0; k < NullDimSq; k++)
+         *   {   blockinverse[k] = identity[k]; }
+         *   svd_solve(BtB, (int) NullDimLoc, (int) NullDimLoc, blockinverse, (int) NullDimLoc, sing_vals, work, (int) work_size);
+         */
+        // for now, just copy BtB into BtBinv and invert in python
         for(I k = 0; k < NullDimSq; k++)
-        {   blockinverse[k] = identity[k]; }
-        svd_solve(BtB, (int) NullDimLoc, (int) NullDimLoc, blockinverse, (int) NullDimLoc, sing_vals, work, (int) work_size);
-          
-
+        {   blockinverse[k] = BtB[k]; }
+    
     } // end i loop
 
     delete[] BtB; 
