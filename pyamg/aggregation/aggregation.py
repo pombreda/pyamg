@@ -113,6 +113,9 @@ def smoothed_aggregation_solver(A, B=None,
     """
 
     A = A.asfptype()
+    
+    if (mat_flag != 'symmetric') or (mat_flag != 'hermitian'):
+        raise ValueError('expected symmetric or hermitian mat_flag')
     A.symmetry = mat_flag
 
     if not (isspmatrix_csr(A) or isspmatrix_bsr(A)):

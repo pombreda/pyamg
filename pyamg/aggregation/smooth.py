@@ -170,7 +170,7 @@ def kaczmarz_richardson_prolongation_smoother(S, T, omega=4.0/3.0, degree=1):
 
 """ sa_energy_min + helper functions minimize the energy of a tentative prolongator for use in SA """
 
-from numpy import ones, zeros, asarray, dot, array_split, diff, ravel, asarray, ones_like, conjugate
+from numpy import ones, zeros, asarray, dot, array_split, diff, ravel, asarray, ones_like, conjugate, mat
 from scipy.sparse import csr_matrix, isspmatrix_csr, bsr_matrix, isspmatrix_bsr
 from scipy.linalg import pinv2
 from pyamg.utils import UnAmal
@@ -200,15 +200,13 @@ def Satisfy_Constraints(U, B, BtBinv):
     num_blocks = U.indices.shape[0]
     num_block_rows = U.shape[0]/RowsPerBlock
 
-    UB = U*B
+    UB = ravel(U*B)
 
-    B  = ravel(asarray(B).reshape(-1,ColsPerBlock,B.shape[1]))
-    UB = ravel(asarray(UB).reshape(-1,RowsPerBlock,UB.shape[1]))
-     
-    #Apply constraints
+    # Apply constraints, noting that we need the conjugate of B 
+    # for use as Bi.H in local projection
     pyamg.multigridtools.satisfy_constraints_helper(RowsPerBlock, ColsPerBlock, 
             num_blocks, num_block_rows, 
-            B, UB, ravel(BtBinv), 
+            conjugate(ravel(B)), UB, ravel(BtBinv), 
             U.indptr, U.indices, ravel(U.data))
         
     return U

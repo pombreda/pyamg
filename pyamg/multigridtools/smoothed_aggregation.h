@@ -357,23 +357,26 @@ void fit_candidates_complex(const I n_row,
  *
  *   # U is a BSR matrix, B is num_block_rows x ColsPerBlock x ColsPerBlock
  *   # UB is num_block_rows x RowsPerBlock x ColsPerBlock,  BtBinv is num_block_rows x ColsPerBlock x ColsPerBlock
+ *   B  = ravel(asarray(B).reshape(-1,ColsPerBlock,B.shape[1]))
+ *   UB = ravel(asarray(UB).reshape(-1,RowsPerBlock,UB.shape[1]))
  *
  *   rows = csr_matrix((U.indices,U.indices,U.indptr), shape=(U.shape[0]/RowsPerBlock,U.shape[1]/ColsPerBlock)).tocoo(copy=False).row
  *   for n,j in enumerate(U.indices):
  *      i = rows[n]
  *      Bi  = B[j]
  *      UBi = UB[i]
- *      U.data[n] -= dot(UBi,dot(BtBinv[i],Bi.T))
+ *      U.data[n] -= dot(UBi,dot(BtBinv[i],Bi.H))
  *
  * Parameters:
  *  RowsPerBlock     rows per block in the BSR matrix, S
  *  ColsPerBlock     cols per block in the BSR matrix, S
  *  num_blocks       number of stored blocks in Sx
  *  num_block_rows   S.shape[0]/RowsPerBlock
- *  x                Near-nullspace vectors, B
- *  y                S*B
- *  z                BtBinv
+ *  x                Conjugate of near-nullspace vectors, B, in row major
+ *  y                S*B, in row major
+ *  z                BtBinv, in row major
  *  Sp,Sj,Sx         BSR matrix, S, that is the update to the prolongator
+ *                   Note that data array Sx is in row major
  *  
  * Returns:
  *  Sx is modified such that S*B = 0
@@ -387,7 +390,7 @@ void satisfy_constraints_helper(const I RowsPerBlock,   const I ColsPerBlock, co
                                 const I num_block_rows, const T x[], const T y[], const T z[], const I Sp[], const I Sj[], T Sx[])
 {
     //Rename to something more familiar
-    const T * B = x;
+    const T * Bt = x;
     const T * UB = y;
     const T * BtBinv = z;
     
@@ -409,10 +412,12 @@ void satisfy_constraints_helper(const I RowsPerBlock,   const I ColsPerBlock, co
 
         for(I j = rowstart; j < rowend; j++)
         {
-            //Calculate C = BtBinv[i*blocksize => (i+1)*blocksize]  *  B[ Sj[j]*blocksize => (Sj[j]+1)*blocksize ]^T
-            gemm(&(BtBinv[i*ColsPerBlockSq]), ColsPerBlock, ColsPerBlock, 'F', &(B[Sj[j]*ColsPerBlockSq]), ColsPerBlock, ColsPerBlock, 'F', &(C[0]), ColsPerBlock, ColsPerBlock, 'T');
+            // Calculate C = BtBinv[i*blocksize => (i+1)*blocksize]  *  B[ Sj[j]*blocksize => (Sj[j]+1)*blocksize ]^H
+            // Implicit transpose of conjugate(B_i) is done through gemm assuming Bt is in column major
+            gemm(&(BtBinv[i*ColsPerBlockSq]), ColsPerBlock, ColsPerBlock, 'F', &(Bt[Sj[j]*ColsPerBlockSq]), ColsPerBlock, ColsPerBlock, 'F', &(C[0]), ColsPerBlock, ColsPerBlock, 'T');
             
             //Calculate Sx[ j*block_size => (j+1)*blocksize ] =  UB[ i*block_size => (i+1)*blocksize ] * C
+            // Note that C actually stores C^T in row major, or C in col major.  gemm assumes C is in col major, so we're OK
             gemm(&(UB[i*block_size]), RowsPerBlock, ColsPerBlock, 'F', &(C[0]), ColsPerBlock, ColsPerBlock, 'F', &(Update[0]), RowsPerBlock, ColsPerBlock, 'F');
             
             //Update Sx
@@ -441,19 +446,19 @@ void satisfy_constraints_helper(const I RowsPerBlock,   const I ColsPerBlock, co
  *   b            In row-major form, this is B-squared, i.e. it 
  *                is each column of B multiplied against each 
  *                other column of B.  For a Nx3 B,
- *                b[:,0] = B[:,0]*B[:,0]
- *                b[:,1] = B[:,0]*B[:,1]
- *                b[:,2] = B[:,0]*B[:,2]
- *                b[:,3] = B[:,1]*B[:,1]
- *                b[:,4] = B[:,1]*B[:,2]
- *                b[:,5] = B[:,2]*B[:,2]
+ *                b[:,0] = conjugate(B[:,0])*B[:,0]
+ *                b[:,1] = conjugate(B[:,0])*B[:,1]
+ *                b[:,2] = conjugate(B[:,0])*B[:,2]
+ *                b[:,3] = conjugate(B[:,1])*B[:,1]
+ *                b[:,4] = conjugate(B[:,1])*B[:,2]
+ *                b[:,5] = conjugate(B[:,2])*B[:,2]
  *   BsqCols      sum(range(NullDim+1)), i.e. number of columns in b
  *   x            BtBinv (output).  Should be zeros upon entry
  *   Sp,Sj        BSR indptr and indices members for matrix, S
  *
  * Returns:
- *  BtBinv      BtBinv[i] = pseudo_invers(B_i^T*B_i), where
- *              B_i is B[colindices,:], colindices = all the nonzero
+ *  BtBinv      BtBinv[i] = pseudo_invers(B_i^T*B_i), in row major format
+ *              where B_i is B[colindices,:], colindices = all the nonzero
  *              column indices for block row i in S
  */          
 
@@ -505,23 +510,24 @@ void invert_BtB(const I NullDim, const I Nnodes,  const I ColsPerBlock,
             {          
                 // Do work in computing Diagonal of  BtB  
                 I BtBcounter = 0; 
-                I BsqCounter = k*BsqCols;
+                I BsqCounter = k*BsqCols;                   // Row-major index
                 for(I m = 0; m < NullDim; m++)
                 {
                     BtB[BtBcounter] += Bsq[BsqCounter];
                     BtBcounter += NullDim + 1;
                     BsqCounter += (NullDim - m);
                 }
-                // Do work in computing offdiagonals of BtB, noting that BtB is symmetric
+                // Do work in computing offdiagonals of BtB, noting that BtB is Hermitian and that
+                // svd_solve needs BtB in column-major form, because svd_solve is Fortran
                 BsqCounter = k*BsqCols;
-                for(I m = 0; m < NullDim; m++)
+                for(I m = 0; m < NullDim; m++)  // Loop over cols
                 {
                     I counter = 1;
-                    for(I n = m+1; n < NullDim; n++)
+                    for(I n = m+1; n < NullDim; n++) // Loop over Rows
                     {
                         T elmt_bsq = Bsq[BsqCounter + counter];
-                        BtB[m*NullDim + n] += elmt_bsq;
-                        BtB[n*NullDim + m] += elmt_bsq;
+                        BtB[m*NullDim + n] += conjugate(elmt_bsq);      // entry(n, m)
+                        BtB[n*NullDim + m] += elmt_bsq;                 // entry(m, n)
                         counter ++;
                     }
                     BsqCounter += (NullDim - m);
@@ -529,9 +535,7 @@ void invert_BtB(const I NullDim, const I Nnodes,  const I ColsPerBlock,
             } // end k loop
         } // end j loop
 
-        // pseudo_inverse(BtB) ==> blockinverse
-        // since BtB is symmetric there's no need to convert to row major
-        // pseudoinverse output begins at the ptr location BtBinv offset by i*NullDimSq
+        // pseudo_inverse(BtB), output begins at the ptr location BtBinv offset by i*NullDimSq
         T * blockinverse = BtBinv + i*NullDimSq; 
         
         /*  svd_solve doesn't work for imaginary 
@@ -540,9 +544,13 @@ void invert_BtB(const I NullDim, const I Nnodes,  const I ColsPerBlock,
          *   {   blockinverse[k] = identity[k]; }
          *   svd_solve(BtB, (int) NullDimLoc, (int) NullDimLoc, blockinverse, (int) NullDimLoc, sing_vals, work, (int) work_size);
          */
-        // for now, just copy BtB into BtBinv and invert in python
+
+        // For now, copy BtB into BtBinv and do pseudo-inverse in python.
+        // Be careful to move the data from column major in BtB to row major in blockinverse.
+        // Later when svd_solve is working, will need to convert from column to row major in blockinverse
+        // Both of the conversions form row to col major only involve taking the conjugate, as BtB is Hermitian  
         for(I k = 0; k < NullDimSq; k++)
-        {   blockinverse[k] = BtB[k]; }
+        {   blockinverse[k] = conjugate(BtB[k]); }
     
     } // end i loop
 
