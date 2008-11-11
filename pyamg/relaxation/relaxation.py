@@ -337,7 +337,7 @@ def kaczmarz_jacobi(A, x, b, iterations=1, omega=1.0):
     temp = zeros(x.shape).astype(A.dtype)
     
     # Dinv for A*A.H
-    Dinv = get_diagonal(A, norm_eq=True, inv=True)
+    Dinv = get_diagonal(A, norm_eq=2, inv=True)
     
     
     # Create uniform type, and convert possibly complex scalars to length 1 arrays
@@ -475,7 +475,7 @@ def kaczmarz_gauss_seidel(A, x, b, iterations=1, sweep='forward'):
         A = csr_matrix(A)
         
     # Dinv for A*A.H
-    Dinv = get_diagonal(A, norm_eq=True, inv=True)
+    Dinv = get_diagonal(A, norm_eq=2, inv=True)
     
     for i in range(iterations):
         multigridtools.kaczmarz_gauss_seidel(A.indptr, A.indices, A.data,

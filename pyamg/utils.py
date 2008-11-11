@@ -321,7 +321,9 @@ def to_type(upcast_type, varlist):
 
 def get_diagonal(A, norm_eq=False, inv=False):
     ''' return the diagonal of sparse matrix A
-        if norm_eq=True, return the diagonal of diag(A A.H)
+        if norm_eq=0, return diag(A)
+                  =1, return diag(A.H A)
+                  =2, return diag(A A.H)
         if inv=True, return 1.0/D
     '''
     
@@ -331,7 +333,11 @@ def get_diagonal(A, norm_eq=False, inv=False):
     
     # critical to sort the indices of A
     A.sort_indices()
-    if norm_eq:
+    if norm_eq == 1:
+        # This transpose involves almost no work, use csr data structures as csc, or vice versa
+        At = A.T    
+        D = (At.multiply(At.conjugate()))*ones((At.shape[0],))
+    elif norm_eq == 2:    
         D = (A.multiply(A.conjugate()))*ones((A.shape[0],))
     else:
         D = A.diagonal()

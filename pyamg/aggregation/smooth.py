@@ -98,7 +98,7 @@ def kaczmarz_jacobi_prolongation_smoother(S, T, omega=4.0/3.0, degree=1):
     """
 
     # Form Dinv for S*S.H
-    D_inv = get_diagonal(S, norm_eq=True, inv=True)
+    D_inv = get_diagonal(S, norm_eq=2, inv=True)
     D_inv_S = scale_rows(S, D_inv, copy=True)
 
     # Approximate Spectral radius by defining a matvec for S.T*D_inv_S
@@ -411,11 +411,11 @@ def energy_prolongation_smoother(A, T, Atilde, B, SPD=True, maxiter=4, tol=1e-8,
         #For non-SPD system, apply CG on Normal Equations with Diagonal Preconditioning (requires transpose)
         Ah = A.H
         
-        # D for A*A.H
-        Dinv = get_diagonal(A, norm_eq=True, inv=True)
+        # D for A.H*A
+        Dinv = get_diagonal(A, norm_eq=1, inv=True)
 
         #Calculate initial residual
-        R = -A*(Ah*T)  
+        R = -Ah*(A*T)  
         
         #Enforce constraints on R.  First the sparsity pattern, then the nullspace vectors.
         R = R.multiply(Sparsity_Pattern)
@@ -455,7 +455,7 @@ def energy_prolongation_smoother(A, T, Atilde, B, SPD=True, maxiter=4, tol=1e-8,
             oldsum = newsum
     
             #Calculate new direction and enforce constraints
-            AP = A*(Ah*P)
+            AP = Ah*(A*P)
             AP = AP.multiply(Sparsity_Pattern)
             if AP.nnz < Sparsity_Pattern.nnz:
                 # ugly hack to give AP the same sparsity pattern as Sparsity_Pattern

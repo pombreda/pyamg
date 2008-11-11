@@ -114,7 +114,7 @@ def smoothed_aggregation_solver(A, B=None,
 
     A = A.asfptype()
     
-    if (mat_flag != 'symmetric') or (mat_flag != 'hermitian'):
+    if (mat_flag != 'symmetric') and (mat_flag != 'hermitian'):
         raise ValueError('expected symmetric or hermitian mat_flag')
     A.symmetry = mat_flag
 
@@ -263,6 +263,7 @@ def extend_hierarchy(levels, strength, aggregate, smooth):
     elif fn == 'richardson':
         P = richardson_prolongation_smoother(A, T, **kwargs)
     elif fn == 'energy':
+        #R = energy_prolongation_smoother(A.H.asformat(A.format), T, C, B, **kwargs).H
         P = energy_prolongation_smoother(A, T, C, B, **kwargs)
     elif fn == 'kaczmarz_richardson':
         P = kaczmarz_richardson_prolongation_smoother(A, T, **kwargs)
@@ -276,10 +277,12 @@ def extend_hierarchy(levels, strength, aggregate, smooth):
     ##
     # Choice of R reflects A's structure
     symmetry = A.symmetry
-    if symmetry == 'hermitian':
-        R = P.H
-    elif symmetry == 'symmetric':
-        R = P.T
+    #if fn != 'energy':
+    if True:
+        if symmetry == 'hermitian':
+            R = P.H
+        elif symmetry == 'symmetric':
+            R = P.T
 
     levels[-1].C     = C       # strength of connection matrix
     levels[-1].AggOp = AggOp   # aggregation operator

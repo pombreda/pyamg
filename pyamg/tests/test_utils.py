@@ -214,20 +214,27 @@ class TestComplexUtils(TestCase):
 
 
         for A in cases:
-            D_A      = get_diagonal(A, norm_eq=False, inv=False)
-            D_A_inv  = get_diagonal(A, norm_eq=False, inv=True)
-            D_AA     = get_diagonal(A, norm_eq=True, inv=False)
-            D_AA_inv = get_diagonal(A, norm_eq=True, inv=True)
+            D_A       = get_diagonal(A, norm_eq=False, inv=False)
+            D_A_inv   = get_diagonal(A, norm_eq=False, inv=True)
+            D_AA      = get_diagonal(A, norm_eq=1, inv=False)
+            D_AA_inv  = get_diagonal(A, norm_eq=1, inv=True)
+            D_AA2     = get_diagonal(A, norm_eq=2, inv=False)
+            D_AA_inv2 = get_diagonal(A, norm_eq=2, inv=True)
             
             D = diag(A.todense())
             assert_almost_equal(D, D_A)
             D = 1.0/D
             assert_almost_equal(D, D_A_inv)
             
-            D = diag((A*A.H).todense())
+            D = diag((A.H*A).todense())
             assert_almost_equal(D, D_AA)
             D = 1.0/D
             assert_almost_equal(D, D_AA_inv)
+            
+            D = diag((A*A.H).todense())
+            assert_almost_equal(D, D_AA2)
+            D = 1.0/D
+            assert_almost_equal(D, D_AA_inv2)
 
 
     def test_profile_solver(self):
