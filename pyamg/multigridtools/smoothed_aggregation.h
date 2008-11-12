@@ -357,13 +357,13 @@ void fit_candidates_complex(const I n_row,
  *
  *   # U is a BSR matrix, B is num_block_rows x ColsPerBlock x ColsPerBlock
  *   # UB is num_block_rows x RowsPerBlock x ColsPerBlock,  BtBinv is num_block_rows x ColsPerBlock x ColsPerBlock
- *   B  = ravel(asarray(B).reshape(-1,ColsPerBlock,B.shape[1]))
- *   UB = ravel(asarray(UB).reshape(-1,RowsPerBlock,UB.shape[1]))
+ *   B  = asarray(B).reshape(-1,ColsPerBlock,B.shape[1])
+ *   UB = asarray(UB).reshape(-1,RowsPerBlock,UB.shape[1])
  *
  *   rows = csr_matrix((U.indices,U.indices,U.indptr), shape=(U.shape[0]/RowsPerBlock,U.shape[1]/ColsPerBlock)).tocoo(copy=False).row
  *   for n,j in enumerate(U.indices):
  *      i = rows[n]
- *      Bi  = B[j]
+ *      Bi  = mat(B[j])
  *      UBi = UB[i]
  *      U.data[n] -= dot(UBi,dot(BtBinv[i],Bi.H))
  *
@@ -432,12 +432,12 @@ void satisfy_constraints_helper(const I RowsPerBlock,   const I ColsPerBlock, co
  * Helper routine for energy_prolongation_smoother
  * Calculates the following python code:
  *
- *  Bblk = asarray(B).reshape(-1,NullDim,NullDim)
- *  colindices = array_split(Sparsity_Pattern.indices,Sparsity_Pattern.indptr[1:-1])
- *  for i,cols in enumerate(colindices):
- *      if len(cols) > 0:
- *      Bi = Bblk[cols].reshape(-1,NullDim)
- *      BtBinv[i] = pinv2(dot(Bi.T,Bi))
+ *   RowsPerBlock = Sparsity_Pattern.blocksize[0]
+ *   BtBinv = zeros((Nnodes,NullDim,NullDim), dtype=B.dtype)
+ *   S2 = Sparsity_Pattern.tocsr()
+ *   for i in range(Nnodes):
+ *       Bi = mat( B[S2.indices[S2.indptr[i*RowsPerBlock]:S2.indptr[i*RowsPerBlock + 1]],:] )
+ *       BtBinv[i,:,:] = pinv2(Bi.H*Bi) 
  *
  * Parameters:
  *   NullDim      Number of near nullspace vectors
