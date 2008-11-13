@@ -28,7 +28,8 @@ class TestParameters(TestCase):
             x = rand(A.shape[0])
             b = A*rand(A.shape[0])
 
-            x_sol,residuals = ml.solve(b, x0=x, maxiter=30, tol=1e-10, return_residuals=True)
+            residuals = []
+            x_sol = ml.solve(b, x0=x, maxiter=30, tol=1e-10, residuals=residuals)
             convergence_ratio = (residuals[-1]/residuals[0])**(1.0/len(residuals))
             assert(convergence_ratio < 0.9)
 
@@ -154,7 +155,8 @@ class TestSolverPerformance(TestCase):
             x = rand(A.shape[0])
             b = A*rand(A.shape[0])
 
-            x_sol,residuals = ml.solve(b,x0=x,maxiter=20,tol=1e-10,return_residuals=True)
+            residuals = []
+            x_sol = ml.solve(b, x0=x, maxiter=20, tol=1e-10, residuals=residuals)
 
             avg_convergence_ratio = (residuals[-1]/residuals[0])**(1.0/len(residuals))
             #print "Real Test:   %1.3e,  %d,  %1.3e" % (avg_convergence_ratio, len(ml.levels), ml.operator_complexity())
@@ -178,7 +180,10 @@ class TestSolverPerformance(TestCase):
         kwargs = {'max_coarse' : 1, 'max_levels' : 2, 'coarse_solver' : 'splu'}
 
         sa = smoothed_aggregation_solver(D*A*D, D_inv * B, **kwargs)
-        x_sol,residuals = sa.solve(b,x0=x,maxiter=10,tol=1e-12,return_residuals=True)
+
+        residuals = []
+        x_sol = sa.solve(b, x0=x, maxiter=10, tol=1e-12, residuals=residuals)
+
         avg_convergence_ratio = (residuals[-1]/residuals[0])**(1.0/len(residuals))
 
         assert(avg_convergence_ratio < 0.25)

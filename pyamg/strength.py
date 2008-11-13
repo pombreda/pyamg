@@ -7,21 +7,70 @@ from warnings import warn
 from scipy.sparse import csr_matrix, isspmatrix_csr, isspmatrix_bsr
 import multigridtools
 
-__all__ = ['classical_strength_of_connection', 'symmetric_strength_of_connection',
-        'ode_strength_of_connection']
-
-
-#TODO improve docstrings
+__all__ = ['classical_strength_of_connection', 'symmetric_strength_of_connection', 'ode_strength_of_connection']
 
 def classical_strength_of_connection(A,theta=0.0):
-    """Return a strength of connection matrix using the classical AMG measure
+    """
+    Return a strength of connection matrix using the classical AMG measure
 
-    An off-diagonal entry A[i.j] is a strong connection iff
-        -A[i,j] >= theta * max( -A[i,k] )   where k != i
+    An off-diagonal entry A[i,j] is a strong connection iff::
+            | A[i,j] | >= theta * max(| A[i,k] |), where k != i
+
+    Parameters
+    ----------
+    A : csr_matrix
+        Matrix graph defined in sparse format.  Entry A[i,j] describes the
+        strength of edge [i,j]
+    theta : float
+        Threshold parameter in [0,1].
+
+    Return
+    ------
+    S : csr_matrix
+        Matrix graph defining strong connections.  S[i,j]=1 if vertex i
+        is strongly influenced by vertex j.
+
+    See Also
+    --------
+    symmetric_strength_of_connection : symmetric measure used in SA
+    ode_strength_of_connection : relaxation based strength measure
+
+    Notes
+    -----
+    - A symmetric A does not necessarily yield a symmetric strength matrix S
+    - Calls C++ function classical_strength_of_connection
+    - The version as implemented is designed form M-matrices.  Trottenberg et
+      al. use max A[i,k] over all negative entries, which is the same.  A
+      positive edge weight never indicates a strong connection.
+
+    References
+    ----------
+    Briggs, W. L., Henson, V. E., McCormick, S. F., "A multigrid tutorial",
+    Second edition. Society for Industrial and Applied Mathematics (SIAM),
+    Philadelphia, PA, 2000. xii+193 pp. ISBN: 0-89871-462-1
+
+    Trottenberg, U., Oosterlee, C. W., Schüller, A., "Multigrid",
+    Academic Press, Inc., San Diego, CA, 2001. xvi+631 pp. ISBN: 0-12-701070-X
+
+    Examples
+    --------
+    >>> from numpy import array
+    >>> from pyamg.gallery import stencil_grid
+    >>> from pyamg.strength import classical_strength_of_connection
+    >>> n=3
+    >>> stencil = array([[-1.0,-1.0,-1.0],
+    >>>                  [-1.0, 8.0,-1.0],
+    >>>                  [-1.0,-1.0,-1.0]])
+    >>> A = stencil_grid(stencil, (n,n), format='csr')
+    >>> S = classical_strength_of_connection(A, 0.0)
+
     """
     if not isspmatrix_csr(A): 
         warn("Efficiency Warning, Implicit conversion of A to csr")
         A = csr_matrix(A)
+
+    if (theta<0 or theta>1):
+        raise ValueError('expected theta in [0,1]')
 
     Sp = empty_like(A.indptr)
     Sj = empty_like(A.indices)
@@ -34,10 +83,45 @@ def classical_strength_of_connection(A,theta=0.0):
 
 
 def symmetric_strength_of_connection(A, theta=0):
-    """Compute a strength of connection matrix using the standard symmetric measure
+    """
+    Compute a strength of connection matrix using the standard symmetric measure
     
-    An off-diagonal connection A[i,j] is strong iff
+    An off-diagonal connection A[i,j] is strong iff::
+
         abs(A[i,j]) >= theta * sqrt( abs(A[i,i] * A[j,j]) )
+
+    Parameters
+    ----------
+    A : csr_matrix
+        Matrix graph defined in sparse format.  Entry A[i,j] describes the
+        strength of edge [i,j]
+    theta : float
+        Threshold parameter (positive).
+
+    Return
+    ------
+    S : csr_matrix
+        Matrix graph defining strong connections.  S[i,j]=1 if vertex i
+        is strongly influenced by vertex j.
+
+    See Also
+    --------
+    symmetric_strength_of_connection : symmetric measure used in SA
+    ode_strength_of_connection : relaxation based strength measure
+
+    Notes
+    -----
+        - Calls C++ function classical_strength_of_connection
+        - For vector problems, standard strength measures may produce
+          undesirable aggregates.  A "block approach" from Vanek et al. is used
+          to replace vertex comparisons with block-type comparisons.  A
+          connection between nodes i and j in the block case is strong if::
+
+          ||AB[i,j]|| >= theta * sqrt( ||AB[i,i]||*||AB[j,j]|| ) where AB[k,l]
+
+          is the matrix block (degrees of freedom) associated with nodes k and
+          l and ||.|| is a matrix norm, such a Frobenius.
+        
 
     References
     ----------
@@ -46,8 +130,21 @@ def symmetric_strength_of_connection(A, theta=0):
         Second and Fourth Order Elliptic Problems", 
         Computing, vol. 56, no. 3, pp. 179--196, 1996.
 
+    Examples
+    --------
+    >>> from numpy import array
+    >>> from pyamg.gallery import stencil_grid
+    >>> from pyamg.strength import symmetric_strength_of_connection
+    >>> n=3
+    >>> stencil = array([[-1.0,-1.0,-1.0],
+    >>>                  [-1.0, 8.0,-1.0],
+    >>>                  [-1.0,-1.0,-1.0]])
+    >>> A = stencil_grid(stencil, (n,n), format='csr')
+    >>> S = symmetric_strength_of_connection(A, 0.0)
     """
-    #TODO describe case of blocks
+
+    if (theta<0):
+        raise ValueError('expected a positive theta')
 
     if isspmatrix_csr(A):
         #if theta == 0:
@@ -82,16 +179,10 @@ def symmetric_strength_of_connection(A, theta=0):
     else:
         raise TypeError('expected csr_matrix or bsr_matrix') 
 
-
-
-from numpy import array, zeros, mat, eye, ones, setdiff1d, min, ravel, diff, mod, repeat, inf, asarray
-from scipy.sparse import csr_matrix, isspmatrix_csr, bsr_matrix, isspmatrix_bsr, spdiags
-import scipy.sparse
-from scipy.linalg import pinv2
-from pyamg.utils import approximate_spectral_radius, scale_rows
-
 def ode_strength_of_connection(A, B, epsilon=4.0, k=2, proj_type="l2"):
-    """Construct an AMG strength of connection matrix using an ODE based inspiration.
+    """
+    Construct an AMG strength of connection matrix using an ODE based
+    inspiration.
 
     Parameters
     ----------
@@ -103,7 +194,7 @@ def ode_strength_of_connection(A, B, epsilon=4.0, k=2, proj_type="l2"):
         Drop tolerance
     k : integer
         ODE num time steps, step size is assumed to be 1/rho(DinvA)
-    proj_type : ['l2','D_A']
+    proj_type : {'l2','D_A'}
         Define norm for constrained min prob, i.e. define projection
    
     Returns
@@ -111,23 +202,28 @@ def ode_strength_of_connection(A, B, epsilon=4.0, k=2, proj_type="l2"):
     Atilde : {csr_matrix}
         Sparse matrix of strength values
 
-
-    Notes
-    -----
-
+    References
+    ----------
+    Olson, L. N., Schroder, J., Tuminaro, R. S., "A New Perspective on Strength
+    Measures in Algebraic Multigrid", submitted, June, 2008.
 
     Examples
     --------
-
-    
-    References
-    ----------
-
-        Jacob Schroder and his homeys
-        "Put a title here"
-
-
+    >>> from numpy import array
+    >>> from pyamg.gallery import stencil_grid
+    >>> from pyamg.strength import ode_strength_of_connection
+    >>> n=3
+    >>> stencil = array([[-1.0,-1.0,-1.0],
+    >>>                  [-1.0, 8.0,-1.0],
+    >>>                  [-1.0,-1.0,-1.0]])
+    >>> A = stencil_grid(stencil, (n,n), format='csr')
+    >>> S = ode_strength_of_connection(A, ones((A.shape[0],1)))
     """
+    # many imports for ode_strength_of_connection, so moved the imports local
+    from numpy import array, zeros, mat, ravel, diff, mod, repeat, inf, asarray
+    from scipy.sparse import bsr_matrix, spdiags, eye
+    from scipy.sparse import eye as speye
+    from pyamg.utils import approximate_spectral_radius, scale_rows
 
     #Regarding the efficiency TODO listings below, the bulk of the routine's time
     #   is spent inside the main loop that solves the constrained min problem
@@ -201,7 +297,7 @@ def ode_strength_of_connection(A, B, epsilon=4.0, k=2, proj_type="l2"):
     
     # First Step.  Calculate (Atilde^p)^T = (Atilde^T)^p, where p is the largest power of two <= k, 
     p = 2;
-    I = scipy.sparse.eye(dimen, dimen, format="csr")
+    I = speye(dimen, dimen, format="csr")
     Atilde = (I - (1.0/rho_DinvA)*Dinv_A)
     Atilde = Atilde.T.tocsr()
 
@@ -303,7 +399,7 @@ def ode_strength_of_connection(A, B, epsilon=4.0, k=2, proj_type="l2"):
         Atilde.data[neg_ratios] = 0.0
 
         # Set diagonal to 1.0, as each point is perfectly strongly connected to itself.
-        I = scipy.sparse.eye(dimen, dimen, format="csr")
+        I = speye(dimen, dimen, format="csr")
         I.data -= Atilde.diagonal()
         Atilde = Atilde + I
 

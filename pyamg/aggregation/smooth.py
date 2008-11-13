@@ -619,7 +619,7 @@ def energy_prolongation_smoother(A, T, Atilde, B, SPD=True, maxiter=4, tol=1e-8,
 #            i += 1
 #            resid = max(R.data.flatten().__abs__())
 #            #print "Energy Minimization of Prolongator --- Iteration " + str(i) + " --- r = " + str(resid)
-    #====================================================================
+#====================================================================
     
     T.eliminate_zeros()
     return T

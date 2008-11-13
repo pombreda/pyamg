@@ -1,15 +1,12 @@
-__all__ = ['approximate_spectral_radius', 'infinity_norm', 'diag_sparse',
-        'norm', 'profile_solver', 'to_type', 'type_prep', 'get_diagonal']
-__all__ += ['UnAmal', 'Coord2RBM', 'BSR_Get_Row', 'BSR_Row_WriteScalar', 
-        'BSR_Row_WriteVect' ]
+"""General utility functions for pyamg"""
 
-import numpy
-import scipy
+__docformat__ = "restructuredtext en"
+
 from warnings import warn
 from numpy import fromfile, ascontiguousarray, mat, int32, inner, dot, \
                   ravel, arange, concatenate, tile, asarray, sqrt, diff, \
                   zeros, ones, empty, asmatrix, array, isscalar, conjugate
-from scipy import rand, real                  
+from scipy import rand, real, random, rank                  
 from scipy.linalg import eigvals
 from scipy.lib.blas import get_blas_funcs
 from scipy.sparse import isspmatrix, isspmatrix_csr, isspmatrix_csc, \
@@ -17,15 +14,72 @@ from scipy.sparse import isspmatrix, isspmatrix_csr, isspmatrix_csc, \
 from scipy.sparse.sputils import upcast
 from scipy.sparse.linalg import eigen, eigen_symmetric
 
+__all__ = ['approximate_spectral_radius', 'infinity_norm', 'diag_sparse',
+        'norm', 'residual_norm', 'profile_solver', 'to_type', 'type_prep', 'get_diagonal']
+__all__ += ['UnAmal', 'Coord2RBM', 'BSR_Get_Row', 'BSR_Row_WriteScalar', 
+        'BSR_Row_WriteVect' ]
+
+
 def norm(x):
-    #currently 40x faster than scipy.linalg.norm(x)
+    """
+    2-norm of a vector
+    
+    Parameters
+    ----------
+    x : array_like
+        Vector of complex or real values
+
+    Return
+    ------
+    n : float
+        2-norm of a vector
+
+    Notes
+    -----
+    - currently 40x faster than scipy.linalg.norm(x), which calls
+      sqrt(numpy.sum(real((conjugate(x)*x)),axis=0)) resulting in an extra copy
+    - only handles the 2-norm for vectors
+
+    See Also
+    --------
+    scipy.linalg.norm : scipy general matrix or vector norm
+    """
+
     x = ravel(x)
-    return sqrt(inner(conjugate(x),x))
+    return sqrt( inner(x.conj(),x).real )
 
 def axpy(x,y,a=1.0):
+    """
+    Quick level-1 call to blas::
+    y = a*x+y
+
+    Parameters
+    ----------
+    x : array_like
+        nx1 real or complex vector
+    y : array_like
+        nx1 real or complex vector
+    a : float
+        real or complex scalar
+
+    Return
+    ------
+    y : array_like
+        Input variable y is rewritten
+
+    Notes
+    -----
+    The call to get_blas_funcs automatically determines the prefix for the blas
+    call.
+    """
     fn = get_blas_funcs(['axpy'], [x,y])[0]
     fn(x,y,a)
 
+
+def residual_norm(A, x, b):
+    """Compute ||b - A*x||"""
+
+    return norm(ravel(b) - A*ravel(x))
 
 #def approximate_spectral_radius(A, tol=0.1, maxiter=10, symmetric=False):
 #    """approximate the spectral radius of a matrix
@@ -56,7 +110,8 @@ def axpy(x,y,a=1.0):
 
 
 def approximate_spectral_radius(A,tol=0.1,maxiter=10,symmetric=None):
-    """approximate the spectral radius of a matrix
+    """
+    Approximate the spectral radius of a matrix
 
     Parameters
     ----------
@@ -75,7 +130,35 @@ def approximate_spectral_radius(A,tol=0.1,maxiter=10,symmetric=None):
 
     Returns
     -------
-        An approximation to the spectral radius of A
+    An approximation to the spectral radius of A
+
+    Notes
+    -----
+    The spectral radius is approximated by looking at the Ritz eigenvalues.
+    Arnoldi iteration (or Lanczos) is used to project the matrix A onto a
+    Krylov subspace: H = Q* A Q.  The eigenvalues of H (i.e. the Ritz
+    eigenvalues) should represent the eigenvalues of A in the sense that the
+    minimum and maximum values are usually well matched (for the symmetric case
+    it is true since the eigenvalues are real).
+
+    References
+    ----------
+    Z. Bai, J. Demmel, J. Dongarra, A. Ruhe, and H. van der Vorst, editors.
+    "Templates for the Solution of Algebraic Eigenvalue Problems: A Practical
+    Guide", SIAM, Philadelphia, 2000.
+
+    Examples
+    --------
+    >>> from pyamg.utils import approximate_spectral_radius
+    >>> from scipy import rand
+    >>> from scipy.linalg import eigvals, norm
+    >>> A = rand(10,10)
+    >>> print approximate_spectral_radius(A,maxiter=3)
+    >>> print max([norm(x) for x in eigvals(A)])
+
+    TODO
+    ----
+    Make the method adaptive (restarts)
     """
    
     if type(A) == type( array([0.0]) ):
@@ -86,9 +169,7 @@ def approximate_spectral_radius(A,tol=0.1,maxiter=10,symmetric=None):
 
     maxiter = min(A.shape[0],maxiter)
 
-    #TODO make method adaptive
-
-    numpy.random.seed(0)  #make results deterministic
+    random.seed(0)  #make results deterministic
 
     v0  = rand(A.shape[1],1)
     if A.dtype == complex:
@@ -154,33 +235,100 @@ def approximate_spectral_radius(A,tol=0.1,maxiter=10,symmetric=None):
 
 
 def profile_solver(ml, accel=None, **kwargs):
+    """
+    A quick solver to profile a particular multilevel object
+
+    Parameters
+    ----------
+    ml : multilevel
+        Fully constructed multilevel object
+    accel : function pointer
+        Pointer to a valid Krylov solver (e.g. gmres, cg)
+
+    Returns
+    -------
+    residuals : array
+        Array of residuals for each iteration
+
+    See Also
+    --------
+    multilevel.psolve, multilevel.solve
+
+    Examples
+    --------
+    >>> from numpy import ones
+    >>> from scipy.sparse import spdiags
+    >>> from scipy.sparse.linalg import cg
+    >>> from pyamg.classical import ruge_stuben_solver
+    >>> from pyamg.utils import profile_solver
+    >>> n=100
+    >>> e = ones((n,1)).ravel()
+    >>> data = [ -1*e, 2*e, -1*e ]
+    >>> A = spdiags(data,[-1,0,1],n,n)
+    >>> b = A*ones(A.shape[0])
+    >>> ml = ruge_stuben_solver(A, max_coarse=10)
+    >>> res = profile_solver(ml,accel=cg)
+    >>> print res
+    """
     A = ml.levels[0].A
     b = A * rand(A.shape[0],1)
+    residuals = []
 
     if accel is None:
-        x_sol, residuals = ml.solve(b, return_residuals=True, **kwargs)
+        x_sol = ml.solve(b, residuals=residuals, **kwargs)
     else:
-        residuals = []
         def callback(x):
             residuals.append( norm(ravel(b) - ravel(A*x)) )
-        A.psolve = ml.psolve
-        accel(A, b, callback=callback, **kwargs)
+        M = ml.aspreconditioner(cycle=kwargs.get('cycle','V'))
+        accel(A, b, M=M, callback=callback, **kwargs)
 
     return asarray(residuals)
 
 
 def infinity_norm(A):
     """
-    Infinity norm of a sparse matrix (maximum absolute row sum).  This serves
-    as an upper bound on spectral radius.
+    Infinity norm of a matrix (maximum absolute row sum).  
+
+    Parameters
+    ----------
+    A : csr_matrix, csc_matrix, sparse, or numpy matrix
+        Sparse or dense matrix
+    
+    Returns
+    -------
+    n : float
+        Infinity norm of the matrix
+    
+    Notes
+    -----
+    - This serves as an upper bound on spectral radius.
+    - csr and csc avoid a deep copy
+    - dense calls scipy.linalg.norm
+
+    See Also
+    --------
+    scipy.linalg.norm : dense matrix norms
+
+    Examples
+    --------
+    >>> from numpy import ones
+    >>> from scipy.sparse import spdiags
+    >>> from pyamg.utils import infinity_norm
+    >>> n=100
+    >>> e = ones((n,1)).ravel()
+    >>> data = [ -1*e, 2*e, -1*e ]
+    >>> A = spdiags(data,[-1,0,1],n,n)
+    >>> print infinity_norm(A)
     """
 
     if isspmatrix_csr(A) or isspmatrix_csc(A):
         #avoid copying index and ptr arrays
         abs_A = A.__class__((abs(A.data),A.indices,A.indptr),shape=A.shape)
-        return (abs_A * ones(A.shape[1],dtype=A.dtype)).max()
+        return (abs_A * ones((A.shape[1]),dtype=A.dtype)).max()
+    elif isspmatrix(A):
+        return (abs(A) * ones((A.shape[1]),dtype=A.dtype)).max()
     else:
-        return (abs(A) * ones(A.shape[1],dtype=A.dtype)).max()
+        return norm(A,inf)
 
 def diag_sparse(A):
     """
@@ -189,15 +337,73 @@ def diag_sparse(A):
 
     Otherwise
        - return a csr_matrix with A on the diagonal
-    """
 
-    #TODO integrate into SciPy?
+    Parameters
+    ----------
+    A : sparse matrix or rank 1 array
+        General sparse matrix or array of diagonal entries
+
+    Returns
+    -------
+    B : array or sparse matrix
+        Diagonal sparse is returned as csr if A is dense otherwise return an
+        array of the diagonal
+
+    Examples
+    --------
+    >>> from scipy import rand
+    >>> from pyamg.utils import diag_sparse
+    >>> d = rand(6,1).ravel()
+    >>> print diag_sparse(d).todense()
+    """
     if isspmatrix(A):
         return A.diagonal()
     else:
+        if(rank(A)!=1):
+            raise ValueError,'input diagonal array expected to be rank 1'
         return csr_matrix((asarray(A),arange(len(A)),arange(len(A)+1)),(len(A),len(A)))
 
 def scale_rows(A,v,copy=True):
+    """
+    Scale the sparse rows of a matrix
+
+    Parameters
+    ----------
+    A : sparse matrix
+        Sparse matrix with M rows
+    v : array_like
+        Array of M scales
+    copy : {True,False}
+        - If copy=True, then the matrix is copied to a new and different return
+          matrix (e.g. B=scale_rows(A,v))
+        - If copy=False, then the matrix is overwritten deeply (e.g.
+          scale_rows(A,v,copy=False) overwrites A)
+
+    Returns
+    -------
+    A : sparse matrix
+        Scaled sparse matrix in original format
+
+    See Also
+    --------
+    scipy.sparse.sparsetools.csr_scale_rows, scale_columns
+
+    Notes
+    -----
+    - if A is a csc_matrix, the transpose A.T is passed to scale_columns
+    - if A is not csr, csc, or bsr, it is converted to csr and sent to scale_rows
+
+    Examples
+    --------
+    >>> from numpy import ones
+    >>> from scipy.sparse import spdiags
+    >>> from pyamg.utils import scale_rows
+    >>> n=5
+    >>> e = ones((n,1)).ravel()
+    >>> data = [ -1*e, 2*e, -1*e ]
+    >>> A = spdiags(data,[-1,0,1],n,n-1).tocsr()
+    >>> print scale_rows(A,5*ones((A.shape[0],1))).todense()
+    """
     from scipy.sparse.sparsetools import csr_scale_rows, bsr_scale_rows
 
     v = ravel(v)
@@ -226,6 +432,46 @@ def scale_rows(A,v,copy=True):
         return scale_rows(csr_matrix(A),v)
         
 def scale_columns(A,v,copy=True):
+    """
+    Scale the sparse columns of a matrix
+
+    Parameters
+    ----------
+    A : sparse matrix
+        Sparse matrix with N rows
+    v : array_like
+        Array of N scales
+    copy : {True,False}
+        - If copy=True, then the matrix is copied to a new and different return
+          matrix (e.g. B=scale_columns(A,v))
+        - If copy=False, then the matrix is overwritten deeply (e.g.
+          scale_columns(A,v,copy=False) overwrites A)
+
+    Returns
+    -------
+    A : sparse matrix
+        Scaled sparse matrix in original format
+
+    See Also
+    --------
+    scipy.sparse.sparsetools.csr_scale_columns, scale_rows
+
+    Notes
+    -----
+    - if A is a csc_matrix, the transpose A.T is passed to scale_rows
+    - if A is not csr, csc, or bsr, it is converted to csr and sent to scale_rows
+
+    Examples
+    --------
+    >>> from numpy import ones
+    >>> from scipy.sparse import spdiags
+    >>> from pyamg.utils import scale_columns
+    >>> n=5
+    >>> e = ones((n,1)).ravel()
+    >>> data = [ -1*e, 2*e, -1*e ]
+    >>> A = spdiags(data,[-1,0,1],n,n-1).tocsr()
+    >>> print scale_columns(A,5*ones((A.shape[1],1))).todense()
+    """
     from scipy.sparse.sparsetools import csr_scale_columns, bsr_scale_columns
 
     v = ravel(v)
@@ -254,6 +500,51 @@ def scale_columns(A,v,copy=True):
         return scale_rows(csr_matrix(A),v)
 
 def symmetric_rescaling(A,copy=True):
+    """
+    Scale the matrix symmetrically::
+
+        A = D^{-1/2} A D^{-1/2}
+
+    where D=diag(A).
+
+    The left multiplication is accomplished through scale_rows and the right
+    multiplication is done through scale columns.
+
+    Parameters
+    ----------
+    A : sparse matrix
+        Sparse matrix with N rows
+    copy : {True,False}
+        - If copy=True, then the matrix is copied to a new and different return
+          matrix (e.g. B=symmetric_rescaling(A))
+        - If copy=False, then the matrix is overwritten deeply (e.g.
+          symmetric_rescaling(A,copy=False) overwrites A)
+
+    Returns
+    -------
+    D_sqrt : array
+        Array of sqrt(diag(A))
+    D_sqrt_inv : array
+        Array of 1/sqrt(diag(A))
+    DAD    : csr_matrix
+        Symmetrically scaled A
+
+    Notes
+    -----
+    - if A is not csr, it is converted to csr and sent to scale_rows
+
+    Examples
+    --------
+    >>> from numpy import ones
+    >>> from scipy.sparse import spdiags
+    >>> from pyamg.utils import symmetric_rescaling
+    >>> n=5
+    >>> e = ones((n,1)).ravel()
+    >>> data = [ -1*e, 2*e, -1*e ]
+    >>> A = spdiags(data,[-1,0,1],n,n).tocsr()
+    >>> Ds, Dsi, DAD = symmetric_rescaling(A)
+    >>> print DAD.todense()
+    """
     if isspmatrix_csr(A) or isspmatrix_csc(A) or isspmatrix_bsr(A):
         if A.shape[0] != A.shape[1]:
             raise ValueError,'expected square matrix'
@@ -376,44 +667,65 @@ def get_diagonal(A, norm_eq=False, inv=False):
 #    return dispatcher
 
 
-
-##############################################################################################
-#                                           JBS Utils                                        #
-##############################################################################################
-
 def UnAmal(A, RowsPerBlock, ColsPerBlock):
-    """Unamalgamate a CSR A with blocks of 1's.  
+    """
+    Unamalgamate a CSR A with blocks of 1's.  
+
     Equivalent to Kronecker_Product(A, ones(RowsPerBlock, ColsPerBlock)
 
-    Input
-    =====
-    A                   Amalmagated matrix, assumed to be in CSR format
-    RowsPerBlock &
-    ColsPerBlock        Give A blocks of size (RowsPerBlock, ColsPerBlock)
+    Parameters
+    ----------
+    A : csr_matrix
+        Amalgamted matrix
+    RowsPerBlock : int
+        Give A blocks of size (RowsPerBlock, ColsPerBlock)
+    ColsPerBlock : int
+        Give A blocks of size (RowsPerBlock, ColsPerBlock)
     
-    Output
-    ======
-    A_UnAmal:           BSR matrix that is essentially a Kronecker product of 
-                        A and ones(RowsPerBlock, ColsPerBlock
+    Returns
+    -------
+    A_UnAmal : bsr_matrix 
+        Similar to a Kronecker product of A and ones(RowsPerBlock, ColsPerBlock)
 
+    Examples
+    --------
+    >>> from numpy import array
+    >>> from scipy.sparse import csr_matrix
+    >>> from pyamg.utils import UnAmal
+    >>> row = array([0,0,1,2,2,2])
+    >>> col = array([0,2,2,0,1,2])
+    >>> data = array([1,2,3,4,5,6])
+    >>> A = csr_matrix( (data,(row,col)), shape=(3,3) )
+    >>> A.todense()
+    >>> UnAmal(A,2,2).todense()
     """
     data = ones( (A.indices.shape[0], RowsPerBlock, ColsPerBlock) )
     return bsr_matrix((data, A.indices, A.indptr), shape=(RowsPerBlock*A.shape[0], ColsPerBlock*A.shape[1]) )
 
 def Coord2RBM(numNodes, numPDEs, x, y, z):
-    """Convert 2D or 3D coordinates into Rigid body modes for use as near nullspace modes in elasticity AMG solvers
+    """
+    Convert 2D or 3D coordinates into Rigid body modes for use as near
+    nullspace modes in elasticity AMG solvers
 
-    Input
-    =====
-    numNodes    Number of nodes
-    numPDEs     Number of dofs per node
-    x,y,z       Coordinate vectors
+    Parameters
+    ----------
+    numNodes : int
+        Number of nodes
+    numPDEs : 
+        Number of dofs per node
+    x,y,z : array_like
+        Coordinate vectors
 
+    Returns
+    -------
+    rbm : matrix 
+        A matrix of size (numNodes*numPDEs) x (1 | 6) containing the 6 rigid
+        body modes
 
-    Output
-    ======
-    rbm:        Matrix of size (numNodes*numPDEs) x (1 | 6) containing the 6 rigid body modes
-
+    Examples
+    --------
+    >>> from pyamg.utils import Coord2RBM
+    >>> Coord2RBM(3,6,array([0,1,2]),array([0,1,2]),array([0,1,2]))
     """
 
     #check inputs
@@ -485,24 +797,33 @@ def Coord2RBM(numNodes, numPDEs, x, y, z):
     
     return rbm
 
-
-############################################################################################
-#                    JBS --- Define BSR helper functions                                   #
-############################################################################################
-
 def BSR_Get_Row(A, i):
-    """Return row i in BSR matrix A.  Only nonzero entries are returned
+    """
+    Return row i in BSR matrix A.  Only nonzero entries are returned
 
-    Input
-    =====
-    A   Matrix assumed to be in BSR format
-    i   row number
+    Parameters
+    ----------
+    A : bsr_matrix
+        Input matrix
+    i : int
+        Row number
 
-    Output
-    ======
-    z   Actual nonzero values for row i
-        colindx Array of column indices for the nonzeros of row i
-    
+    Returns
+    -------
+    z : array
+        Actual nonzero values for row i colindx Array of column indices for the
+        nonzeros of row i
+   
+    Examples
+    --------
+    >>> from numpy import array
+    >>> from scipy.sparse import bsr_matrix
+    >>> from pyamg.utils import BSR_Get_Row
+    >>> indptr  = array([0,2,3,6])
+    >>> indices = array([0,2,2,0,1,2])
+    >>> data    = array([1,2,3,4,5,6]).repeat(4).reshape(6,2,2)
+    >>> B = bsr_matrix( (data,indices,indptr), shape=(6,6) )
+    >>> BSR_Get_Row(B,2)
     """
     
     blocksize = A.blocksize[0]
@@ -529,20 +850,35 @@ def BSR_Get_Row(A, i):
     return mat(z).T, colindx[0,:]
 
 def BSR_Row_WriteScalar(A, i, x): 
-    """Write a scalar at each nonzero location in row i of BSR matrix A
+    """
+    Write a scalar at each nonzero location in row i of BSR matrix A
 
-    Input
-    =====
-    A   Matrix assumed to be in BSR format
-    i   row number
-    x   scalar to overwrite nonzeros of row i in A
+    Parameters
+    ----------
+    A : bsr_matrix
+        Input matrix
+    i : int
+        Row number
+    x : float
+        Scalar to overwrite nonzeros of row i in A
 
-    Output
-    ======
-    A   All nonzeros in row i of A have been overwritten with x.  
+    Returns
+    -------
+    A : bsr_matrix
+        All nonzeros in row i of A have been overwritten with x.  
         If x is a vector, the first length(x) nonzeros in row i 
         of A have been overwritten with entries from x
 
+    Examples
+    --------
+    >>> from numpy import array
+    >>> from scipy.sparse import bsr_matrix
+    >>> from pyamg.utils import BSR_Row_WriteScalar
+    >>> indptr  = array([0,2,3,6])
+    >>> indices = array([0,2,2,0,1,2])
+    >>> data    = array([1,2,3,4,5,6]).repeat(4).reshape(6,2,2)
+    >>> B = bsr_matrix( (data,indices,indptr), shape=(6,6) )
+    >>> BSR_Row_WriteScalar(B,5,22)
     """
     
     blocksize = A.blocksize[0]
@@ -561,23 +897,38 @@ def BSR_Row_WriteScalar(A, i, x):
 
 
 def BSR_Row_WriteVect(A, i, x): 
-    """Overwrite the nonzeros in row i of BSR matrix A with the vector x.  
-       length(x) and nnz(A[i,:]) must be equivalent.
+    """
+    Overwrite the nonzeros in row i of BSR matrix A with the vector x.  
+    length(x) and nnz(A[i,:]) must be equivalent.
 
-    Input
-    =====
-    A   Matrix assumed to be in BSR format
-    i   row number
-    x   Array of values to overwrite nonzeros in row i of A
+    Parameters
+    ----------
+    A : bsr_matrix
+        Matrix assumed to be in BSR format
+    i : int
+        Row number
+    x : array
+        Array of values to overwrite nonzeros in row i of A
 
-    Output
-    ======
-    A   The nonzeros in row i of A have been
+    Returns
+    -------
+    A : bsr_matrix
+        The nonzeros in row i of A have been
         overwritten with entries from x.  x must be same
         length as nonzeros of row i.  This is guaranteed
         when this routine is used with vectors derived form
         Get_BSR_Row
 
+    Examples
+    --------
+    >>> from numpy import array
+    >>> from scipy.sparse import bsr_matrix
+    >>> from pyamg.utils import BSR_Row_WriteVect
+    >>> indptr  = array([0,2,3,6])
+    >>> indices = array([0,2,2,0,1,2])
+    >>> data    = array([1,2,3,4,5,6]).repeat(4).reshape(6,2,2)
+    >>> B = bsr_matrix( (data,indices,indptr), shape=(6,6) )
+    >>> BSR_Row_WriteVect(B,5,array([11,22,33,44,55,66]))
     """
     
     blocksize = A.blocksize[0]
@@ -586,9 +937,7 @@ def BSR_Row_WriteVect(A, i, x):
     rowend = A.indptr[BlockIndx+1]
     localRowIndx = i%blocksize
     
-    # This line fixes one of the idiotic things about the array/matrix setup.
-    # Sometimes I really wish for the Matlab matrix "slicing" interface rather 
-    # than this.
+    # like matlab slicing:
     x = x.__array__().reshape( (max(x.shape),) )
 
     #counter = 0
@@ -600,8 +949,3 @@ def BSR_Row_WriteVect(A, i, x):
 
     indys = A.data[rowstart:rowend, localRowIndx, :].nonzero()
     A.data[rowstart:rowend, localRowIndx, :][indys[0], indys[1]] = x
-
-
-###################################################################################################
-
-
