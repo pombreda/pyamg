@@ -264,7 +264,7 @@ def extend_hierarchy(levels, strength, aggregate, smooth):
         P = richardson_prolongation_smoother(A, T, **kwargs)
     elif fn == 'energy':
         #from scipy import conjugate
-        #R = energy_prolongation_smoother(A.H.asformat(A.format), T, C, conjugate(B), **kwargs).T
+        #R = energy_prolongation_smoother(A.H.asformat(A.format), T, C, conjugate(B), **kwargs).H
         P = energy_prolongation_smoother(A, T, C, B, **kwargs)
     elif fn == 'kaczmarz_richardson':
         P = kaczmarz_richardson_prolongation_smoother(A, T, **kwargs)
