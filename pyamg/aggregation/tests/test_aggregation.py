@@ -86,8 +86,9 @@ class TestComplexParameters(TestCase):
 
             x = rand(A.shape[0]) + 1.0j*rand(A.shape[0])
             b = A*rand(A.shape[0])
+            residuals = []
 
-            x_sol,residuals = ml.solve(b, x0=x, maxiter=30, tol=1e-10, return_residuals=True)
+            x_sol= ml.solve(b, x0=x, maxiter=30, tol=1e-10, residuals=residuals)
             convergence_ratio = (residuals[-1]/residuals[0])**(1.0/len(residuals))
             assert(convergence_ratio < 0.9)
 
@@ -234,8 +235,9 @@ class TestComplexSolverPerformance(TestCase):
 
             x = rand(A.shape[0]) + 1.0j*rand(A.shape[0])
             b = A*rand(A.shape[0])
+            residuals=[]
 
-            x_sol,residuals = ml.solve(b,x0=x,maxiter=20,tol=1e-10,return_residuals=True)
+            x_sol = ml.solve(b,x0=x,maxiter=20,tol=1e-10, residuals=residuals)
 
             avg_convergence_ratio = (residuals[-1]/residuals[0])**(1.0/len(residuals))
             
