@@ -83,7 +83,8 @@ def setup_smoothers(ml, presmoother, postsmoother):
 
 import relaxation
 from chebyshev import chebyshev_polynomial_coefficients
-from pyamg.utils import approximate_spectral_radius, scale_rows
+from pyamg.utils import scale_rows
+from pyamg.linalg import approximate_spectral_radius
 
 
 def rho_D_inv_A(A):

@@ -223,7 +223,8 @@ def ode_strength_of_connection(A, B, epsilon=4.0, k=2, proj_type="l2"):
     from numpy import array, zeros, mat, ravel, diff, mod, repeat, inf, asarray
     from scipy.sparse import bsr_matrix, spdiags, eye
     from scipy.sparse import eye as speye
-    from pyamg.utils import approximate_spectral_radius, scale_rows
+    from pyamg.linalg import approximate_spectral_radius
+    from pyamg.utils  import scale_rows
 
     #Regarding the efficiency TODO listings below, the bulk of the routine's time
     #   is spent inside the main loop that solves the constrained min problem

@@ -3,7 +3,8 @@
 __docformat__ = "restructuredtext en"
 
 from numpy import ones
-from pyamg.utils import approximate_spectral_radius, scale_rows, get_diagonal
+from pyamg.utils import scale_rows, get_diagonal
+from pyamg.linalg import approximate_spectral_radius
 
 __all__ = ['jacobi_prolongation_smoother', 'richardson_prolongation_smoother', 
         'energy_prolongation_smoother', 'kaczmarz_richardson_prolongation_smoother',

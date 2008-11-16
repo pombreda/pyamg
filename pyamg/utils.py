@@ -3,236 +3,19 @@
 __docformat__ = "restructuredtext en"
 
 from warnings import warn
-from numpy import fromfile, ascontiguousarray, mat, int32, inner, dot, \
-                  ravel, arange, concatenate, tile, asarray, sqrt, diff, \
-                  zeros, ones, empty, asmatrix, array, isscalar, conjugate
-from scipy import rand, real, random, rank                  
-from scipy.linalg import eigvals
-from scipy.lib.blas import get_blas_funcs
+from numpy import mat, int32, ravel, arange, asarray, sqrt, \
+                  zeros, ones, array, isscalar, conjugate
+from scipy import rand, rank, real, imag, mat, union1d,ceil                  
 from scipy.sparse import isspmatrix, isspmatrix_csr, isspmatrix_csc, \
         isspmatrix_bsr, csr_matrix, csc_matrix, bsr_matrix, coo_matrix
 from scipy.sparse.sputils import upcast
-from scipy.sparse.linalg import eigen, eigen_symmetric
+from pyamg.linalg import norm, cond
+from scipy.linalg import eigvals
 
-__all__ = ['approximate_spectral_radius', 'infinity_norm', 'diag_sparse',
-        'norm', 'residual_norm', 'profile_solver', 'to_type', 'type_prep', 'get_diagonal']
-__all__ += ['UnAmal', 'Coord2RBM', 'BSR_Get_Row', 'BSR_Row_WriteScalar', 
-        'BSR_Row_WriteVect' ]
-
-
-def norm(x):
-    """
-    2-norm of a vector
-    
-    Parameters
-    ----------
-    x : array_like
-        Vector of complex or real values
-
-    Return
-    ------
-    n : float
-        2-norm of a vector
-
-    Notes
-    -----
-    - currently 40x faster than scipy.linalg.norm(x), which calls
-      sqrt(numpy.sum(real((conjugate(x)*x)),axis=0)) resulting in an extra copy
-    - only handles the 2-norm for vectors
-
-    See Also
-    --------
-    scipy.linalg.norm : scipy general matrix or vector norm
-    """
-
-    x = ravel(x)
-    return sqrt( inner(x.conj(),x).real )
-
-def axpy(x,y,a=1.0):
-    """
-    Quick level-1 call to blas::
-    y = a*x+y
-
-    Parameters
-    ----------
-    x : array_like
-        nx1 real or complex vector
-    y : array_like
-        nx1 real or complex vector
-    a : float
-        real or complex scalar
-
-    Return
-    ------
-    y : array_like
-        Input variable y is rewritten
-
-    Notes
-    -----
-    The call to get_blas_funcs automatically determines the prefix for the blas
-    call.
-    """
-    fn = get_blas_funcs(['axpy'], [x,y])[0]
-    fn(x,y,a)
-
-
-def residual_norm(A, x, b):
-    """Compute ||b - A*x||"""
-
-    return norm(ravel(b) - A*ravel(x))
-
-#def approximate_spectral_radius(A, tol=0.1, maxiter=10, symmetric=False):
-#    """approximate the spectral radius of a matrix
-#
-#    Parameters
-#    ----------
-#
-#    A : {dense or sparse matrix}
-#        E.g. csr_matrix, csc_matrix, ndarray, etc.
-#    tol : {scalar}
-#        Tolerance of approximation
-#    maxiter : {integer}
-#        Maximum number of iterations to perform
-#    symmetric : {boolean}
-#        True if A is symmetric, False otherwise (default)
-#
-#    Returns
-#    -------
-#        An approximation to the spectral radius of A
-#
-#    """
-#    if symmetric:
-#        method = eigen_symmetric
-#    else:
-#        method = eigen
-#    
-#    return norm( method(A, k=1, tol=0.1, which='LM', maxiter=maxiter, return_eigenvectors=False) )
-
-
-def approximate_spectral_radius(A,tol=0.1,maxiter=10,symmetric=None):
-    """
-    Approximate the spectral radius of a matrix
-
-    Parameters
-    ----------
-
-    A : {dense or sparse matrix}
-        E.g. csr_matrix, csc_matrix, ndarray, etc.
-    tol : {scalar}
-        Tolerance of approximation
-    maxiter : {integer}
-        Maximum number of iterations to perform
-    symmetric : {boolean}
-        True  - if A is symmetric
-                Lanczos iteration is used (more efficient)
-        False - if A is non-symmetric (default
-                Arnoldi iteration is used (less efficient)
-
-    Returns
-    -------
-    An approximation to the spectral radius of A
-
-    Notes
-    -----
-    The spectral radius is approximated by looking at the Ritz eigenvalues.
-    Arnoldi iteration (or Lanczos) is used to project the matrix A onto a
-    Krylov subspace: H = Q* A Q.  The eigenvalues of H (i.e. the Ritz
-    eigenvalues) should represent the eigenvalues of A in the sense that the
-    minimum and maximum values are usually well matched (for the symmetric case
-    it is true since the eigenvalues are real).
-
-    References
-    ----------
-    Z. Bai, J. Demmel, J. Dongarra, A. Ruhe, and H. van der Vorst, editors.
-    "Templates for the Solution of Algebraic Eigenvalue Problems: A Practical
-    Guide", SIAM, Philadelphia, 2000.
-
-    Examples
-    --------
-    >>> from pyamg.utils import approximate_spectral_radius
-    >>> from scipy import rand
-    >>> from scipy.linalg import eigvals, norm
-    >>> A = rand(10,10)
-    >>> print approximate_spectral_radius(A,maxiter=3)
-    >>> print max([norm(x) for x in eigvals(A)])
-
-    TODO
-    ----
-    Make the method adaptive (restarts)
-    """
-   
-    if type(A) == type( array([0.0]) ):
-        A = asmatrix(A) #convert dense arrays to matrix type
-    
-    if A.shape[0] != A.shape[1]:
-        raise ValueError,'expected square matrix'
-
-    maxiter = min(A.shape[0],maxiter)
-
-    random.seed(0)  #make results deterministic
-
-    v0  = rand(A.shape[1],1)
-    if A.dtype == complex:
-        v0 = v0 + 1.0j*rand(A.shape[1],1)
-
-    v0 /= norm(v0)
-
-    H  = zeros((maxiter+1,maxiter), dtype=A.dtype)
-    V = [v0]
-
-    for j in range(maxiter):
-        w = A * V[-1]
-   
-        if symmetric:
-            if j >= 1:
-                H[j-1,j] = beta
-                w -= beta * V[-2]
-
-            alpha = dot(conjugate(ravel(w)),ravel(V[-1]))
-            H[j,j] = alpha
-            w -= alpha * V[-1]  #axpy(V[-1],w,-alpha) 
-            
-            beta = norm(w)
-            H[j+1,j] = beta
-
-            if (H[j+1,j] < 1e-10): 
-                break
-            
-            w /= beta
-
-            V.append(w)
-            V = V[-2:] #retain only last two vectors
-
-        else:
-            #orthogonalize against Vs
-            for i,v in enumerate(V):
-                H[i,j] = dot(conjugate(ravel(v)),ravel(w))
-                w = w - H[i,j]*v
-
-            H[j+1,j] = real(norm(w))
-            
-            if (H[j+1,j] < 1e-10): 
-                break
-            
-            w = w/H[j+1,j] 
-            V.append(w)
-   
-            # if upper 2x2 block of Hessenberg matrix H is almost symmetric,
-            # and the user has not explicitly specified symmetric=False,
-            # then switch to symmetric Lanczos algorithm
-            #if symmetric is not False and j == 1:
-            #    if abs(H[1,0] - H[0,1]) < 1e-12:
-            #        #print "using symmetric mode"
-            #        symmetric = True
-            #        V = V[1:]
-            #        H[1,0] = H[0,1]
-            #        beta = H[2,1]
-    
-    #print "Approximated spectral radius in %d iterations" % (j + 1)
-     
-    e = eigvals(H[:j+1,:j+1])
-    return max(abs(e))        
-
+__all__ = ['diag_sparse', 'profile_solver', 'to_type', 'type_prep', 
+           'get_diagonal', 'UnAmal', 'Coord2RBM', 'BSR_Get_Row', 
+           'BSR_Row_WriteScalar', 'BSR_Row_WriteVect', 'hierarchy_spectrum',
+           'print_table']
 
 def profile_solver(ml, accel=None, **kwargs):
     """
@@ -283,52 +66,6 @@ def profile_solver(ml, accel=None, **kwargs):
         accel(A, b, M=M, callback=callback, **kwargs)
 
     return asarray(residuals)
-
-
-def infinity_norm(A):
-    """
-    Infinity norm of a matrix (maximum absolute row sum).  
-
-    Parameters
-    ----------
-    A : csr_matrix, csc_matrix, sparse, or numpy matrix
-        Sparse or dense matrix
-    
-    Returns
-    -------
-    n : float
-        Infinity norm of the matrix
-    
-    Notes
-    -----
-    - This serves as an upper bound on spectral radius.
-    - csr and csc avoid a deep copy
-    - dense calls scipy.linalg.norm
-
-    See Also
-    --------
-    scipy.linalg.norm : dense matrix norms
-
-    Examples
-    --------
-    >>> from numpy import ones
-    >>> from scipy.sparse import spdiags
-    >>> from pyamg.utils import infinity_norm
-    >>> n=100
-    >>> e = ones((n,1)).ravel()
-    >>> data = [ -1*e, 2*e, -1*e ]
-    >>> A = spdiags(data,[-1,0,1],n,n)
-    >>> print infinity_norm(A)
-    """
-
-    if isspmatrix_csr(A) or isspmatrix_csc(A):
-        #avoid copying index and ptr arrays
-        abs_A = A.__class__((abs(A.data),A.indices,A.indptr),shape=A.shape)
-        return (abs_A * ones((A.shape[1]),dtype=A.dtype)).max()
-    elif isspmatrix(A):
-        return (abs(A) * ones((A.shape[1]),dtype=A.dtype)).max()
-    else:
-        return norm(A,inf)
 
 def diag_sparse(A):
     """
@@ -572,9 +309,39 @@ def symmetric_rescaling(A,copy=True):
 
 def type_prep(upcast_type, varlist):
     '''
-    Loop over all elements of varlist and convert them to dtype
-    The elements of varlist may be arrays, mat's, sparse matrices, or scalars (either float or int)
-    Returns upcasted varlist, with caveat that all scalars are now length 1-arrays
+    Loop over all elements of varlist and convert them to upcasttype
+    The only difference with pyamg.utils.to_type(...), is that scalars
+    are wrapped into (1,0) arrays.  This is desirable when passing 
+    the numpy complex data type to C routines and complex scalars aren't
+    handled correctly
+
+    Parameters
+    ----------
+    upcast_type : data type
+        e.g. complex, float64 or complex128
+    varlist : list
+        list may contain arrays, mat's, sparse matrices, or scalars 
+        the elements may be float, int or complex
+
+    Returns
+    -------
+    Returns upcasted varlist to upcast_type
+
+    Notes
+    -----
+    Useful when harmonizing the types of variables, such as 
+    if A and b are complex, but x,y and z are not.
+
+    Examples
+    --------
+    >>> from scipy import ones, complex128, rand
+    >>> from pyamg.utils import type_prep 
+    >>> from scipy.sparse.sputils import upcast
+    >>> x = ones((5,1))
+    >>> y = 1.0j*rand(5,1)
+    >>> z = 2.3
+    >>> type_prep(upcast(x.dtype, y.dtype), [x, y, z])
+
     '''
     varlist = to_type(upcast_type, varlist)
     for i in range(len(varlist)):
@@ -586,9 +353,34 @@ def type_prep(upcast_type, varlist):
 
 def to_type(upcast_type, varlist):
     '''
-    Loop over all elements of varlist and convert them to dtype
-    The elements of varlist may be arrays, mat's, sparse matrices, or scalars (either float or int)
-    Returns upcasted varlist
+    Loop over all elements of varlist and convert them to upcasttype
+
+    Parameters
+    ----------
+    upcast_type : data type
+        e.g. complex, float64 or complex128
+    varlist : list
+        list may contain arrays, mat's, sparse matrices, or scalars 
+        the elements may be float, int or complex
+
+    Returns
+    -------
+    Returns upcasted varlist to upcast_type
+
+    Notes
+    -----
+    Useful when harmonizing the types of variables, such as 
+    if A and b are complex, but x,y and z are not.
+
+    Examples
+    --------
+    >>> from scipy import ones, complex128, rand
+    >>> from pyamg.utils import to_type  
+    >>> from scipy.sparse.sputils import upcast
+    >>> x = ones((5,1))
+    >>> y = 1.0j*rand(5,1)
+    >>> to_type(upcast(x.dtype, y.dtype), [x, y])
+
     '''
 
     #convert_type = type(array([0], upcast_type)[0])
@@ -611,11 +403,39 @@ def to_type(upcast_type, varlist):
 
 
 def get_diagonal(A, norm_eq=False, inv=False):
-    ''' return the diagonal of sparse matrix A
-        if norm_eq=0, return diag(A)
-                  =1, return diag(A.H A)
-                  =2, return diag(A A.H)
-        if inv=True, return 1.0/D
+    ''' Return the diagonal or inverse of diagonal for 
+        A, (A.H A) or (A A.H)
+    
+    Parameters
+    ----------
+    A   : {dense or sparse matrix}
+        e.g. array, matrix, csr_matrix, ...
+    norm_eq : {0, 1, 2}
+        0 ==> D = diag(A)
+        1 ==> D = diag(A.H A)
+        2 ==> D = diag(A A.H)
+    inv : {True, False}
+        If True, D = 1.0/D
+    
+    Returns
+    -------
+    diagonal, D, of appropriate system
+
+    Notes
+    -----
+    This function is especially useful for its fast methods
+    of obtaining diag(A A.H) and diag(A.H A).  Zeros on the diagonal
+    are also set to 1.0 if D is inverted.
+
+    Examples
+    --------
+    >>> from pyamg.utils import get_diagonal
+    >>> from pyamg.gallery import poisson
+    >>> A = poisson( (15,15), format='csr' )
+    >>> D = get_diagonal(A)
+    >>> D = get_diagonal(A, norm_eq=1, inv=True)
+
+
     '''
     
     if not isspmatrix(A):
@@ -639,33 +459,6 @@ def get_diagonal(A, norm_eq=False, inv=False):
         return Dinv
     else:
         return D
-
-#from functools import partial, update_wrapper
-#def dispatcher(name_to_handle):
-#    def dispatcher(arg):
-#        if isinstance(arg,tuple):
-#            fn,opts = arg[0],arg[1]
-#        else:
-#            fn,opts = arg,{}
-#    
-#        if fn in name_to_handle:
-#            # convert string into function handle
-#            fn = name_to_handle[fn] 
-#        #elif isinstance(fn, type(ones)):
-#        #    pass     
-#        elif callable(fn):
-#            # if fn is itself a function handle
-#            pass
-#        else:
-#            raise TypeError('Expected function')
-#
-#        wrapped = partial(fn, **opts)
-#        update_wrapper(wrapped, fn)
-#    
-#        return wrapped
-#
-#    return dispatcher
-
 
 def UnAmal(A, RowsPerBlock, ColsPerBlock):
     """
@@ -701,6 +494,203 @@ def UnAmal(A, RowsPerBlock, ColsPerBlock):
     """
     data = ones( (A.indices.shape[0], RowsPerBlock, ColsPerBlock) )
     return bsr_matrix((data, A.indices, A.indptr), shape=(RowsPerBlock*A.shape[0], ColsPerBlock*A.shape[1]) )
+
+def print_table(table, title='', delim='|', centering='center', col_padding=2, header=True, headerchar='-'):
+    """
+    Print a table from a list of lists representing the rows of a table
+    
+
+    Parameters
+    ----------
+    table : list
+        list of lists, e.g. a table with 3 columns and 2 rows could be
+        [ ['0,0', '0,1', '0,2'], ['1,0', '1,1', '1,2'] ]
+    title : string
+        Printed centered above the table
+    delim : string
+        character to delimit columns
+    centering : {'left', 'right', 'center'}
+        chooses justification for columns
+    col_padding : int
+        number of blank spaces to add to each column
+    header : {True, False}
+        Does the first entry of table contain column headers?
+    headerchar : {string}
+        character to separate column headers from rest of table
+
+    Returns
+    -------
+    string representing table that's ready to be printed
+
+    Notes
+    -----
+    The string for the table will have correctly justified columns
+    with extra paddding added into each column entry to ensure columns align.
+    The characters to delimit the columns can be user defined.  This
+    should be useful for printing convergence data from tests.
+
+
+    Examples
+    --------
+    >>> from pyamg.utils import print_table
+    >>> table = [ ['cos(0)', 'cos(pi/2)', 'cos(pi)'], ['0.0', '1.0', '0.0'] ]
+    >>> print print_table(table)
+    >>> print print_table(table, delim='||')
+    >>> print print_table(table, headerchar='*')
+    >>> print print_table(table, col_padding=6, centering='left')
+    
+    """
+    
+    table_str = ''
+    
+    # sometimes, the table will be passed in as (title, table)
+    if type(table) == type( (2,2) ):
+        title = table[0]
+        table = table[1]
+
+    # Calculate each column's width
+    colwidths=[]
+    for i in range(len(table)):
+        # extend colwidths for row i
+        for k in range( len(table[i]) - len(colwidths) ):
+            colwidths.append(-1)
+        
+        # Update colwidths if table[i][j] is wider than colwidth[j]
+        for j in range(len(table[i])):
+            if len(table[i][j]) > colwidths[j]:
+                colwidths[j] = len(table[i][j])
+
+    # Factor in extra column padding
+    for i in range(len(colwidths)):
+        colwidths[i] += col_padding
+
+    # Total table width
+    ttwidth = sum(colwidths) + len(delim)*(len(colwidths)-1)
+
+    # Print Title
+    if len(title) > 0:
+        print str.center(title, ttwidth)
+
+    # Choose centering scheme
+    centering = centering.lower()
+    if centering == 'center':
+        centering = str.center
+    if centering == 'right':
+        centering = str.rjust
+    if centering == 'left':
+        centering = str.ljust
+
+    if header:
+        # Append Column Headers
+        for elmt,elmtwidth in zip(table[0],colwidths):
+            table_str += centering(str(elmt), elmtwidth) + delim 
+        if table[0] != []:
+            table_str = table_str[:-len(delim)] + '\n'
+
+        # Append Header Separator
+        #                Total Column Width            Total Col Delimiter Widths
+        if len(headerchar) == 0:
+            headerchard = ' '
+        table_str += headerchar*int(ceil(float(ttwidth)/float(len(headerchar)))) + '\n'
+        
+        table = table[1:]
+
+    for row in table:
+        for elmt,elmtwidth in zip(row,colwidths):
+            table_str += centering(str(elmt), elmtwidth) + delim
+        if row != []:
+            table_str = table_str[:-len(delim)] + '\n'
+        else:
+            table_str += '\n'
+
+    return table_str
+
+
+def hierarchy_spectrum(mg, filter=True, plot=False):
+    '''
+    Examine a multilevel hierarchy's spectrum
+
+    Parameters
+    ----------
+    mg { pyamg multilevel hierarchy }
+        e.g. generated with smoothed_aggregation_solver(...) or ruge_stuben_solver(...)
+
+    Returns
+    -------
+    (1) table to standard out detailing the spectrum of each level in mg
+    (2) if plot==True, a sequence of plots in the complex plane of the 
+        spectrum at each level
+
+    Notes
+    -----
+    This can be useful for troubleshooting and when examining how your 
+    problem's nature changes from level to level
+
+
+    Examples
+    --------
+    >>> from pyamg import smoothed_aggregation_solver
+    >>> from pyamg.gallery import poisson
+    >>> from pyamg.utils import hierarchy_spectrum
+    >>> A = poisson( (15,15), format='csr' )
+    >>> ml = smoothed_aggregation_solver(A, max_coarse=5)
+    >>> hierarchy_spectrum(ml)
+    >>> hierarchy_spectrum(ml, plot=True)
+
+    '''
+    
+    real_table = [ ['Level', 'min(re(eig))', 'max(re(eig))', 'num re(eig) < 0', 'num re(eig) > 0', 'cond_2(A)'] ]
+    imag_table = [ ['Level', 'min(im(eig))', 'max(im(eig))', 'num im(eig) < 0', 'num im(eig) > 0', 'cond_2(A)'] ]
+
+    for i in range(len(mg.levels)):
+        A = mg.levels[i].A.tocsr()
+
+        if filter == True:
+            # Filter out any zero rows and columns of A
+            A.eliminate_zeros()
+            nnz_per_row = A.indptr[0:-1] - A.indptr[1:]
+            nonzero_rows = (nnz_per_row != 0).nonzero()[0]
+            A = A.tocsc()
+            nnz_per_col = A.indptr[0:-1] - A.indptr[1:]
+            nonzero_cols = (nnz_per_col != 0).nonzero()[0]
+            nonzero_rowcols = union1d(nonzero_rows, nonzero_cols)
+            A = mat(A.todense())
+            A = A[nonzero_rowcols,:][:,nonzero_rowcols]
+        else:
+            A = mat(A.todense())
+
+        e = eigvals(A)
+        c = cond(A)
+        lambda_min = min(real(e))
+        lambda_max = max(real(e))
+        num_neg = max(e[real(e) < 0.0].shape)
+        num_pos = max(e[real(e) > 0.0].shape)
+        real_table.append([str(i), ('%1.3f' % lambda_min), ('%1.3f' % lambda_max), str(num_neg), str(num_pos), ('%1.2e' % c)])
+        
+        lambda_min = min(imag(e))
+        lambda_max = max(imag(e))
+        num_neg = max(e[imag(e) < 0.0].shape)
+        num_pos = max(e[imag(e) > 0.0].shape)
+        imag_table.append([str(i), ('%1.3f' % lambda_min), ('%1.3f' % lambda_max), str(num_neg), str(num_pos), ('%1.2e' % c)])
+
+        if plot:
+            import pylab
+            pylab.figure(i+1)
+            pylab.plot(real(e), imag(e), 'kx')
+            handle = pylab.title('Level %d Spectrum' % i)
+            handle.set_fontsize(19)
+            handle = pylab.xlabel('real(eig)')
+            handle.set_fontsize(17)
+            handle = pylab.ylabel('imag(eig)')
+            handle.set_fontsize(17)
+
+    print print_table(real_table)
+    print print_table(imag_table)
+
+    if plot:
+        pylab.show()
+
+
 
 def Coord2RBM(numNodes, numPDEs, x, y, z):
     """
@@ -949,3 +939,32 @@ def BSR_Row_WriteVect(A, i, x):
 
     indys = A.data[rowstart:rowend, localRowIndx, :].nonzero()
     A.data[rowstart:rowend, localRowIndx, :][indys[0], indys[1]] = x
+
+
+
+#from functools import partial, update_wrapper
+#def dispatcher(name_to_handle):
+#    def dispatcher(arg):
+#        if isinstance(arg,tuple):
+#            fn,opts = arg[0],arg[1]
+#        else:
+#            fn,opts = arg,{}
+#    
+#        if fn in name_to_handle:
+#            # convert string into function handle
+#            fn = name_to_handle[fn] 
+#        #elif isinstance(fn, type(ones)):
+#        #    pass     
+#        elif callable(fn):
+#            # if fn is itself a function handle
+#            pass
+#        else:
+#            raise TypeError('Expected function')
+#
+#        wrapped = partial(fn, **opts)
+#        update_wrapper(wrapped, fn)
+#    
+#        return wrapped
+#
+#    return dispatcher
+

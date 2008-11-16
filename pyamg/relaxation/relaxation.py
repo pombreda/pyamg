@@ -381,7 +381,7 @@ def kaczmarz_richardson(A, x, b, iterations=1, omega=1.0):
     Bull. Acad.  Polon. Sci. Lett. A 35, 355-57.  1937 
  
     """
-    #from pyamg.utils import approximate_spectral_radius
+    #from pyamg.linagl import approximate_spectral_radius
     #rho = approximate_spectral_radius(A)
     #omega = omega/(rho*rho)
 

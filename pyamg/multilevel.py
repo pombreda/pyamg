@@ -11,7 +11,8 @@ from scipy.sparse.sputils import upcast
 
 #from pyamg import relaxation
 from pyamg.relaxation import *
-from utils import symmetric_rescaling, diag_sparse, residual_norm, to_type
+from utils import symmetric_rescaling, diag_sparse, to_type
+from linalg import residual_norm
 
 __all__ = ['multilevel_solver', 'coarse_grid_solver']
 

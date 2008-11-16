@@ -1,75 +1,13 @@
 from pyamg.testing import *
 
-from numpy import matrix, array, diag, zeros, sqrt, abs
-from scipy import rand, linalg, real, imag, mat, diag
-from scipy.sparse import csr_matrix
+from numpy import matrix, array, diag, zeros, sqrt, abs, ravel
+from scipy import rand, linalg, real, imag, mat, diag, isscalar, ones
+from scipy.sparse import csr_matrix, isspmatrix
 
 from pyamg.utils import *
 from pyamg.utils import symmetric_rescaling
 
 class TestUtils(TestCase):
-    def test_norm(self):
-        cases = []
-
-        cases.append(  4 )
-        cases.append( -1 )
-        cases.append( 2.5 )
-        cases.append( 3 + 5j )
-        cases.append( 7 - 2j )
-        cases.append( [1 + 3j, 6] )
-        cases.append( [1 + 3j, 6 - 2j] )
-
-        for A in cases:
-            assert_almost_equal( norm(A), linalg.norm(A) )
-
-    def test_approximate_spectral_radius(self):
-        cases = []
-
-        cases.append( matrix([[-4]]) )
-        cases.append( array([[-4]]) )
-        
-        cases.append( array([[2,0],[0,1]]) )
-        cases.append( array([[-2,0],[0,1]]) )
-      
-        cases.append( array([[100,0,0],[0,101,0],[0,0,99]]) )
-        
-        for i in range(1,5):
-            cases.append( rand(i,i) )
-       
-        # method should be almost exact for small matrices
-        for A in cases:
-            A = A.astype(float)
-            Asp = csr_matrix(A)
-
-            expected = max([linalg.norm(x) for x in linalg.eigvals(A)])
-            assert_almost_equal( approximate_spectral_radius(A),   expected )
-            assert_almost_equal( approximate_spectral_radius(Asp), expected )
-        
-        # try symmetric matrices
-        for A in cases:
-            A = A + A.transpose()
-            A = A.astype(float) 
-            Asp = csr_matrix(A)
-
-            expected = max([linalg.norm(x) for x in linalg.eigvals(A)])
-            assert_almost_equal( approximate_spectral_radius(A,symmetric=True),   expected )
-            assert_almost_equal( approximate_spectral_radius(Asp,symmetric=True), expected )
-      
-        #TODO test larger matrices
-    
-    def test_infinity_norm(self):
-        A = matrix([[-4]])
-        assert_equal(infinity_norm(csr_matrix(A)),4)
-
-        A = matrix([[1,0,-5],[-2,5,0]])
-        assert_equal(infinity_norm(csr_matrix(A)),7)
-
-        A = matrix([[0,1],[0,-5]])
-        assert_equal(infinity_norm(csr_matrix(A)),5)
-
-        A = matrix([[1.3,-4.7,0],[-2.23,5.5,0],[9,0,-2]])
-        assert_equal(infinity_norm(csr_matrix(A)),11)
-
     def test_diag_sparse(self):
         #check sparse -> array
         A = matrix([[-4]])
@@ -141,47 +79,7 @@ class TestUtils(TestCase):
         for kwargs in opts:
             residuals = profile_solver(ml, **kwargs)
 
-
 class TestComplexUtils(TestCase):
-    def test_approximate_spectral_radius(self):
-        cases = []
-
-        cases.append( matrix([[-4-4.0j]]) )
-        cases.append( array([[-4+8.2j]]) )
-        
-        cases.append( array([[2.0-2.9j,0],[0,1.5]]) )
-        cases.append( array([[-2.0-2.4j,0],[0,1.21]]) )
-      
-        cases.append( array([[100+1.0j,0,0],[0,101-1.0j,0],[0,0,99+9.9j]]) )
-        
-        for i in range(1,5):
-            cases.append( rand(i,i)+1.0j*rand(i,i) )
-       
-        # method should be almost exact for small matrices
-        for A in cases:
-            Asp = csr_matrix(A)
-            e = linalg.eigvals(A)
-            expected = max(abs(e))
-            assert_almost_equal( approximate_spectral_radius(A),   expected )
-            assert_almost_equal( approximate_spectral_radius(Asp), expected )
-            
-            AA = mat(A).H*mat(A)
-            AAsp = csr_matrix(AA)
-            e = linalg.eigvals(AA)
-            expected = max(abs(e))
-            assert_almost_equal( approximate_spectral_radius(AA, symmetric=True),   expected )
-            assert_almost_equal( approximate_spectral_radius(AAsp, symmetric=True), expected )
- 
-    def test_infinity_norm(self):
-        A = matrix([[-4-3.0j]])
-        assert_equal(infinity_norm(csr_matrix(A)),5.0)
-
-        A = matrix([[1,0,4.0-3.0j],[-2,5,0]])
-        assert_equal(infinity_norm(csr_matrix(A)),7)
-
-        A = matrix([[0,1],[0,-4.0+3.0j]])
-        assert_equal(infinity_norm(csr_matrix(A)),5.0)
-
     def test_diag_sparse(self):
         #check sparse -> array
         A = matrix([[-4-4.0j]])
@@ -267,4 +165,36 @@ class TestComplexUtils(TestCase):
         for kwargs in opts:
             residuals = profile_solver(ml, **kwargs)
 
+    def test_to_type(self):
+        w = 1.2
+        x = ones((5,1))
+        y = rand(3,2)
+        z = csr_matrix(rand(2,2))
+        inlist = [w, x, y, z]
+
+        out = to_type(complex, inlist)
+        for i in range(len(out)):
+            assert( out[i].dtype==complex ) 
+            if isspmatrix(out[i]):
+                diff = ravel(out[i].data - inlist[i].data)
+            else:
+                diff = out[i] - inlist[i]
+            assert_equal( max(abs(ravel(diff))), 0.0)
+
+    def test_type_prep(self):
+        w = 1.2
+        x = ones((5,1))
+        y = rand(3,2)
+        z = csr_matrix(rand(2,2))
+        inlist = [w, x, y, z]
+
+        out = type_prep(complex, inlist)
+        for i in range(len(out)):
+            assert( out[i].dtype==complex ) 
+            assert( not isscalar(out[i]) )
+            if isspmatrix(out[i]):
+                diff = ravel(out[i].data - inlist[i].data)
+            else:
+                diff = out[i] - inlist[i]
+            assert_equal( max(abs(ravel(diff))), 0.0)
 

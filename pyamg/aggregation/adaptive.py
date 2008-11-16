@@ -12,7 +12,7 @@ from pyamg.strength import symmetric_strength_of_connection
 from pyamg.relaxation import gauss_seidel, kaczmarz_gauss_seidel
 from pyamg.relaxation.smoothing import setup_smoothers
 import pyamg.relaxation
-from pyamg.utils import norm
+from pyamg.linalg import norm
 
 from aggregation import smoothed_aggregation_solver
 from aggregate import standard_aggregation
