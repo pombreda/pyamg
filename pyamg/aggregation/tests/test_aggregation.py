@@ -6,7 +6,7 @@ from numpy import sqrt, ones, arange, array, abs
 from scipy import rand, pi, exp, hstack
 from scipy.sparse import csr_matrix, spdiags, coo_matrix
 
-from pyamg.utils import diag_sparse
+from pyamg.util.utils import diag_sparse
 from pyamg.gallery import poisson, linear_elasticity, gauge_laplacian
 
 from pyamg.aggregation.aggregation import smoothed_aggregation_solver

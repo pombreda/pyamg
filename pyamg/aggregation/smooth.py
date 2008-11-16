@@ -3,8 +3,8 @@
 __docformat__ = "restructuredtext en"
 
 from numpy import ones
-from pyamg.utils import scale_rows, get_diagonal
-from pyamg.linalg import approximate_spectral_radius
+from pyamg.util.utils import scale_rows, get_diagonal
+from pyamg.util.linalg import approximate_spectral_radius
 
 __all__ = ['jacobi_prolongation_smoother', 'richardson_prolongation_smoother', 
         'energy_prolongation_smoother', 'kaczmarz_richardson_prolongation_smoother',
@@ -174,7 +174,7 @@ def kaczmarz_richardson_prolongation_smoother(S, T, omega=4.0/3.0, degree=1):
 from numpy import ones, zeros, asarray, dot, array_split, diff, ravel, asarray, ones_like, conjugate, mat
 from scipy.sparse import csr_matrix, isspmatrix_csr, bsr_matrix, isspmatrix_bsr
 from scipy.linalg import pinv2
-from pyamg.utils import UnAmal
+from pyamg.util.utils import UnAmal
 import pyamg.multigridtools
 
 ########################################################################################################

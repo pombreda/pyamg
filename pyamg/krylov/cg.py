@@ -1,6 +1,6 @@
 from numpy import asmatrix, asarray, zeros, dot
 from numpy import asanyarray, asarray, asmatrix, array, matrix, zeros
-from pyamg.utils import norm
+from pyamg.util.utils import norm
 from scipy.linalg import solve as direct_solve
 from scipy.sparse.linalg.interface import aslinearoperator, LinearOperator
 from numpy.random import random

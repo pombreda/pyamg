@@ -2,7 +2,7 @@ from pyamg.testing import *
 
 from pyamg.gallery    import poisson
 from pyamg import smoothed_aggregation_solver
-from pyamg.utils import profile_solver
+from pyamg.util.utils import profile_solver
     
 methods = ['gauss_seidel',
            'jacobi',

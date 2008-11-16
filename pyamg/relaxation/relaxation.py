@@ -6,7 +6,7 @@ from warnings import warn
 
 from numpy import empty_like, asarray, arange, ravel, ones_like, zeros
 
-from pyamg.utils import type_prep, get_diagonal
+from pyamg.util.utils import type_prep, get_diagonal
 from pyamg import multigridtools
 from scipy.sparse import isspmatrix_csr, isspmatrix_csc, isspmatrix_bsr, \
         csr_matrix, coo_matrix, bsr_matrix, SparseEfficiencyWarning

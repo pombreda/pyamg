@@ -11,7 +11,7 @@ from scipy.sparse import csr_matrix, coo_matrix, \
 from pyamg import multigridtools
 from pyamg.multilevel import multilevel_solver
 from pyamg.relaxation.smoothing import setup_smoothers
-from pyamg.utils import symmetric_rescaling, diag_sparse, scale_columns
+from pyamg.util.utils import symmetric_rescaling, diag_sparse, scale_columns
 
 from pyamg.strength import *
 from aggregate import *
