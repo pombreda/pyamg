@@ -5,6 +5,7 @@ utils.py provides some utility functions for use with pyamg
 
 BSR_utils.py provides utility functions for accessing and writing individual
     rows of BSR matrices
+
 """
 
 postpone_import = 1
