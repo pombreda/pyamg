@@ -8,7 +8,7 @@ __docformat__ = "restructuredtext en"
 
 __all__=['cg']
 
-def cg(A, b, x0=None, tol=1e-5, maxiter=None, xtype=None, M=None, callback=None):
+def cg(A, b, x0=None, tol=1e-5, maxiter=None, xtype=None, M=None, callback=None, residuals=None):
     '''
     Conjugate Gradient on A x = b
     Left preconditioning is supported
@@ -36,6 +36,9 @@ def cg(A, b, x0=None, tol=1e-5, maxiter=None, xtype=None, M=None, callback=None)
     callback : function
         callback( r ) is called each iteration, 
         where r = b - A*x 
+    residuals : {None, empty-list}
+        If empty-list, residuals holds the residual norm history,
+        including the initial residual, upon completion
      
     Returns
     -------    
@@ -76,12 +79,30 @@ def cg(A, b, x0=None, tol=1e-5, maxiter=None, xtype=None, M=None, callback=None)
 
     
     n = len(b)
+    # Determine maxiter
     if maxiter is None:
         maxiter = int(ceil(1.3*n)) + 2
     elif maxiter < 1:
         raise ValueError('Number of iterations must be positive')
     
-    # setup
+    # Should norm(r) be kept
+    if residuals == []:
+        keep_r = True
+    else:
+        keep_r = False
+    
+    # Scale tol by normb
+    normb = norm(b) 
+    if normb == 0:
+        pass
+    #    if callback != None:
+    #        callback(0.0)
+    #
+    #    return (postprocess(zeros((dimen,), dtype=xtype)),0)
+    else:
+        tol = tol*normb
+
+    # setup method
     doneiterating = False
     iter = 0
     flag = 1
@@ -89,16 +110,18 @@ def cg(A, b, x0=None, tol=1e-5, maxiter=None, xtype=None, M=None, callback=None)
     r = b - ravel(A*x)
 
     normr0 = norm(r)
+    if keep_r:
+        residuals.append(normr0)
 
     if normr0 < tol:
         doneiterating = True
 
     z = ravel(M*r)
+    rz = dot(conjugate(ravel(r)), ravel(z))
 
     p = z.copy()
     Ap = ravel(A*p)
 
-    rz = dot(conjugate(ravel(r)), ravel(z))
     while not doneiterating:
         alpha = rz/dot(conjugate(ravel(Ap)), ravel(p))
 
@@ -119,6 +142,8 @@ def cg(A, b, x0=None, tol=1e-5, maxiter=None, xtype=None, M=None, callback=None)
         iter += 1
         
         normr = norm(r)
+        if keep_r:
+            residuals.append(normr)
         
         if callback != None:
             callback(r)
@@ -127,7 +152,7 @@ def cg(A, b, x0=None, tol=1e-5, maxiter=None, xtype=None, M=None, callback=None)
             doneiterating = True
             flag = 0
 
-        if iter>(maxiter-1):
+        if iter > (maxiter-1):
             doneiterating = True
     
     if flag == 0:

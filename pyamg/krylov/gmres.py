@@ -20,7 +20,7 @@ def mysign(x):
         # return the complex "sign"
         return x/abs(x)
 
-def gmres(A, b, x0=None, tol=1e-5, restrt=None, maxiter=None, xtype=None, M=None, callback=None):
+def gmres(A, b, x0=None, tol=1e-5, restrt=None, maxiter=None, xtype=None, M=None, callback=None, residuals=None):
     '''
     Generalized Minimum Residual Method (GMRES)
         GMRES iteratively refines the initial solution guess to the system Ax = b
@@ -51,6 +51,9 @@ def gmres(A, b, x0=None, tol=1e-5, restrt=None, maxiter=None, xtype=None, M=None
         A.psolve = func, where func := M y
     callback : function
         callback( ||resid||_2 ) is called each iteration, 
+    residuals : {None, empty-list}
+        If empty-list, residuals holds the residual norm history,
+        including the initial residual, upon completion
      
     Returns
     -------    
@@ -95,6 +98,12 @@ def gmres(A, b, x0=None, tol=1e-5, restrt=None, maxiter=None, xtype=None, M=None
     b = ravel(array(b,xtype))
     x = ravel(array(x,xtype))
     
+    # Should norm(r) be kept
+    if residuals == []:
+        keep_r = True
+    else:
+        keep_r = False
+
     # check number of iterations
     if restrt == None:
         restrt = 1
@@ -109,7 +118,7 @@ def gmres(A, b, x0=None, tol=1e-5, restrt=None, maxiter=None, xtype=None, M=None
         warn('maximimum allowed inner iterations (maxiter) are the number of degress of freedom')
         maxiter = dimen
 
-    # Is RHS all zero?
+    # Scale tol by normb
     normb = norm(b) 
     if normb == 0:
         pass
@@ -127,9 +136,12 @@ def gmres(A, b, x0=None, tol=1e-5, restrt=None, maxiter=None, xtype=None, M=None
 
     # Prep for method
     r = b - ravel(A*x)
+    normr = norm(r)
+    if keep_r:
+        residuals.append(normr)
     
     # Is initial guess sufficient?
-    if norm(r) <= tol:
+    if normr <= tol:
         if callback != None:    
             callback(norm(r))
         
@@ -291,6 +303,8 @@ def gmres(A, b, x0=None, tol=1e-5, restrt=None, maxiter=None, xtype=None, M=None
                 # Allow user access to residual
                 if callback != None:
                     callback( normr )
+                if keep_r:
+                    residuals.append(normr)
             
             niter += 1
         
@@ -324,6 +338,8 @@ def gmres(A, b, x0=None, tol=1e-5, restrt=None, maxiter=None, xtype=None, M=None
         # Allow user access to residual
         if callback != None:
             callback( normr )
+        if keep_r:
+            residuals.append(normr)
         
         # Has GMRES stagnated?
         indices = (x != 0)

@@ -11,7 +11,7 @@ __docformat__ = "restructuredtext en"
 
 __all__ = ['cgnr']
 
-def cgnr(A, b, x0=None, tol=1e-5, maxiter=None, xtype=None, M=None, callback=None):
+def cgnr(A, b, x0=None, tol=1e-5, maxiter=None, xtype=None, M=None, callback=None, residuals=None):
     '''
     Conjugate Gradient, Normal Residual algorithm
     Applies CG to the normal equations, A.H A x = b
@@ -41,6 +41,9 @@ def cgnr(A, b, x0=None, tol=1e-5, maxiter=None, xtype=None, M=None, callback=Non
     callback : function
         callback( r ) is called each iteration, 
         where r = b - A*x 
+    residuals : {None, empty-list}
+        If empty-list, residuals holds the residual norm history,
+        including the initial residual, upon completion
      
     Returns
     -------    
@@ -90,6 +93,12 @@ def cgnr(A, b, x0=None, tol=1e-5, maxiter=None, xtype=None, M=None, callback=Non
     b = ravel(array(b,xtype))
     x = ravel(array(x,xtype))
     
+    # Should norm(r) be kept
+    if residuals == []:
+        keep_r = True
+    else:
+        keep_r = False
+
     # Check iteration numbers
     # CGNE suffers from loss of orthogonality quite easily, so we arbitarily let the method go up to 130% over the
     # theoretically necessary limit of maxiter=dimen
@@ -101,7 +110,7 @@ def cgnr(A, b, x0=None, tol=1e-5, maxiter=None, xtype=None, M=None, callback=Non
         warn('maximimum allowed inner iterations (maxiter) are the 130% times the number of degress of freedom')
         maxiter = int(ceil(1.3*dimen)) + 2
 
-    # Is RHS all zero?
+    # Scale tol by normb
     normb = norm(b) 
     if normb == 0:
         pass
@@ -115,9 +124,12 @@ def cgnr(A, b, x0=None, tol=1e-5, maxiter=None, xtype=None, M=None, callback=Non
     # Prep for method
     r = b - ravel(A*x)
     rhat = AH*r
+    normr = norm(r)
+    if keep_r:
+        residuals.append(normr)
 
     # Is initial guess sufficient?
-    if norm(r) <= tol:
+    if normr <= tol:
         if callback != None:    
             callback(r)
         
@@ -163,7 +175,10 @@ def cgnr(A, b, x0=None, tol=1e-5, maxiter=None, xtype=None, M=None, callback=Non
             callback( r )
         
         # test for convergence
-        if norm(r) < tol:
+        normr = norm(r)
+        if keep_r:
+            residuals.append(normr)
+        if normr < tol:
             return (postprocess(x), 0)
 
     # end loop

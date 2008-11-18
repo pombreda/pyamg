@@ -19,10 +19,10 @@ def mysign(x):
         # return the complex "sign"
         return x/abs(x)
 
-def fgmres(A, b, x0=None, tol=1e-5, restrt=None, maxiter=None, xtype=None, M=None, callback=None):
+def fgmres(A, b, x0=None, tol=1e-5, restrt=None, maxiter=None, xtype=None, M=None, callback=None, residuals=None):
     '''
-    Flexible Generalized Minimum Residual Method (GMRES)
-        GMRES iteratively refines the initial solution guess to the system Ax = b
+    Flexible Generalized Minimum Residual Method (fGMRES)
+        fGMRES iteratively refines the initial solution guess to the system Ax = b
     For robustness, Householder reflections are used to orthonormalize the Krylov Space
     Givens Rotations are used to provide the residual norm each iteration
     Flexibility implies that the right preconditioner, M or A.psolve, can vary from 
@@ -53,6 +53,9 @@ def fgmres(A, b, x0=None, tol=1e-5, restrt=None, maxiter=None, xtype=None, M=Non
         A.psolve = func, where func := M y
     callback : function
         callback( ||resid||_2 ) is called each iteration, 
+    residuals : {None, empty-list}
+        If empty-list, residuals holds the residual norm history,
+        including the initial residual, upon completion
      
     Returns
     -------    
@@ -97,6 +100,12 @@ def fgmres(A, b, x0=None, tol=1e-5, restrt=None, maxiter=None, xtype=None, M=Non
     b = ravel(array(b,xtype))
     x = ravel(array(x,xtype))
     
+    # Should norm(r) be kept
+    if residuals == []:
+        keep_r = True
+    else:
+        keep_r = False
+
     # check number of iterations
     if restrt == None:
         restrt = 1
@@ -111,7 +120,7 @@ def fgmres(A, b, x0=None, tol=1e-5, restrt=None, maxiter=None, xtype=None, M=Non
         warn('maximimum allowed inner iterations (maxiter) are the number of degress of freedom')
         maxiter = dimen
 
-    # Is RHS all zero?
+    # Scale tol by normb
     normb = norm(b) 
     if normb == 0:
         pass
@@ -130,6 +139,8 @@ def fgmres(A, b, x0=None, tol=1e-5, restrt=None, maxiter=None, xtype=None, M=Non
     # Prep for method
     r = b - ravel(A*x)
     normr = norm(r)
+    if keep_r:
+        residuals.append(normr)
 
     # Is initial guess sufficient?
     if normr <= tol:
@@ -143,7 +154,7 @@ def fgmres(A, b, x0=None, tol=1e-5, restrt=None, maxiter=None, xtype=None, M=Non
     # the inner loop to halt before reaching maxiter while the actual ||r|| > tol.
     niter = 0
 
-    # Begin FGMRES
+    # Begin fGMRES
     for outer in range(restrt):
 
         # Calculate vector w, which defines the Householder reflector
@@ -158,7 +169,7 @@ def fgmres(A, b, x0=None, tol=1e-5, restrt=None, maxiter=None, xtype=None, M=Non
         # Space required is O(dimen*maxiter)
         H = zeros( (maxiter, maxiter), dtype=xtype)         # upper Hessenberg matrix (actually made upper tri with Given's Rotations) 
         W = zeros( (dimen, maxiter), dtype=xtype)           # Householder reflectors
-        Z = zeros( (dimen, maxiter), dtype=xtype)           # For flexible GMRES, preconditioned vectors must be stored
+        Z = zeros( (dimen, maxiter), dtype=xtype)           # For fGMRES, preconditioned vectors must be stored
                                                             #     No Horner-like scheme exists that allow us to avoid this
         W[:,0] = w
     
@@ -289,6 +300,8 @@ def fgmres(A, b, x0=None, tol=1e-5, restrt=None, maxiter=None, xtype=None, M=Non
                 # Allow user access to residual
                 if callback != None:
                     callback( normr )
+                if keep_r:
+                    residuals.append(normr)
 
             niter += 1
                     
@@ -307,24 +320,23 @@ def fgmres(A, b, x0=None, tol=1e-5, restrt=None, maxiter=None, xtype=None, M=Non
         r = b - ravel(A*x)
         normr = norm(r)
 
-        # test for convergence
-        if normr < tol:
-            if callback != None:
-                callback( normr )
-            
-            return (postprocess(x),0)
-
         # Allow user access to residual
         if callback != None:
             callback( normr )
+        if keep_r:
+            residuals.append(normr)
         
-        # Has GMRES stagnated?
+        # Has fGMRES stagnated?
         indices = (x != 0)
         if indices.any():
             change = max(abs( update[indices] / x[indices] ))
             if change < 1e-12:
                 # No change, halt
                 return (postprocess(x), -1)
+        
+        # test for convergence
+        if normr < tol:
+            return (postprocess(x),0)
     
     # end outer loop
     
