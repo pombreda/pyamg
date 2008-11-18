@@ -4,26 +4,26 @@ from helper import real_runs, real_runs_restrt, complex_runs, complex_runs_restr
 from scipy import random
 
 class TestKrylov(TestCase):
-    #def test_gmres(self):
-    #    # Ensure repeatability of tests
-    #    random.seed(0)
-    #    n_max=8
+    def test_gmres(self):
+        # Ensure repeatability of tests
+        random.seed(0)
+        n_max=8
 
-    #    real_runs(gmres, n_max=n_max)
-    #    real_runs_restrt(gmres, n_max=n_max)
-    #    complex_runs(gmres, n_max=n_max)
-    #    complex_runs_restrt(gmres, n_max=n_max)
+        real_runs(gmres, n_max=n_max)
+        real_runs_restrt(gmres, n_max=n_max)
+        complex_runs(gmres, n_max=n_max)
+        complex_runs_restrt(gmres, n_max=n_max)
 
-    #def test_fgmres(self):
-    #    # Ensure repeatability of tests
-    #    random.seed(0)
-    #    n_max=8
+    def test_fgmres(self):
+        # Ensure repeatability of tests
+        random.seed(0)
+        n_max=8
 
-    #    real_runs(gmres, n_max=n_max)
-    #    real_runs_restrt(gmres, n_max=n_max)
-    #    complex_runs(gmres, n_max=n_max)
-    #    complex_runs_restrt(gmres, n_max=n_max)
-    #    fgmres_runs(fgmres)
+        real_runs(gmres, n_max=n_max)
+        real_runs_restrt(gmres, n_max=n_max)
+        complex_runs(gmres, n_max=n_max)
+        complex_runs_restrt(gmres, n_max=n_max)
+        fgmres_runs(fgmres)
 
     def test_cgne(self):
         # Ensure repeatability of tests
@@ -40,4 +40,12 @@ class TestKrylov(TestCase):
 
         real_runs(cgnr, n_max=n_max, Weak=True)
         complex_runs(cgnr, n_max=n_max, Weak=True)
+    
+    def test_cg(self):
+        # Ensure repeatability of tests
+        random.seed(0)
+        n_max=7
+
+        real_runs(cg, n_max=n_max, Symmetric=True, Weak=True)
+        complex_runs(cg, n_max=n_max, Symmetric=True, Weak=True)
 

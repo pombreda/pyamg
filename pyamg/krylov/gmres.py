@@ -66,6 +66,16 @@ def gmres(A, b, x0=None, tol=1e-5, restrt=None, maxiter=None, xtype=None, M=None
 
     Notes
     -----
+    
+    Examples
+    --------
+    >>>from pyamg.krylov import *
+    >>>from scipy import rand
+    >>>import pyamg
+    >>>A = pyamg.poisson((50,50))
+    >>>b = rand(A.shape[0],)
+    >>>(x,flag) = gmres(A,b)
+    >>>print pyamg.util.linalg.norm(b - A*x)
 
     References
     ----------

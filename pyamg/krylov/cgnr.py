@@ -31,7 +31,7 @@ def cgnr(A, b, x0=None, tol=1e-5, maxiter=None, xtype=None, M=None, callback=Non
         convergence tolerance
     maxiter : int
         maximum number of allowed iterations
-        default is 
+        default is A.shape[0]
     xtype : type
         dtype for the solution
     M : matrix-like
@@ -55,6 +55,16 @@ def cgnr(A, b, x0=None, tol=1e-5, maxiter=None, xtype=None, M=None, callback=Non
 
     Notes
     -----
+    
+    Examples
+    --------
+    >>>from pyamg.krylov import *
+    >>>from scipy import rand
+    >>>import pyamg
+    >>>A = pyamg.poisson((50,50))
+    >>>b = rand(A.shape[0],)
+    >>>(x,flag) = cgnr(A,b)
+    >>>print pyamg.util.linalg.norm(b - A*x)
 
     References
     ----------
