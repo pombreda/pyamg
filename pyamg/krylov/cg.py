@@ -1,7 +1,7 @@
 from numpy import dot, conjugate, ravel, array, int, ceil
 from scipy.sparse.linalg.isolve.utils import make_system
 from scipy.sparse.sputils import upcast
-from pyamg.util.utils import norm
+from pyamg.util.linalg import norm
 from warnings import warn
 
 __docformat__ = "restructuredtext en"
@@ -116,7 +116,6 @@ def cg(A, b, x0=None, tol=1e-5, maxiter=None, xtype=None, M=None, callback=None,
 
     z = ravel(M*r)
     rz = dot(conjugate(ravel(r)), ravel(z))
-
     p = z.copy()
 
     while not doneiterating:
@@ -132,14 +131,10 @@ def cg(A, b, x0=None, tol=1e-5, maxiter=None, xtype=None, M=None, callback=None,
         beta = rz_new/rz
         rz = rz_new
         
-        # Bizarre point
-        if False:    
-            p = z + beta * p
-        else:
-            z += beta*p
-            p = z.copy()
-        print iter
-        #print iter, id(p), id(z)
+        # Bizzare Behavior
+        #z = z + beta*p
+        z += beta * p
+        p = z.copy()
 
         iter += 1
         
@@ -171,7 +166,7 @@ if __name__ == '__main__':
 
     from pyamg.gallery import stencil_grid
     from numpy.random import random
-    A = stencil_grid([[0,-1,0],[-1,4,-1],[0,-1,0]],(1000,1000),dtype=float,format='csr')
+    A = stencil_grid([[0,-1,0],[-1,4,-1],[0,-1,0]],(10,10),dtype=float,format='csr')
     b = random((A.shape[0],))
     x0 = random((A.shape[0],))
 

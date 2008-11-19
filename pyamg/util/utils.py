@@ -9,7 +9,7 @@ from scipy import rand, rank, real, imag, mat, union1d,ceil
 from scipy.sparse import isspmatrix, isspmatrix_csr, isspmatrix_csc, \
         isspmatrix_bsr, csr_matrix, csc_matrix, bsr_matrix, coo_matrix
 from scipy.sparse.sputils import upcast
-from pyamg.linalg import norm, cond
+from pyamg.util.linalg import norm, cond
 from scipy.linalg import eigvals
 
 __all__ = ['diag_sparse', 'profile_solver', 'to_type', 'type_prep', 
