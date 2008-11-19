@@ -69,14 +69,12 @@ def cg(A, b, x0=None, tol=1e-5, maxiter=None, xtype=None, M=None, callback=None,
     Second Edition", SIAM, pp. 262-67, 2003
 
     '''
-
     A,M,x,b,postprocess = make_system(A,M,x0,b,xtype=None)
-    
+
     # We assume henceforth that shape=(n,) for all arrays
     xtype = upcast(A.dtype, x.dtype, b.dtype, M.dtype)
     b = ravel(array(b,xtype))
     x = ravel(array(x,xtype))
-
     
     n = len(b)
     # Determine maxiter
@@ -120,25 +118,29 @@ def cg(A, b, x0=None, tol=1e-5, maxiter=None, xtype=None, M=None, callback=None,
     rz = dot(conjugate(ravel(r)), ravel(z))
 
     p = z.copy()
-    Ap = ravel(A*p)
 
     while not doneiterating:
+        Ap = ravel(A*p)
         alpha = rz/dot(conjugate(ravel(Ap)), ravel(p))
 
-        x = x + alpha * p
+        x += alpha * p
 
-        rnew = r - alpha * Ap
-        znew = ravel(M*rnew)
+        r -= alpha * Ap
+        z = ravel(M*r)
 
-        rz_new = dot(conjugate(ravel(rnew)), ravel(znew))
+        rz_new = dot(conjugate(ravel(r)), ravel(z))
         beta = rz_new/rz
         rz = rz_new
+        
+        # Bizarre point
+        if False:    
+            p = z + beta * p
+        else:
+            z += beta*p
+            p = z.copy()
+        print iter
+        #print iter, id(p), id(z)
 
-        p = znew + beta * p
-
-        z = znew
-        r = rnew
-        Ap = ravel(A*p)
         iter += 1
         
         normr = norm(r)
@@ -148,7 +150,7 @@ def cg(A, b, x0=None, tol=1e-5, maxiter=None, xtype=None, M=None, callback=None,
         if callback != None:
             callback(r)
 
-        if normr/normr0 < tol:
+        if normr < tol:
             doneiterating = True
             flag = 0
 
@@ -160,34 +162,35 @@ def cg(A, b, x0=None, tol=1e-5, maxiter=None, xtype=None, M=None, callback=None,
     else:    
         return (postprocess(x), iter)
 
-#if __name__ == '__main__':
-#    # from numpy import diag
-#    # A = random((4,4))
-#    # A = A*A.transpose() + diag([10,10,10,10])
-#    # b = random((4,1))
-#    # x0 = random((4,1))
-#
-#    from pyamg.gallery import stencil_grid
-#    from numpy.random import random
-#    A = stencil_grid([[0,-1,0],[-1,4,-1],[0,-1,0]],(100,100),dtype=float,format='csr')
-#    b = random((A.shape[0],))
-#    x0 = random((A.shape[0],))
-#
-#    import time
-#    from scipy.sparse.linalg.isolve import cg as icg
-#
-#    print '\n\nTesting CG with %d x %d 2D Laplace Matrix'%(A.shape[0],A.shape[0])
-#    t1=time.time()
-#    x = cg(A,b,x0,tol=1e-8,maxiter=100)
-#    t2=time.time()
-#    print '%s took %0.3f ms' % ('cg', (t2-t1)*1000.0)
-#    print 'norm = %g'%(norm(b - A*x))
-#
-#    t1=time.time()
-#    y = icg(A,b,x0,tol=1e-8,maxiter=100)
-#    t2=time.time()
-#    print '\n%s took %0.3f ms' % ('linalg cg', (t2-t1)*1000.0)
-#    print 'norm = %g'%(norm(b - A*y[0]))
-#    print 'info flag = %d'%(y[1])
-#
-#    
+if __name__ == '__main__':
+    # from numpy import diag
+    # A = random((4,4))
+    # A = A*A.transpose() + diag([10,10,10,10])
+    # b = random((4,1))
+    # x0 = random((4,1))
+
+    from pyamg.gallery import stencil_grid
+    from numpy.random import random
+    A = stencil_grid([[0,-1,0],[-1,4,-1],[0,-1,0]],(1000,1000),dtype=float,format='csr')
+    b = random((A.shape[0],))
+    x0 = random((A.shape[0],))
+
+    import time
+    from scipy.sparse.linalg.isolve import cg as icg
+
+    print '\n\nTesting CG with %d x %d 2D Laplace Matrix'%(A.shape[0],A.shape[0])
+    t1=time.time()
+    (x,flag) = cg(A,b,x0,tol=1e-8,maxiter=100)
+    t2=time.time()
+    print '%s took %0.3f ms' % ('cg', (t2-t1)*1000.0)
+    print 'norm = %g'%(norm(b - A*x))
+    print 'info flag = %d'%(flag)
+
+    t1=time.time()
+    (y,flag) = icg(A,b,x0,tol=1e-8,maxiter=100)
+    t2=time.time()
+    print '\n%s took %0.3f ms' % ('linalg cg', (t2-t1)*1000.0)
+    print 'norm = %g'%(norm(b - A*y))
+    print 'info flag = %d'%(flag)
+
+    

@@ -18,19 +18,20 @@ from pyamg.linalg import norm
 
 def oneD_profile(mg, grid=None, x0=None, b=None, soln=None, iter=1, cycle='V', fig_num=1):
     '''
-    Plot the near nullspace modes from which P is built
-    
+    Profile mg on the problem defined by x0 and b.  
+    Default problem is x0=rand, b = 0.
+
     Parameters
     ----------
     mg : pyamg multilevel hierarchy
-        visualize the components of mg
+        Hierarchy to profile
     grid : array
         if None, default grid is assumed to be on [0,1]
     x0 : array
         initial guess to linear system, default is a random
     b : array
         right hand side to linear system, default is all zeros
-        Note that if b is not all zeros, then if soln if not provided,
+        Note that if b is not all zeros and soln is not provided,
         A must be inverted in order to plot the error
     soln: array
         soln to the linear system
@@ -43,7 +44,7 @@ def oneD_profile(mg, grid=None, x0=None, b=None, soln=None, iter=1, cycle='V', f
     
     Returns
     -------
-    The error is sent to the plotter.
+    The error, residual and residual ratio history are sent to the plotter.
     To see plots, type pyamg.show()
 
     Notes
