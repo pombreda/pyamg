@@ -58,11 +58,9 @@ def run_krylov(krylov, A ,b, x0=None, tol=1e-6, restrt=None, maxiter=None, M=Non
 
     if (flag == 0) and (normr > normb*tol) and check:
         #print "Krylov method returned with falsely reported convergence, || r ||_2 = %e" % normr
-        import pdb; pdb.set_trace()
         assert(0)
     elif (normr > normb*tol) and check:
         #print "Krylov method did not converge in the maximum allowed number of iterations.  || r ||_2 = %e, flag = %d" % (normr, flag)
-        import pdb; pdb.set_trace()
         assert(0)        
 
     return x
@@ -210,7 +208,8 @@ def real_runs(krylov, n_max = 12, Weak=False, Symmetric=False):
         def callback_fcn(x):
             if isscalar(x): residuals.append(x)
             else:           residuals.append( norm(ravel(b)-ravel(A*x)) )
-        run_krylov(krylov, cases[i][0], cases[i][1], x0=x0, callback=callback_fcn, picky=True, Symmetric=False)
+        #run_krylov(krylov, cases[i][0], cases[i][1], x0=x0, callback=callback_fcn, picky=True, Symmetric=False)
+        run_krylov(krylov, cases[i][0], cases[i][1], x0=x0, callback=callback_fcn, picky=False, Symmetric=False)
         iters1 = len(residuals)
         
         # Test w/o preconditioning
@@ -450,7 +449,8 @@ def complex_runs(krylov, n_max = 12, Weak=False, Symmetric=False):
         def callback_fcn(x):
             if isscalar(x): residuals.append(x)
             else:           residuals.append( norm(ravel(b)-ravel(A*x)) )
-        run_krylov(krylov, cases[i][0], cases[i][1], x0=x0, callback=callback_fcn, picky=True, Symmetric=Symmetric, check=False)
+        #run_krylov(krylov, cases[i][0], cases[i][1], x0=x0, callback=callback_fcn, picky=True, Symmetric=Symmetric, check=False)
+        run_krylov(krylov, cases[i][0], cases[i][1], x0=x0, callback=callback_fcn, picky=False, Symmetric=Symmetric, check=False)
         iters1 = len(residuals)
         
         # Test w/o preconditioning

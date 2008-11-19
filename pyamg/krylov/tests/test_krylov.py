@@ -1,5 +1,5 @@
 from pyamg.testing import *
-from pyamg.krylov import gmres, fgmres, cgne, cgnr, cg
+from pyamg.krylov import gmres, fgmres, cgne, cgnr, cg, bicgstab
 from helper import real_runs, real_runs_restrt, complex_runs, complex_runs_restrt, fgmres_runs
 from scipy import random
 
@@ -48,4 +48,12 @@ class TestKrylov(TestCase):
 
         real_runs(cg, n_max=n_max, Symmetric=True, Weak=True)
         complex_runs(cg, n_max=n_max, Symmetric=True, Weak=True)
+    
+    def test_bicgstab(self):
+        # Ensure repeatability of tests
+        random.seed(0)
+        n_max=7
+
+        real_runs(bicgstab, n_max=n_max, Weak=True)
+        complex_runs(bicgstab, n_max=n_max, Weak=True)
 
