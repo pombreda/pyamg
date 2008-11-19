@@ -5,7 +5,7 @@ from scipy import rand, linalg, real, imag, mat, diag, random
 from scipy.sparse import csr_matrix
 from scipy.linalg import svd, eigvals
 
-from pyamg.linalg import *
+from pyamg.util.linalg import *
 
 class TestLinalg(TestCase):
     def test_norm(self):

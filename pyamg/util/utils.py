@@ -42,7 +42,7 @@ def profile_solver(ml, accel=None, **kwargs):
     >>> from scipy.sparse import spdiags
     >>> from scipy.sparse.linalg import cg
     >>> from pyamg.classical import ruge_stuben_solver
-    >>> from pyamg.utils import profile_solver
+    >>> from pyamg.util.utils import profile_solver
     >>> n=100
     >>> e = ones((n,1)).ravel()
     >>> data = [ -1*e, 2*e, -1*e ]
@@ -88,7 +88,7 @@ def diag_sparse(A):
     Examples
     --------
     >>> from scipy import rand
-    >>> from pyamg.utils import diag_sparse
+    >>> from pyamg.util.utils import diag_sparse
     >>> d = rand(6,1).ravel()
     >>> print diag_sparse(d).todense()
     """
@@ -133,7 +133,7 @@ def scale_rows(A,v,copy=True):
     --------
     >>> from numpy import ones
     >>> from scipy.sparse import spdiags
-    >>> from pyamg.utils import scale_rows
+    >>> from pyamg.util.utils import scale_rows
     >>> n=5
     >>> e = ones((n,1)).ravel()
     >>> data = [ -1*e, 2*e, -1*e ]
@@ -201,7 +201,7 @@ def scale_columns(A,v,copy=True):
     --------
     >>> from numpy import ones
     >>> from scipy.sparse import spdiags
-    >>> from pyamg.utils import scale_columns
+    >>> from pyamg.util.utils import scale_columns
     >>> n=5
     >>> e = ones((n,1)).ravel()
     >>> data = [ -1*e, 2*e, -1*e ]
@@ -273,7 +273,7 @@ def symmetric_rescaling(A,copy=True):
     --------
     >>> from numpy import ones
     >>> from scipy.sparse import spdiags
-    >>> from pyamg.utils import symmetric_rescaling
+    >>> from pyamg.util.utils import symmetric_rescaling
     >>> n=5
     >>> e = ones((n,1)).ravel()
     >>> data = [ -1*e, 2*e, -1*e ]
@@ -309,7 +309,7 @@ def symmetric_rescaling(A,copy=True):
 def type_prep(upcast_type, varlist):
     '''
     Loop over all elements of varlist and convert them to upcasttype
-    The only difference with pyamg.utils.to_type(...), is that scalars
+    The only difference with pyamg.util.utils.to_type(...), is that scalars
     are wrapped into (1,0) arrays.  This is desirable when passing 
     the numpy complex data type to C routines and complex scalars aren't
     handled correctly
@@ -334,7 +334,7 @@ def type_prep(upcast_type, varlist):
     Examples
     --------
     >>> from scipy import ones, complex128, rand
-    >>> from pyamg.utils import type_prep 
+    >>> from pyamg.util.utils import type_prep 
     >>> from scipy.sparse.sputils import upcast
     >>> x = ones((5,1))
     >>> y = 1.0j*rand(5,1)
@@ -374,7 +374,7 @@ def to_type(upcast_type, varlist):
     Examples
     --------
     >>> from scipy import ones, complex128, rand
-    >>> from pyamg.utils import to_type  
+    >>> from pyamg.util.utils import to_type  
     >>> from scipy.sparse.sputils import upcast
     >>> x = ones((5,1))
     >>> y = 1.0j*rand(5,1)
@@ -428,7 +428,7 @@ def get_diagonal(A, norm_eq=False, inv=False):
 
     Examples
     --------
-    >>> from pyamg.utils import get_diagonal
+    >>> from pyamg.util.utils import get_diagonal
     >>> from pyamg.gallery import poisson
     >>> A = poisson( (15,15), format='csr' )
     >>> D = get_diagonal(A)
@@ -483,7 +483,7 @@ def UnAmal(A, RowsPerBlock, ColsPerBlock):
     --------
     >>> from numpy import array
     >>> from scipy.sparse import csr_matrix
-    >>> from pyamg.utils import UnAmal
+    >>> from pyamg.util.utils import UnAmal
     >>> row = array([0,0,1,2,2,2])
     >>> col = array([0,2,2,0,1,2])
     >>> data = array([1,2,3,4,5,6])
@@ -531,7 +531,7 @@ def print_table(table, title='', delim='|', centering='center', col_padding=2, h
 
     Examples
     --------
-    >>> from pyamg.utils import print_table
+    >>> from pyamg.util.utils import print_table
     >>> table = [ ['cos(0)', 'cos(pi/2)', 'cos(pi)'], ['0.0', '1.0', '0.0'] ]
     >>> print print_table(table)
     >>> print print_table(table, delim='||')
@@ -630,7 +630,7 @@ def hierarchy_spectrum(mg, filter=True, plot=False):
     --------
     >>> from pyamg import smoothed_aggregation_solver
     >>> from pyamg.gallery import poisson
-    >>> from pyamg.utils import hierarchy_spectrum
+    >>> from pyamg.util.utils import hierarchy_spectrum
     >>> A = poisson( (15,15), format='csr' )
     >>> ml = smoothed_aggregation_solver(A, max_coarse=5)
     >>> hierarchy_spectrum(ml)
@@ -713,7 +713,7 @@ def Coord2RBM(numNodes, numPDEs, x, y, z):
 
     Examples
     --------
-    >>> from pyamg.utils import Coord2RBM
+    >>> from pyamg.util.utils import Coord2RBM
     >>> Coord2RBM(3,6,array([0,1,2]),array([0,1,2]),array([0,1,2]))
     """
 

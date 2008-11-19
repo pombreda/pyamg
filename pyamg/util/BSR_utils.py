@@ -29,7 +29,7 @@ def BSR_Get_Row(A, i):
     --------
     >>> from numpy import array
     >>> from scipy.sparse import bsr_matrix
-    >>> from pyamg.utils import BSR_Get_Row
+    >>> from pyamg.util.util.utils import BSR_Get_Row
     >>> indptr  = array([0,2,3,6])
     >>> indices = array([0,2,2,0,1,2])
     >>> data    = array([1,2,3,4,5,6]).repeat(4).reshape(6,2,2)
@@ -84,7 +84,7 @@ def BSR_Row_WriteScalar(A, i, x):
     --------
     >>> from numpy import array
     >>> from scipy.sparse import bsr_matrix
-    >>> from pyamg.utils import BSR_Row_WriteScalar
+    >>> from pyamg.util.utils import BSR_Row_WriteScalar
     >>> indptr  = array([0,2,3,6])
     >>> indices = array([0,2,2,0,1,2])
     >>> data    = array([1,2,3,4,5,6]).repeat(4).reshape(6,2,2)
@@ -134,7 +134,7 @@ def BSR_Row_WriteVect(A, i, x):
     --------
     >>> from numpy import array
     >>> from scipy.sparse import bsr_matrix
-    >>> from pyamg.utils import BSR_Row_WriteVect
+    >>> from pyamg.util.utils import BSR_Row_WriteVect
     >>> indptr  = array([0,2,3,6])
     >>> indices = array([0,2,2,0,1,2])
     >>> data    = array([1,2,3,4,5,6]).repeat(4).reshape(6,2,2)

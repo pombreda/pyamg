@@ -4,8 +4,8 @@ from numpy import matrix, array, diag, zeros, sqrt, abs, ravel
 from scipy import rand, linalg, real, imag, mat, diag, isscalar, ones
 from scipy.sparse import csr_matrix, isspmatrix
 
-from pyamg.utils import *
-from pyamg.utils import symmetric_rescaling
+from pyamg.util.utils import *
+from pyamg.util.utils import symmetric_rescaling
 
 class TestUtils(TestCase):
     def test_diag_sparse(self):

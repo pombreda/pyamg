@@ -14,7 +14,7 @@ from numpy import ravel, zeros, ones, min, abs, array, max, pi
 from scipy import imag, real, linspace, exp, rand
 from scipy.sparse import bsr_matrix
 from scipy.linalg import solve 
-from pyamg.linalg import norm
+from pyamg.util.linalg import norm
 
 def oneD_profile(mg, grid=None, x0=None, b=None, soln=None, iter=1, cycle='V', fig_num=1):
     '''

@@ -70,7 +70,7 @@ def infinity_norm(A):
     --------
     >>> from numpy import ones
     >>> from scipy.sparse import spdiags
-    >>> from pyamg.utils import infinity_norm
+    >>> from pyamg.util.linalg import infinity_norm
     >>> n=100
     >>> e = ones((n,1)).ravel()
     >>> data = [ -1*e, 2*e, -1*e ]
@@ -188,7 +188,7 @@ def approximate_spectral_radius(A,tol=0.1,maxiter=10,symmetric=None):
 
     Examples
     --------
-    >>> from pyamg.utils import approximate_spectral_radius
+    >>> from pyamg.util.linalg import approximate_spectral_radius
     >>> from scipy import rand
     >>> from scipy.linalg import eigvals, norm
     >>> A = rand(10,10)
@@ -303,7 +303,7 @@ def condest(A, tol=0.1, maxiter=25, symmetric=False):
     Examples
     --------
     >>> from scipy import rand
-    >>> from pyamg.linalg import condest
+    >>> from pyamg.util.linalg import condest
     >>> condest(rand(5,5))
 
     
@@ -400,7 +400,7 @@ def cond(A):
     Examples
     --------
     >>> from scipy import rand
-    >>> from pyamg.linalg import cond
+    >>> from pyamg.util.linalg import cond
     >>> cond(rand(5,5))
 
     """  
@@ -438,7 +438,7 @@ def issymm(A, tol=1e-6):
     Examples
     --------
     >>> from scipy import rand
-    >>> from pyamg.linalg import issymm
+    >>> from pyamg.util.linalg import issymm
     >>> issymm(rand(5,5))
     
     >>> from pyamg.gallery import poisson
