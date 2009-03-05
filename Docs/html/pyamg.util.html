@@ -1,0 +1,994 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Util Documentation &mdash; PyAMG v1.0 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="PyAMG v1.0 documentation" href="index.html" />
+    <link rel="up" title="Pyamg Documentation" href="pyamg.html" />
+    <link rel="prev" title="Testing Documentation" href="pyamg.testing.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="pyamg.testing.html" title="Testing Documentation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">PyAMG v1.0 documentation</a> &raquo;</li>
+          <li><a href="modules.html" accesskey="U">Project Documentation</a> &raquo;</li>
+          <li><a href="pyamg.html" accesskey="U">Pyamg Documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  
+  <div class="section" id="util-documentation">
+<h1>Util Documentation<a class="headerlink" href="#util-documentation" title="Permalink to this headline">¶</a></h1>
+<p>This page contains the Util Package documentation.</p>
+<div class="section" id="module-pyamg.util.BSR_utils">
+<h2>The <tt class="xref docutils literal"><span class="pre">BSR_utils</span></tt> Module<a class="headerlink" href="#module-pyamg.util.BSR_utils" title="Permalink to this headline">¶</a></h2>
+<p>Utility Functions for reading and writing individual rows
+in BSR matrices</p>
+<dl class="function">
+<dt id="pyamg.util.BSR_utils.BSR_Get_Row">
+<!--[pyamg.util.BSR_utils.BSR_Get_Row]--><tt class="descclassname">pyamg.util.BSR_utils.</tt><tt class="descname">BSR_Get_Row</tt><big>(</big><em>A</em>, <em>i</em><big>)</big><a class="headerlink" href="#pyamg.util.BSR_utils.BSR_Get_Row" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return row i in BSR matrix A.  Only nonzero entries are returned</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>A</strong> : bsr_matrix</p>
+<blockquote>
+<p>Input matrix</p>
+</blockquote>
+<p><strong>i</strong> : int</p>
+<blockquote>
+<p>Row number</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>z</strong> : array</p>
+<blockquote class="last">
+<p>Actual nonzero values for row i colindx Array of column indices for the
+nonzeros of row i</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">array</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">scipy.sparse</span> <span class="k">import</span> <span class="n">bsr_matrix</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.util.BSR_utils</span> <span class="k">import</span> <span class="n">BSR_Get_Row</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">indptr</span>  <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mf">0</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">3</span><span class="p">,</span><span class="mf">6</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">indices</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mf">0</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">0</span><span class="p">,</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span>    <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">3</span><span class="p">,</span><span class="mf">4</span><span class="p">,</span><span class="mf">5</span><span class="p">,</span><span class="mf">6</span><span class="p">])</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mf">4</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mf">6</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">B</span> <span class="o">=</span> <span class="n">bsr_matrix</span><span class="p">(</span> <span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">indices</span><span class="p">,</span><span class="n">indptr</span><span class="p">),</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mf">6</span><span class="p">,</span><span class="mf">6</span><span class="p">)</span> <span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Brow</span> <span class="o">=</span> <span class="n">BSR_Get_Row</span><span class="p">(</span><span class="n">B</span><span class="p">,</span><span class="mf">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">Brow</span><span class="p">[</span><span class="mf">1</span><span class="p">]</span>
+<span class="go">[4 5]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.util.BSR_utils.BSR_Row_WriteScalar">
+<!--[pyamg.util.BSR_utils.BSR_Row_WriteScalar]--><tt class="descclassname">pyamg.util.BSR_utils.</tt><tt class="descname">BSR_Row_WriteScalar</tt><big>(</big><em>A</em>, <em>i</em>, <em>x</em><big>)</big><a class="headerlink" href="#pyamg.util.BSR_utils.BSR_Row_WriteScalar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a scalar at each nonzero location in row i of BSR matrix A</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>A</strong> : bsr_matrix</p>
+<blockquote>
+<p>Input matrix</p>
+</blockquote>
+<p><strong>i</strong> : int</p>
+<blockquote>
+<p>Row number</p>
+</blockquote>
+<p><strong>x</strong> : float</p>
+<blockquote>
+<p>Scalar to overwrite nonzeros of row i in A</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>A</strong> : bsr_matrix</p>
+<blockquote class="last">
+<p>All nonzeros in row i of A have been overwritten with x.  
+If x is a vector, the first length(x) nonzeros in row i 
+of A have been overwritten with entries from x</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">array</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">scipy.sparse</span> <span class="k">import</span> <span class="n">bsr_matrix</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.util.BSR_utils</span> <span class="k">import</span> <span class="n">BSR_Row_WriteScalar</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">indptr</span>  <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mf">0</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">3</span><span class="p">,</span><span class="mf">6</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">indices</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mf">0</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">0</span><span class="p">,</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span>    <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">3</span><span class="p">,</span><span class="mf">4</span><span class="p">,</span><span class="mf">5</span><span class="p">,</span><span class="mf">6</span><span class="p">])</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mf">4</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mf">6</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">B</span> <span class="o">=</span> <span class="n">bsr_matrix</span><span class="p">(</span> <span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">indices</span><span class="p">,</span><span class="n">indptr</span><span class="p">),</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mf">6</span><span class="p">,</span><span class="mf">6</span><span class="p">)</span> <span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">BSR_Row_WriteScalar</span><span class="p">(</span><span class="n">B</span><span class="p">,</span><span class="mf">5</span><span class="p">,</span><span class="mf">22</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.util.BSR_utils.BSR_Row_WriteVect">
+<!--[pyamg.util.BSR_utils.BSR_Row_WriteVect]--><tt class="descclassname">pyamg.util.BSR_utils.</tt><tt class="descname">BSR_Row_WriteVect</tt><big>(</big><em>A</em>, <em>i</em>, <em>x</em><big>)</big><a class="headerlink" href="#pyamg.util.BSR_utils.BSR_Row_WriteVect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overwrite the nonzeros in row i of BSR matrix A with the vector x.  
+length(x) and nnz(A[i,:]) must be equivalent.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>A</strong> : bsr_matrix</p>
+<blockquote>
+<p>Matrix assumed to be in BSR format</p>
+</blockquote>
+<p><strong>i</strong> : int</p>
+<blockquote>
+<p>Row number</p>
+</blockquote>
+<p><strong>x</strong> : array</p>
+<blockquote>
+<p>Array of values to overwrite nonzeros in row i of A</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>A</strong> : bsr_matrix</p>
+<blockquote class="last">
+<p>The nonzeros in row i of A have been
+overwritten with entries from x.  x must be same
+length as nonzeros of row i.  This is guaranteed
+when this routine is used with vectors derived form
+Get_BSR_Row</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">array</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">scipy.sparse</span> <span class="k">import</span> <span class="n">bsr_matrix</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.util.BSR_utils</span> <span class="k">import</span> <span class="n">BSR_Row_WriteVect</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">indptr</span>  <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mf">0</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">3</span><span class="p">,</span><span class="mf">6</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">indices</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mf">0</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">0</span><span class="p">,</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span>    <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">3</span><span class="p">,</span><span class="mf">4</span><span class="p">,</span><span class="mf">5</span><span class="p">,</span><span class="mf">6</span><span class="p">])</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mf">4</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mf">6</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">B</span> <span class="o">=</span> <span class="n">bsr_matrix</span><span class="p">(</span> <span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">indices</span><span class="p">,</span><span class="n">indptr</span><span class="p">),</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mf">6</span><span class="p">,</span><span class="mf">6</span><span class="p">)</span> <span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">BSR_Row_WriteVect</span><span class="p">(</span><span class="n">B</span><span class="p">,</span><span class="mf">5</span><span class="p">,</span><span class="n">array</span><span class="p">([</span><span class="mf">11</span><span class="p">,</span><span class="mf">22</span><span class="p">,</span><span class="mf">33</span><span class="p">,</span><span class="mf">44</span><span class="p">,</span><span class="mf">55</span><span class="p">,</span><span class="mf">66</span><span class="p">]))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyamg.util.utils">
+<h2>The <tt class="xref docutils literal"><span class="pre">utils</span></tt> Module<a class="headerlink" href="#module-pyamg.util.utils" title="Permalink to this headline">¶</a></h2>
+<p>General utility functions for pyamg</p>
+<dl class="function">
+<dt id="pyamg.util.utils.diag_sparse">
+<!--[pyamg.util.utils.diag_sparse]--><tt class="descclassname">pyamg.util.utils.</tt><tt class="descname">diag_sparse</tt><big>(</big><em>A</em><big>)</big><a class="headerlink" href="#pyamg.util.utils.diag_sparse" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>If A is a sparse matrix (e.g. csr_matrix or csc_matrix)</dt>
+<dd><ul class="first last simple">
+<li>return the diagonal of A as an array</li>
+</ul>
+</dd>
+<dt>Otherwise</dt>
+<dd><ul class="first last simple">
+<li>return a csr_matrix with A on the diagonal</li>
+</ul>
+</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>A</strong> : sparse matrix or rank 1 array</p>
+<blockquote>
+<p>General sparse matrix or array of diagonal entries</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>B</strong> : array or sparse matrix</p>
+<blockquote class="last">
+<p>Diagonal sparse is returned as csr if A is dense otherwise return an
+array of the diagonal</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">import</span> <span class="nn">numpy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.util.utils</span> <span class="k">import</span> <span class="n">diag_sparse</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mf">3</span><span class="p">,))</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">diag_sparse</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
+<span class="go">[[ 2.  0.  0.]</span>
+<span class="go"> [ 0.  2.  0.]</span>
+<span class="go"> [ 0.  0.  2.]]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.util.utils.profile_solver">
+<!--[pyamg.util.utils.profile_solver]--><tt class="descclassname">pyamg.util.utils.</tt><tt class="descname">profile_solver</tt><big>(</big><em>ml</em>, <em>accel=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#pyamg.util.utils.profile_solver" title="Permalink to this definition">¶</a></dt>
+<dd><p>A quick solver to profile a particular multilevel object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ml</strong> : multilevel</p>
+<blockquote>
+<p>Fully constructed multilevel object</p>
+</blockquote>
+<p><strong>accel</strong> : function pointer</p>
+<blockquote>
+<p>Pointer to a valid Krylov solver (e.g. gmres, cg)</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>residuals</strong> : array</p>
+<blockquote class="last">
+<p>Array of residuals for each iteration</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><tt class="xref docutils literal"><span class="pre">multilevel.psolve</span></tt>, <tt class="xref docutils literal"><span class="pre">multilevel.solve</span></tt></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">import</span> <span class="nn">numpy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">scipy.sparse</span> <span class="k">import</span> <span class="n">spdiags</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">scipy.sparse.linalg</span> <span class="k">import</span> <span class="n">cg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.classical</span> <span class="k">import</span> <span class="n">ruge_stuben_solver</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.util.utils</span> <span class="k">import</span> <span class="n">profile_solver</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n</span><span class="o">=</span><span class="mf">100</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">n</span><span class="p">,</span><span class="mf">1</span><span class="p">))</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span> <span class="o">-</span><span class="mf">1</span><span class="o">*</span><span class="n">e</span><span class="p">,</span> <span class="mf">2</span><span class="o">*</span><span class="n">e</span><span class="p">,</span> <span class="o">-</span><span class="mf">1</span><span class="o">*</span><span class="n">e</span> <span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">spdiags</span><span class="p">(</span><span class="n">data</span><span class="p">,[</span><span class="o">-</span><span class="mf">1</span><span class="p">,</span><span class="mf">0</span><span class="p">,</span><span class="mf">1</span><span class="p">],</span><span class="n">n</span><span class="p">,</span><span class="n">n</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">A</span><span class="o">*</span><span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ml</span> <span class="o">=</span> <span class="n">ruge_stuben_solver</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">max_coarse</span><span class="o">=</span><span class="mf">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">profile_solver</span><span class="p">(</span><span class="n">ml</span><span class="p">,</span><span class="n">accel</span><span class="o">=</span><span class="n">cg</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.util.utils.to_type">
+<!--[pyamg.util.utils.to_type]--><tt class="descclassname">pyamg.util.utils.</tt><tt class="descname">to_type</tt><big>(</big><em>upcast_type</em>, <em>varlist</em><big>)</big><a class="headerlink" href="#pyamg.util.utils.to_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loop over all elements of varlist and convert them to upcasttype</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>upcast_type</strong> : data type</p>
+<blockquote>
+<p>e.g. complex, float64 or complex128</p>
+</blockquote>
+<p><strong>varlist</strong> : list</p>
+<blockquote>
+<p>list may contain arrays, mat&#8217;s, sparse matrices, or scalars 
+the elements may be float, int or complex</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Returns upcasted varlist to upcast_type</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Useful when harmonizing the types of variables, such as 
+if A and b are complex, but x,y and z are not.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">import</span> <span class="nn">numpy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.util.utils</span> <span class="k">import</span> <span class="n">to_type</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">scipy.sparse.sputils</span> <span class="k">import</span> <span class="n">upcast</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mf">5</span><span class="p">,</span><span class="mf">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="mf">2.0</span><span class="n">j</span><span class="o">*</span><span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mf">5</span><span class="p">,</span><span class="mf">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">varlist</span> <span class="o">=</span> <span class="n">to_type</span><span class="p">(</span><span class="n">upcast</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">y</span><span class="o">.</span><span class="n">dtype</span><span class="p">),</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.util.utils.type_prep">
+<!--[pyamg.util.utils.type_prep]--><tt class="descclassname">pyamg.util.utils.</tt><tt class="descname">type_prep</tt><big>(</big><em>upcast_type</em>, <em>varlist</em><big>)</big><a class="headerlink" href="#pyamg.util.utils.type_prep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loop over all elements of varlist and convert them to upcasttype
+The only difference with pyamg.util.utils.to_type(...), is that scalars
+are wrapped into (1,0) arrays.  This is desirable when passing 
+the numpy complex data type to C routines and complex scalars aren&#8217;t
+handled correctly</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>upcast_type</strong> : data type</p>
+<blockquote>
+<p>e.g. complex, float64 or complex128</p>
+</blockquote>
+<p><strong>varlist</strong> : list</p>
+<blockquote>
+<p>list may contain arrays, mat&#8217;s, sparse matrices, or scalars 
+the elements may be float, int or complex</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Returns upcasted varlist to upcast_type</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Useful when harmonizing the types of variables, such as 
+if A and b are complex, but x,y and z are not.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">import</span> <span class="nn">numpy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.util.utils</span> <span class="k">import</span> <span class="n">type_prep</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">scipy.sparse.sputils</span> <span class="k">import</span> <span class="n">upcast</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mf">5</span><span class="p">,</span><span class="mf">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="mf">2.0</span><span class="n">j</span><span class="o">*</span><span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mf">5</span><span class="p">,</span><span class="mf">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">z</span> <span class="o">=</span> <span class="mf">2.3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">varlist</span> <span class="o">=</span> <span class="n">type_prep</span><span class="p">(</span><span class="n">upcast</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">y</span><span class="o">.</span><span class="n">dtype</span><span class="p">),</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.util.utils.get_diagonal">
+<!--[pyamg.util.utils.get_diagonal]--><tt class="descclassname">pyamg.util.utils.</tt><tt class="descname">get_diagonal</tt><big>(</big><em>A</em>, <em>norm_eq=False</em>, <em>inv=False</em><big>)</big><a class="headerlink" href="#pyamg.util.utils.get_diagonal" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Return the diagonal or inverse of diagonal for </dt>
+<dd>A, (A.H A) or (A A.H)</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>A</strong> : {dense or sparse matrix}</p>
+<blockquote>
+<p>e.g. array, matrix, csr_matrix, ...</p>
+</blockquote>
+<p><strong>norm_eq</strong> : {0, 1, 2}</p>
+<blockquote>
+<p>0 ==&gt; D = diag(A)
+1 ==&gt; D = diag(A.H A)
+2 ==&gt; D = diag(A A.H)</p>
+</blockquote>
+<p><strong>inv</strong> : {True, False}</p>
+<blockquote>
+<p>If True, D = 1.0/D</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>diagonal, D, of appropriate system</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>This function is especially useful for its fast methods
+of obtaining diag(A A.H) and diag(A.H A).  Dinv is zero
+wherever D is zero</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.util.utils</span> <span class="k">import</span> <span class="n">get_diagonal</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery</span> <span class="k">import</span> <span class="n">poisson</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">poisson</span><span class="p">(</span> <span class="p">(</span><span class="mf">5</span><span class="p">,),</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;csr&#39;</span> <span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D</span> <span class="o">=</span> <span class="n">get_diagonal</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">D</span>
+<span class="go">[ 2.  2.  2.  2.  2.]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D</span> <span class="o">=</span> <span class="n">get_diagonal</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">norm_eq</span><span class="o">=</span><span class="mf">1</span><span class="p">,</span> <span class="n">inv</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">D</span>
+<span class="go">[ 0.2         0.16666667  0.16666667  0.16666667  0.2       ]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.util.utils.UnAmal">
+<!--[pyamg.util.utils.UnAmal]--><tt class="descclassname">pyamg.util.utils.</tt><tt class="descname">UnAmal</tt><big>(</big><em>A</em>, <em>RowsPerBlock</em>, <em>ColsPerBlock</em><big>)</big><a class="headerlink" href="#pyamg.util.utils.UnAmal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unamalgamate a CSR A with blocks of 1&#8217;s.</p>
+<p>Equivalent to Kronecker_Product(A, ones(RowsPerBlock, ColsPerBlock))</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>A</strong> : csr_matrix</p>
+<blockquote>
+<p>Amalgamted matrix</p>
+</blockquote>
+<p><strong>RowsPerBlock</strong> : int</p>
+<blockquote>
+<p>Give A blocks of size (RowsPerBlock, ColsPerBlock)</p>
+</blockquote>
+<p><strong>ColsPerBlock</strong> : int</p>
+<blockquote>
+<p>Give A blocks of size (RowsPerBlock, ColsPerBlock)</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>A_UnAmal</strong> : bsr_matrix</p>
+<blockquote class="last">
+<p>Similar to a Kronecker product of A and ones(RowsPerBlock, ColsPerBlock)</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">array</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">scipy.sparse</span> <span class="k">import</span> <span class="n">csr_matrix</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.util.utils</span> <span class="k">import</span> <span class="n">UnAmal</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">row</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mf">0</span><span class="p">,</span><span class="mf">0</span><span class="p">,</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">2</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mf">0</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">0</span><span class="p">,</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">3</span><span class="p">,</span><span class="mf">4</span><span class="p">,</span><span class="mf">5</span><span class="p">,</span><span class="mf">6</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">csr_matrix</span><span class="p">(</span> <span class="p">(</span><span class="n">data</span><span class="p">,(</span><span class="n">row</span><span class="p">,</span><span class="n">col</span><span class="p">)),</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mf">3</span><span class="p">,</span><span class="mf">3</span><span class="p">)</span> <span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
+<span class="go">matrix([[1, 0, 2],</span>
+<span class="go">        [0, 0, 3],</span>
+<span class="go">        [4, 5, 6]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">UnAmal</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">2</span><span class="p">)</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
+<span class="go">matrix([[ 1.,  1.,  0.,  0.,  1.,  1.],</span>
+<span class="go">        [ 1.,  1.,  0.,  0.,  1.,  1.],</span>
+<span class="go">        [ 0.,  0.,  0.,  0.,  1.,  1.],</span>
+<span class="go">        [ 0.,  0.,  0.,  0.,  1.,  1.],</span>
+<span class="go">        [ 1.,  1.,  1.,  1.,  1.,  1.],</span>
+<span class="go">        [ 1.,  1.,  1.,  1.,  1.,  1.]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.util.utils.Coord2RBM">
+<!--[pyamg.util.utils.Coord2RBM]--><tt class="descclassname">pyamg.util.utils.</tt><tt class="descname">Coord2RBM</tt><big>(</big><em>numNodes</em>, <em>numPDEs</em>, <em>x</em>, <em>y</em>, <em>z</em><big>)</big><a class="headerlink" href="#pyamg.util.utils.Coord2RBM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert 2D or 3D coordinates into Rigid body modes for use as near
+nullspace modes in elasticity AMG solvers</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>numNodes</strong> : int</p>
+<blockquote>
+<p>Number of nodes</p>
+</blockquote>
+<p><strong>numPDEs :</strong> :</p>
+<blockquote>
+<p>Number of dofs per node</p>
+</blockquote>
+<p><strong>x,y,z</strong> : array_like</p>
+<blockquote>
+<p>Coordinate vectors</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>rbm</strong> : matrix</p>
+<blockquote class="last">
+<p>A matrix of size (numNodes*numPDEs) x (1 | 6) containing the 6 rigid
+body modes</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">import</span> <span class="nn">numpy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.util.utils</span> <span class="k">import</span> <span class="n">Coord2RBM</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0</span><span class="p">,</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">])</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Coord2RBM</span><span class="p">(</span><span class="mf">3</span><span class="p">,</span><span class="mf">6</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">a</span><span class="p">)</span>
+<span class="go">matrix([[ 1.,  0.,  0.,  0.,  0., -0.],</span>
+<span class="go">        [ 0.,  1.,  0., -0.,  0.,  0.],</span>
+<span class="go">        [ 0.,  0.,  1.,  0., -0.,  0.],</span>
+<span class="go">        [ 0.,  0.,  0.,  1.,  0.,  0.],</span>
+<span class="go">        [ 0.,  0.,  0.,  0.,  1.,  0.],</span>
+<span class="go">        [ 0.,  0.,  0.,  0.,  0.,  1.],</span>
+<span class="go">        [ 1.,  0.,  0.,  0.,  1., -1.],</span>
+<span class="go">        [ 0.,  1.,  0., -1.,  0.,  1.],</span>
+<span class="go">        [ 0.,  0.,  1.,  1., -1.,  0.],</span>
+<span class="go">        [ 0.,  0.,  0.,  1.,  0.,  0.],</span>
+<span class="go">        [ 0.,  0.,  0.,  0.,  1.,  0.],</span>
+<span class="go">        [ 0.,  0.,  0.,  0.,  0.,  1.],</span>
+<span class="go">        [ 1.,  0.,  0.,  0.,  2., -2.],</span>
+<span class="go">        [ 0.,  1.,  0., -2.,  0.,  2.],</span>
+<span class="go">        [ 0.,  0.,  1.,  2., -2.,  0.],</span>
+<span class="go">        [ 0.,  0.,  0.,  1.,  0.,  0.],</span>
+<span class="go">        [ 0.,  0.,  0.,  0.,  1.,  0.],</span>
+<span class="go">        [ 0.,  0.,  0.,  0.,  0.,  1.]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.util.utils.hierarchy_spectrum">
+<!--[pyamg.util.utils.hierarchy_spectrum]--><tt class="descclassname">pyamg.util.utils.</tt><tt class="descname">hierarchy_spectrum</tt><big>(</big><em>mg</em>, <em>filter=True</em>, <em>plot=False</em><big>)</big><a class="headerlink" href="#pyamg.util.utils.hierarchy_spectrum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Examine a multilevel hierarchy&#8217;s spectrum</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>mg { pyamg multilevel hierarchy }</strong> :</p>
+<blockquote>
+<p>e.g. generated with smoothed_aggregation_solver(...) or ruge_stuben_solver(...)</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>(1) table to standard out detailing the spectrum of each level in mg</strong> :</p>
+<p><strong>(2) if plot==True, a sequence of plots in the complex plane of the</strong> :</p>
+<blockquote class="last">
+<p>spectrum at each level</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>This can be useful for troubleshooting and when examining how your 
+problem&#8217;s nature changes from level to level</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg</span> <span class="k">import</span> <span class="n">smoothed_aggregation_solver</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery</span> <span class="k">import</span> <span class="n">poisson</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.util.utils</span> <span class="k">import</span> <span class="n">hierarchy_spectrum</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">poisson</span><span class="p">(</span> <span class="p">(</span><span class="mf">1</span><span class="p">,),</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;csr&#39;</span> <span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ml</span> <span class="o">=</span> <span class="n">smoothed_aggregation_solver</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hierarchy_spectrum</span><span class="p">(</span><span class="n">ml</span><span class="p">)</span>
+<span class="go">&lt;BLANKLINE&gt;</span>
+<span class="go"> Level | min(re(eig)) | max(re(eig)) | num re(eig) &lt; 0 | num re(eig) &gt; 0 | cond_2(A) </span>
+<span class="go">-------------------------------------------------------------------------------------</span>
+<span class="go">   0   |    2.000     |    2.000     |        0        |        1        |  1.00e+00 </span>
+<span class="go">&lt;BLANKLINE&gt;</span>
+<span class="go">&lt;BLANKLINE&gt;</span>
+<span class="go"> Level | min(im(eig)) | max(im(eig)) | num im(eig) &lt; 0 | num im(eig) &gt; 0 | cond_2(A) </span>
+<span class="go">-------------------------------------------------------------------------------------</span>
+<span class="go">   0   |    0.000     |    0.000     |        0        |        0        |  1.00e+00 </span>
+<span class="go">&lt;BLANKLINE&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.util.utils.print_table">
+<!--[pyamg.util.utils.print_table]--><tt class="descclassname">pyamg.util.utils.</tt><tt class="descname">print_table</tt><big>(</big><em>table</em>, <em>title=''</em>, <em>delim='|'</em>, <em>centering='center'</em>, <em>col_padding=2</em>, <em>header=True</em>, <em>headerchar='-'</em><big>)</big><a class="headerlink" href="#pyamg.util.utils.print_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print a table from a list of lists representing the rows of a table</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>table</strong> : list</p>
+<blockquote>
+<p>list of lists, e.g. a table with 3 columns and 2 rows could be
+[ [&#8216;0,0&#8217;, &#8216;0,1&#8217;, &#8216;0,2&#8217;], [&#8216;1,0&#8217;, &#8216;1,1&#8217;, &#8216;1,2&#8217;] ]</p>
+</blockquote>
+<p><strong>title</strong> : string</p>
+<blockquote>
+<p>Printed centered above the table</p>
+</blockquote>
+<p><strong>delim</strong> : string</p>
+<blockquote>
+<p>character to delimit columns</p>
+</blockquote>
+<p><strong>centering</strong> : {&#8216;left&#8217;, &#8216;right&#8217;, &#8216;center&#8217;}</p>
+<blockquote>
+<p>chooses justification for columns</p>
+</blockquote>
+<p><strong>col_padding</strong> : int</p>
+<blockquote>
+<p>number of blank spaces to add to each column</p>
+</blockquote>
+<p><strong>header</strong> : {True, False}</p>
+<blockquote>
+<p>Does the first entry of table contain column headers?</p>
+</blockquote>
+<p><strong>headerchar</strong> : {string}</p>
+<blockquote>
+<p>character to separate column headers from rest of table</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>string representing table that&#8217;s ready to be printed</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The string for the table will have correctly justified columns
+with extra paddding added into each column entry to ensure columns align.
+The characters to delimit the columns can be user defined.  This
+should be useful for printing convergence data from tests.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.util.utils</span> <span class="k">import</span> <span class="n">print_table</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">table</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span><span class="s">&#39;cos(0)&#39;</span><span class="p">,</span> <span class="s">&#39;cos(pi/2)&#39;</span><span class="p">,</span> <span class="s">&#39;cos(pi)&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s">&#39;0.0&#39;</span><span class="p">,</span> <span class="s">&#39;1.0&#39;</span><span class="p">,</span> <span class="s">&#39;0.0&#39;</span><span class="p">]</span> <span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">table1</span> <span class="o">=</span> <span class="n">print_table</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>                 <span class="c"># string to print</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">table2</span> <span class="o">=</span> <span class="n">print_table</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">delim</span><span class="o">=</span><span class="s">&#39;||&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">table3</span> <span class="o">=</span> <span class="n">print_table</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">headerchar</span><span class="o">=</span><span class="s">&#39;*&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">table4</span> <span class="o">=</span> <span class="n">print_table</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">col_padding</span><span class="o">=</span><span class="mf">6</span><span class="p">,</span> <span class="n">centering</span><span class="o">=</span><span class="s">&#39;left&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyamg.util.setup">
+<h2>The <tt class="xref docutils literal"><span class="pre">setup</span></tt> Module<a class="headerlink" href="#module-pyamg.util.setup" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pyamg.util.setup.configuration">
+<!--[pyamg.util.setup.configuration]--><tt class="descclassname">pyamg.util.setup.</tt><tt class="descname">configuration</tt><big>(</big><em>parent_package=''</em>, <em>top_path=None</em><big>)</big><a class="headerlink" href="#pyamg.util.setup.configuration" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-pyamg.util.linalg">
+<h2>The <tt class="xref docutils literal"><span class="pre">linalg</span></tt> Module<a class="headerlink" href="#module-pyamg.util.linalg" title="Permalink to this headline">¶</a></h2>
+<p>Linear Algebra Helper Routines</p>
+<dl class="function">
+<dt id="pyamg.util.linalg.approximate_spectral_radius">
+<!--[pyamg.util.linalg.approximate_spectral_radius]--><tt class="descclassname">pyamg.util.linalg.</tt><tt class="descname">approximate_spectral_radius</tt><big>(</big><em>A</em>, <em>tol=0.10000000000000001</em>, <em>maxiter=10</em>, <em>symmetric=None</em><big>)</big><a class="headerlink" href="#pyamg.util.linalg.approximate_spectral_radius" title="Permalink to this definition">¶</a></dt>
+<dd><p>Approximate the spectral radius of a matrix</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>A</strong> : {dense or sparse matrix}</p>
+<blockquote>
+<p>E.g. csr_matrix, csc_matrix, ndarray, etc.</p>
+</blockquote>
+<p><strong>tol</strong> : {scalar}</p>
+<blockquote>
+<p>Tolerance of approximation (currently unused)</p>
+</blockquote>
+<p><strong>maxiter</strong> : {integer}</p>
+<blockquote>
+<p>Maximum number of iterations to perform</p>
+</blockquote>
+<p><strong>symmetric</strong> : {boolean}</p>
+<blockquote>
+<dl class="docutils">
+<dt>True  - if A is symmetric</dt>
+<dd><p class="first last">Lanczos iteration is used (more efficient)</p>
+</dd>
+<dt>False - if A is non-symmetric (default</dt>
+<dd><p class="first last">Arnoldi iteration is used (less efficient)</p>
+</dd>
+</dl>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>An approximation to the spectral radius of A</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The spectral radius is approximated by looking at the Ritz eigenvalues.
+Arnoldi iteration (or Lanczos) is used to project the matrix A onto a
+Krylov subspace: H = Q* A Q.  The eigenvalues of H (i.e. the Ritz
+eigenvalues) should represent the eigenvalues of A in the sense that the
+minimum and maximum values are usually well matched (for the symmetric case
+it is true since the eigenvalues are real).</p>
+<p class="rubric">References</p>
+<table class="docutils footnote" frame="void" id="id1" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id1">[31]</a></td><td>Z. Bai, J. Demmel, J. Dongarra, A. Ruhe, and H. van der Vorst, editors.
+&#8220;Templates for the Solution of Algebraic Eigenvalue Problems: A Practical
+Guide&#8221;, SIAM, Philadelphia, 2000.</td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.util.linalg</span> <span class="k">import</span> <span class="n">approximate_spectral_radius</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">import</span> <span class="nn">numpy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">scipy.linalg</span> <span class="k">import</span> <span class="n">eigvals</span><span class="p">,</span> <span class="n">norm</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1</span><span class="p">,</span><span class="mf">0</span><span class="p">],[</span><span class="mf">0</span><span class="p">,</span><span class="mf">1</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">approximate_spectral_radius</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">maxiter</span><span class="o">=</span><span class="mf">3</span><span class="p">)</span>
+<span class="go">1.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="nb">max</span><span class="p">([</span><span class="n">norm</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">eigvals</span><span class="p">(</span><span class="n">A</span><span class="p">)])</span>
+<span class="go">1.0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.util.linalg.infinity_norm">
+<!--[pyamg.util.linalg.infinity_norm]--><tt class="descclassname">pyamg.util.linalg.</tt><tt class="descname">infinity_norm</tt><big>(</big><em>A</em><big>)</big><a class="headerlink" href="#pyamg.util.linalg.infinity_norm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Infinity norm of a matrix (maximum absolute row sum).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>A</strong> : csr_matrix, csc_matrix, sparse, or numpy matrix</p>
+<blockquote>
+<p>Sparse or dense matrix</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>n</strong> : float</p>
+<blockquote class="last">
+<p>Infinity norm of the matrix</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><tt class="xref docutils literal"><span class="pre">scipy.linalg.norm</span></tt></dt>
+<dd>dense matrix norms</dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>This serves as an upper bound on spectral radius.</li>
+<li>csr and csc avoid a deep copy</li>
+<li>dense calls scipy.linalg.norm</li>
+</ul>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">import</span> <span class="nn">numpy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">scipy.sparse</span> <span class="k">import</span> <span class="n">spdiags</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.util.linalg</span> <span class="k">import</span> <span class="n">infinity_norm</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n</span><span class="o">=</span><span class="mf">10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">n</span><span class="p">,</span><span class="mf">1</span><span class="p">))</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span> <span class="o">-</span><span class="mf">1</span><span class="o">*</span><span class="n">e</span><span class="p">,</span> <span class="mf">2</span><span class="o">*</span><span class="n">e</span><span class="p">,</span> <span class="o">-</span><span class="mf">1</span><span class="o">*</span><span class="n">e</span> <span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">spdiags</span><span class="p">(</span><span class="n">data</span><span class="p">,[</span><span class="o">-</span><span class="mf">1</span><span class="p">,</span><span class="mf">0</span><span class="p">,</span><span class="mf">1</span><span class="p">],</span><span class="n">n</span><span class="p">,</span><span class="n">n</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">infinity_norm</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="go">4.0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.util.linalg.norm">
+<!--[pyamg.util.linalg.norm]--><tt class="descclassname">pyamg.util.linalg.</tt><tt class="descname">norm</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#pyamg.util.linalg.norm" title="Permalink to this definition">¶</a></dt>
+<dd><p>2-norm of a vector</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> : array_like</p>
+<blockquote>
+<p>Vector of complex or real values</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>n</strong> : float</p>
+<blockquote class="last">
+<p>2-norm of a vector</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><tt class="xref docutils literal"><span class="pre">scipy.linalg.norm</span></tt></dt>
+<dd>scipy general matrix or vector norm</dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>currently 1+ order of magnitude faster than scipy.linalg.norm(x), which calls
+sqrt(numpy.sum(real((conjugate(x)*x)),axis=0)) resulting in an extra copy</li>
+<li>only handles the 2-norm for vectors</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.util.linalg.residual_norm">
+<!--[pyamg.util.linalg.residual_norm]--><tt class="descclassname">pyamg.util.linalg.</tt><tt class="descname">residual_norm</tt><big>(</big><em>A</em>, <em>x</em>, <em>b</em><big>)</big><a class="headerlink" href="#pyamg.util.linalg.residual_norm" title="Permalink to this definition">¶</a></dt>
+<dd>Compute ||b - A*x||</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.util.linalg.condest">
+<!--[pyamg.util.linalg.condest]--><tt class="descclassname">pyamg.util.linalg.</tt><tt class="descname">condest</tt><big>(</big><em>A</em>, <em>tol=0.10000000000000001</em>, <em>maxiter=25</em>, <em>symmetric=False</em><big>)</big><a class="headerlink" href="#pyamg.util.linalg.condest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimates the condition number of A</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>A</strong> : {dense or sparse matrix}</p>
+<blockquote>
+<p>e.g. array, matrix, csr_matrix, ...</p>
+</blockquote>
+<p><strong>tol</strong> : {float}</p>
+<blockquote>
+<p>Approximation tolerance, currently not used</p>
+</blockquote>
+<p><strong>maxiter: {int}</strong> :</p>
+<blockquote>
+<p>Max number of Arnoldi/Lanczos iterations</p>
+</blockquote>
+<p><strong>symmetric</strong> : {bool}</p>
+<blockquote>
+<p>If symmetric use the far more efficient Lanczos algorithm,
+Else use Arnoldi</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>Estimate of cond(A) with |lambda_max| / |lambda_min|</strong> :</p>
+<p><strong>through the use of Arnoldi or Lanczos iterations, depending on</strong> :</p>
+<p class="last"><strong>the symmetric flag</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The condition number measures how large of a change in the 
+the problems solution is caused by a change in problem&#8217;s input.
+Large condition numbers indicate that small perturbations 
+and numerical errors are magnified greatly when solving the system.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">import</span> <span class="nn">numpy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.util.linalg</span> <span class="k">import</span> <span class="n">condest</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">condest</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1</span><span class="p">,</span><span class="mf">0</span><span class="p">],[</span><span class="mf">0</span><span class="p">,</span><span class="mf">2</span><span class="p">]]))</span>
+<span class="go">1.0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.util.linalg.cond">
+<!--[pyamg.util.linalg.cond]--><tt class="descclassname">pyamg.util.linalg.</tt><tt class="descname">cond</tt><big>(</big><em>A</em><big>)</big><a class="headerlink" href="#pyamg.util.linalg.cond" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns condition number of A</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>A</strong> : {dense or sparse matrix}</p>
+<blockquote>
+<p>e.g. array, matrix, csr_matrix, ...</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>2-norm condition number through use of the SVD</strong> :</p>
+<p><strong>Use for small to moderate sized dense matrices.</strong> :</p>
+<p class="last"><strong>For large sparse matrices, use condest.</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The condition number measures how large of a change in the 
+the problems solution is caused by a change in problem&#8217;s input.
+Large condition numbers indicate that small perturbations 
+and numerical errors are magnified greatly when solving the system.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">import</span> <span class="nn">numpy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.util.linalg</span> <span class="k">import</span> <span class="n">cond</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">condest</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1</span><span class="p">,</span><span class="mf">0</span><span class="p">],[</span><span class="mf">0</span><span class="p">,</span><span class="mf">2</span><span class="p">]]))</span>
+<span class="go">1.0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.util.linalg.issymm">
+<!--[pyamg.util.linalg.issymm]--><tt class="descclassname">pyamg.util.linalg.</tt><tt class="descname">issymm</tt><big>(</big><em>A</em>, <em>tol=9.9999999999999995e-07</em><big>)</big><a class="headerlink" href="#pyamg.util.linalg.issymm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns 0 if A is Hermitian symmetric to within tol</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>A</strong> : {dense or sparse matrix}</p>
+<blockquote>
+<p>e.g. array, matrix, csr_matrix, ...</p>
+</blockquote>
+<p><strong>tol</strong> : {float}</p>
+<blockquote>
+<p>Symmetry tolerance</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>0                if symmetric</strong> :</p>
+<p class="last"><strong>max( |A - A.H| ) if unsymmetric</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>This function applies a simple test of Hermitian symmetry</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">import</span> <span class="nn">numpy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.util.linalg</span> <span class="k">import</span> <span class="n">issymm</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">issymm</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">],[</span><span class="mf">1</span><span class="p">,</span><span class="mf">1</span><span class="p">]]))</span>
+<span class="go">1</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery</span> <span class="k">import</span> <span class="n">poisson</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">issymm</span><span class="p">(</span><span class="n">poisson</span><span class="p">((</span><span class="mf">10</span><span class="p">,</span><span class="mf">10</span><span class="p">)))</span>
+<span class="go">0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo_dropshadow_small.png" alt="Logo"/>
+            </a></p>
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference" href="">Util Documentation</a><ul>
+<li><a class="reference" href="#module-pyamg.util.BSR_utils">The <tt class="docutils literal"><span class="pre">BSR_utils</span></tt> Module</a></li>
+<li><a class="reference" href="#module-pyamg.util.utils">The <tt class="docutils literal"><span class="pre">utils</span></tt> Module</a></li>
+<li><a class="reference" href="#module-pyamg.util.setup">The <tt class="docutils literal"><span class="pre">setup</span></tt> Module</a></li>
+<li><a class="reference" href="#module-pyamg.util.linalg">The <tt class="docutils literal"><span class="pre">linalg</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="pyamg.testing.html" title="previous chapter">Testing Documentation</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/pyamg.util.txt">Show Source</a></li>
+            </ul>
+          <h3>Quick search</h3>
+            <form class="search" action="search.html" method="get">
+              <input type="text" name="q" size="18" /> <input type="submit" value="Go" />
+              <input type="hidden" name="check_keywords" value="yes" />
+              <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="pyamg.testing.html" title="Testing Documentation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">PyAMG v1.0 documentation</a> &raquo;</li>
+          <li><a href="modules.html" accesskey="U">Project Documentation</a> &raquo;</li>
+          <li><a href="pyamg.html" accesskey="U">Pyamg Documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009, Nathan Bell, Luke Olson, Jacob Schroder.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.1.
+    </div>
+  </body>
+</html>

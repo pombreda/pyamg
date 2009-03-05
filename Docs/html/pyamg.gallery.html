@@ -1,0 +1,635 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Gallery Documentation &mdash; PyAMG v1.0 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="PyAMG v1.0 documentation" href="index.html" />
+    <link rel="up" title="Pyamg Documentation" href="pyamg.html" />
+    <link rel="next" title="Aggregation Documentation" href="pyamg.aggregation.html" />
+    <link rel="prev" title="Krylov Documentation" href="pyamg.krylov.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="pyamg.aggregation.html" title="Aggregation Documentation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pyamg.krylov.html" title="Krylov Documentation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">PyAMG v1.0 documentation</a> &raquo;</li>
+          <li><a href="modules.html" accesskey="U">Project Documentation</a> &raquo;</li>
+          <li><a href="pyamg.html" accesskey="U">Pyamg Documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  
+  <div class="section" id="gallery-documentation">
+<h1>Gallery Documentation<a class="headerlink" href="#gallery-documentation" title="Permalink to this headline">¶</a></h1>
+<p>This page contains the Gallery Package documentation.</p>
+<div class="section" id="module-pyamg.gallery.example">
+<h2>The <tt class="xref docutils literal"><span class="pre">example</span></tt> Module<a class="headerlink" href="#module-pyamg.gallery.example" title="Permalink to this headline">¶</a></h2>
+<p>Examples stored in files</p>
+<dl class="function">
+<dt id="pyamg.gallery.example.load_example">
+<!--[pyamg.gallery.example.load_example]--><tt class="descclassname">pyamg.gallery.example.</tt><tt class="descname">load_example</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#pyamg.gallery.example.load_example" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load an example problem by name</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : string (e.g. &#8216;airfoil&#8217;)</p>
+<blockquote class="last">
+<p>Name of the example to load</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<dl class="docutils">
+<dt>Each example is stored in a dictionary with the following keys:</dt>
+<dd><ul class="first last simple">
+<li>&#8216;A&#8217;        : sparse matrix</li>
+<li>&#8216;B&#8217;        : near-nullspace candidates</li>
+<li>&#8216;vertices&#8217; : dense array of nodal coordinates</li>
+<li>&#8216;elements&#8217; : dense array of element indices</li>
+</ul>
+</dd>
+<dt>Current example names are:</dt>
+<dd>airfoil
+bar
+knot
+unit_cube
+unit_square</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery</span> <span class="k">import</span> <span class="n">load_example</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ex</span> <span class="o">=</span> <span class="n">load_example</span><span class="p">(</span><span class="s">&#39;knot&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyamg.gallery.laplacian">
+<h2>The <tt class="xref docutils literal"><span class="pre">laplacian</span></tt> Module<a class="headerlink" href="#module-pyamg.gallery.laplacian" title="Permalink to this headline">¶</a></h2>
+<p>Discretizations of the Poisson problem</p>
+<dl class="function">
+<dt id="pyamg.gallery.laplacian.poisson">
+<!--[pyamg.gallery.laplacian.poisson]--><tt class="descclassname">pyamg.gallery.laplacian.</tt><tt class="descname">poisson</tt><big>(</big><em>grid</em>, <em>spacing=None</em>, <em>dtype=&lt;type 'float'&gt;</em>, <em>format=None</em><big>)</big><a class="headerlink" href="#pyamg.gallery.laplacian.poisson" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a sparse matrix for the N-dimensional Poisson problem</p>
+<p>The matrix represents a finite Difference approximation to the 
+Poisson problem on a regular n-dimensional grid with unit grid 
+spacing and Dirichlet boundary conditions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>grid</strong> : tuple of integers</p>
+<blockquote class="last">
+<p>grid dimensions e.g. (100,100)</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The matrix is symmetric and positive definite (SPD).</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># 4 nodes in one dimension</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poisson</span><span class="p">(</span> <span class="p">(</span><span class="mf">4</span><span class="p">,)</span> <span class="p">)</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
+<span class="go">matrix([[ 2., -1.,  0.,  0.],</span>
+<span class="go">        [-1.,  2., -1.,  0.],</span>
+<span class="go">        [ 0., -1.,  2., -1.],</span>
+<span class="go">        [ 0.,  0., -1.,  2.]])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># rectangular two dimensional grid </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poisson</span><span class="p">(</span> <span class="p">(</span><span class="mf">2</span><span class="p">,</span><span class="mf">3</span><span class="p">)</span> <span class="p">)</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
+<span class="go">matrix([[ 4., -1.,  0., -1.,  0.,  0.],</span>
+<span class="go">        [-1.,  4., -1.,  0., -1.,  0.],</span>
+<span class="go">        [ 0., -1.,  4.,  0.,  0., -1.],</span>
+<span class="go">        [-1.,  0.,  0.,  4., -1.,  0.],</span>
+<span class="go">        [ 0., -1.,  0., -1.,  4., -1.],</span>
+<span class="go">        [ 0.,  0., -1.,  0., -1.,  4.]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.gallery.laplacian.gauge_laplacian">
+<!--[pyamg.gallery.laplacian.gauge_laplacian]--><tt class="descclassname">pyamg.gallery.laplacian.</tt><tt class="descname">gauge_laplacian</tt><big>(</big><em>npts</em>, <em>spacing=1.0</em>, <em>beta=0.10000000000000001</em><big>)</big><a class="headerlink" href="#pyamg.gallery.laplacian.gauge_laplacian" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct a Gauge Laplacian from Quantum Chromodynamics for regualar 2D grids</p>
+<p>Note that this function is not written efficiently, but should be 
+fine for N x N grids where N is in the low hundreds.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>npts</strong> : {int}</p>
+<blockquote>
+<p>number of pts in x and y directions</p>
+</blockquote>
+<p><strong>spacing</strong> : {float}</p>
+<blockquote>
+<p>grid spacing between points</p>
+</blockquote>
+<p><strong>beta</strong> : {float}</p>
+<blockquote>
+<p>temperature
+Note that if beta=0, then we get the typical 5pt Laplacian stencil</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>A</strong> : {csr matrix}</p>
+<blockquote class="last">
+<p>A is Hermitian positive definite for beta &gt; 0.0
+A is Symmetric semi-definite for beta = 0.0</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">References</p>
+<table class="docutils footnote" frame="void" id="id1" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id1">[15]</a></td><td>MacLachlan, S. and Oosterlee, C., 
+&#8220;Algebraic Multigrid Solvers for Complex-Valued Matrices&#8221;,
+Vol. 30, SIAM J. Sci. Comp, 2008</td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">gauge_laplacian</span><span class="p">(</span><span class="mf">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyamg.gallery.diffusion">
+<h2>The <tt class="xref docutils literal"><span class="pre">diffusion</span></tt> Module<a class="headerlink" href="#module-pyamg.gallery.diffusion" title="Permalink to this headline">¶</a></h2>
+<p>Generate a diffusion stencil</p>
+<p>Supports isotropic diffusion (FE,FD), anisotropic diffusion (FE, FD), and
+rotated anisotropic diffusion (FD).</p>
+<p>The stencils include redundancy to maintain readability for simple cases (e.g.
+isotropic diffusion).</p>
+<p>-div Q A Q grad u</p>
+<dl class="docutils">
+<dt>Q = [cos(theta) -sin(theta)]</dt>
+<dd>[sin(theta)  cos(theta)]</dd>
+<dt>A = [1          0        ]</dt>
+<dd>[0          eps      ]</dd>
+</dl>
+<dl class="function">
+<dt id="pyamg.gallery.diffusion.diffusion_stencil_2d">
+<!--[pyamg.gallery.diffusion.diffusion_stencil_2d]--><tt class="descclassname">pyamg.gallery.diffusion.</tt><tt class="descname">diffusion_stencil_2d</tt><big>(</big><em>epsilon=1.0</em>, <em>theta=0.0</em>, <em>type='FE'</em><big>)</big><a class="headerlink" href="#pyamg.gallery.diffusion.diffusion_stencil_2d" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>epsilon</strong> : float, optional</p>
+<blockquote>
+<p>Anisotropic diffusion coefficient: -div A grad u, 
+where A = [1 0; 0 epsilon].  The default is isotropic, epsilon=1.0</p>
+</blockquote>
+<p><strong>theta</strong> : float, optional</p>
+<blockquote>
+<p>Rotation angle <cite>theta</cite> in radians defines -div Q A Q^T grad,
+where Q = [cos(<cite>theta</cite>) -sin(<cite>theta</cite>); sin(<cite>theta</cite>) cos(<cite>theta</cite>)].</p>
+</blockquote>
+<p><strong>type</strong> : {&#8216;FE&#8217;,&#8217;FD&#8217;}</p>
+<blockquote>
+<p>Specifies the discretization as Q1 finite element (FE) or 2nd order
+finite difference (FD)
+The default is <cite>theta</cite> = 0.0</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>stencil</strong> : numpy array</p>
+<blockquote class="last">
+<p>A 3x3 diffusion stencil</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><tt class="xref docutils literal"><span class="pre">stencil_grid</span></tt>, <tt class="xref docutils literal"><span class="pre">poisson</span></tt></p>
+</div>
+<p class="rubric">Notes</p>
+<p>Not all combinations are supported.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">import</span> <span class="nn">scipy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery.diffusion</span> <span class="k">import</span> <span class="n">diffusion_stencil_2d</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sten</span> <span class="o">=</span> <span class="n">diffusion_stencil_2d</span><span class="p">(</span><span class="n">epsilon</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span><span class="n">theta</span><span class="o">=</span><span class="n">scipy</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">6</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="s">&#39;FD&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">sten</span>
+<span class="go">[[-0.2164847 -0.750025   0.2164847]</span>
+<span class="go"> [-0.250075   2.0002    -0.250075 ]</span>
+<span class="go"> [ 0.2164847 -0.750025  -0.2164847]]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyamg.gallery.elasticity">
+<h2>The <tt class="xref docutils literal"><span class="pre">elasticity</span></tt> Module<a class="headerlink" href="#module-pyamg.gallery.elasticity" title="Permalink to this headline">¶</a></h2>
+<p>Constructs linear elasticity problems for first-order elements in 2D and 3D</p>
+<dl class="function">
+<dt id="pyamg.gallery.elasticity.linear_elasticity">
+<!--[pyamg.gallery.elasticity.linear_elasticity]--><tt class="descclassname">pyamg.gallery.elasticity.</tt><tt class="descname">linear_elasticity</tt><big>(</big><em>grid</em>, <em>spacing=None</em>, <em>E=100000.0</em>, <em>nu=0.29999999999999999</em>, <em>format=None</em><big>)</big><a class="headerlink" href="#pyamg.gallery.elasticity.linear_elasticity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Linear elasticity problem discretizes with Q1 finite elements
+on a regular rectangular grid</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>grid</strong> : tuple</p>
+<blockquote>
+<p>length 2 tuple of grid sizes, e.g. (10,10)</p>
+</blockquote>
+<p><strong>spacing</strong> : tuple</p>
+<blockquote>
+<p>length 2 tuple of grid spacings, e.g. (1.0,0.1)</p>
+</blockquote>
+<p><strong>E</strong> : float</p>
+<blockquote>
+<p>Young&#8217;s modulus</p>
+</blockquote>
+<p><strong>nu</strong> : float</p>
+<blockquote>
+<p>Poisson&#8217;s ratio</p>
+</blockquote>
+<p><strong>format</strong> : string</p>
+<blockquote>
+<p>Format of the returned sparse matrix (eg. &#8216;csr&#8217;, &#8216;bsr&#8217;, etc.)</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>A</strong> : {csr_matrix}</p>
+<blockquote class="last">
+<p>FE Q1 stiffness matrix</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a title="pyamg.gallery.elasticity.linear_elasticity_p1" class="reference" href="#pyamg.gallery.elasticity.linear_elasticity_p1"><tt class="xref docutils literal"><span class="pre">linear_elasticity_p1</span></tt></a></p>
+</div>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>only 2d for now</li>
+</ul>
+<p class="rubric">References</p>
+<table class="docutils footnote" frame="void" id="id2" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id2">[16]</a></td><td>J. Alberty, C. Carstensen, S. A. Funken, and R. KloseDOI
+&#8220;Matlab implementation of the finite element method in elasticity&#8221;
+Computing, Volume 69,  Issue 3  (November 2002) Pages: 239 - 263
+<a class="reference" href="http://www.math.hu-berlin.de/~cc/">http://www.math.hu-berlin.de/~cc/</a></td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery</span> <span class="k">import</span> <span class="n">linear_elasticity</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="p">,</span><span class="n">B</span> <span class="o">=</span> <span class="n">linear_elasticity</span><span class="p">((</span><span class="mf">4</span><span class="p">,</span><span class="mf">4</span><span class="p">))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.gallery.elasticity.linear_elasticity_p1">
+<!--[pyamg.gallery.elasticity.linear_elasticity_p1]--><tt class="descclassname">pyamg.gallery.elasticity.</tt><tt class="descname">linear_elasticity_p1</tt><big>(</big><em>vertices</em>, <em>elements</em>, <em>E=100000.0</em>, <em>nu=0.29999999999999999</em>, <em>format=None</em><big>)</big><a class="headerlink" href="#pyamg.gallery.elasticity.linear_elasticity_p1" title="Permalink to this definition">¶</a></dt>
+<dd><p>P1 elements in 2 or 3 dimensions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>verticies</strong> : array_like</p>
+<blockquote>
+<p>array of vertices of a triangle or tets</p>
+</blockquote>
+<p><strong>elements</strong> : array_like</p>
+<blockquote>
+<p>array of vertex indices for tri or tet elements</p>
+</blockquote>
+<p><strong>E</strong> : float</p>
+<blockquote>
+<p>Young&#8217;s modulus</p>
+</blockquote>
+<p><strong>nu</strong> : float</p>
+<blockquote>
+<p>Poisson&#8217;s ratio</p>
+</blockquote>
+<p><strong>format</strong> : string</p>
+<blockquote>
+<p>&#8216;csr&#8217;, &#8216;csc&#8217;, &#8216;coo&#8217;, &#8216;bsr&#8217;</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>A</strong> : {csr_matrix}</p>
+<blockquote class="last">
+<p>FE Q1 stiffness matrix</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>works in both 2d and in 3d</li>
+</ul>
+<p class="rubric">References</p>
+<table class="docutils footnote" frame="void" id="id3" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id3">[17]</a></td><td>J. Alberty, C. Carstensen, S. A. Funken, and R. KloseDOI
+&#8220;Matlab implementation of the finite element method in elasticity&#8221;
+Computing, Volume 69,  Issue 3  (November 2002) Pages: 239 - 263
+<a class="reference" href="http://www.math.hu-berlin.de/~cc/">http://www.math.hu-berlin.de/~cc/</a></td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery</span> <span class="k">import</span> <span class="n">linear_elasticity_p1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">E</span> <span class="o">=</span> <span class="n">array</span><span class="p">([[</span><span class="mf">0</span><span class="p">,</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">],[</span><span class="mf">1</span><span class="p">,</span><span class="mf">3</span><span class="p">,</span><span class="mf">2</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">V</span> <span class="o">=</span> <span class="n">array</span><span class="p">([[</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">],[</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">],[</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">],[</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="p">,</span><span class="n">B</span> <span class="o">=</span> <span class="n">linear_elasticity_p1</span><span class="p">(</span><span class="n">V</span><span class="p">,</span><span class="n">E</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyamg.gallery.mesh">
+<h2>The <tt class="xref docutils literal"><span class="pre">mesh</span></tt> Module<a class="headerlink" href="#module-pyamg.gallery.mesh" title="Permalink to this headline">¶</a></h2>
+<p>Generates simple meshes</p>
+<dl class="function">
+<dt id="pyamg.gallery.mesh.regular_triangle_mesh">
+<!--[pyamg.gallery.mesh.regular_triangle_mesh]--><tt class="descclassname">pyamg.gallery.mesh.</tt><tt class="descname">regular_triangle_mesh</tt><big>(</big><em>nx</em>, <em>ny</em><big>)</big><a class="headerlink" href="#pyamg.gallery.mesh.regular_triangle_mesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct a regular triangular mesh in the unit square</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>nx</strong> : int</p>
+<blockquote>
+<p>Number of nodes in the x direction</p>
+</blockquote>
+<p><strong>ny</strong> : int</p>
+<blockquote>
+<p>Number of nodes in the y direction</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>Vert</strong> : array</p>
+<blockquote>
+<p>nx*ny x 2 vertex list</p>
+</blockquote>
+<p><strong>E2V</strong> : array</p>
+<blockquote class="last">
+<p>Nex x 3 element list</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">E2V</span><span class="p">,</span><span class="n">Vert</span> <span class="o">=</span> <span class="n">regular_triangle_mesh</span><span class="p">(</span><span class="mf">3</span><span class="p">,</span> <span class="mf">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyamg.gallery.setup">
+<h2>The <tt class="xref docutils literal"><span class="pre">setup</span></tt> Module<a class="headerlink" href="#module-pyamg.gallery.setup" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pyamg.gallery.setup.configuration">
+<!--[pyamg.gallery.setup.configuration]--><tt class="descclassname">pyamg.gallery.setup.</tt><tt class="descname">configuration</tt><big>(</big><em>parent_package=''</em>, <em>top_path=None</em><big>)</big><a class="headerlink" href="#pyamg.gallery.setup.configuration" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-pyamg.gallery.demo">
+<h2>The <tt class="xref docutils literal"><span class="pre">demo</span></tt> Module<a class="headerlink" href="#module-pyamg.gallery.demo" title="Permalink to this headline">¶</a></h2>
+<p>Basic PyAMG demo showing AMG standalone convergence versus preconditioned CG
+with AMG</p>
+<dl class="function">
+<dt id="pyamg.gallery.demo.demo">
+<!--[pyamg.gallery.demo.demo]--><tt class="descclassname">pyamg.gallery.demo.</tt><tt class="descname">demo</tt><big>(</big><big>)</big><a class="headerlink" href="#pyamg.gallery.demo.demo" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-pyamg.gallery.stencil">
+<h2>The <tt class="xref docutils literal"><span class="pre">stencil</span></tt> Module<a class="headerlink" href="#module-pyamg.gallery.stencil" title="Permalink to this headline">¶</a></h2>
+<p>Construct sparse matrix from a local stencil</p>
+<dl class="function">
+<dt id="pyamg.gallery.stencil.stencil_grid">
+<!--[pyamg.gallery.stencil.stencil_grid]--><tt class="descclassname">pyamg.gallery.stencil.</tt><tt class="descname">stencil_grid</tt><big>(</big><em>S</em>, <em>grid</em>, <em>dtype=None</em>, <em>format=None</em><big>)</big><a class="headerlink" href="#pyamg.gallery.stencil.stencil_grid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct a sparse matrix form a local matrix stencil</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>S</strong> : ndarray</p>
+<blockquote>
+<p>matrix stencil stored in rank N array</p>
+</blockquote>
+<p><strong>grid</strong> : tuple</p>
+<blockquote>
+<p>tuple containing the N grid dimensions</p>
+</blockquote>
+<p><strong>dtype :</strong> :</p>
+<blockquote>
+<p>data type of the result</p>
+</blockquote>
+<p><strong>format</strong> : string</p>
+<blockquote>
+<p>sparse matrix format to return, e.g. &#8220;csr&#8221;, &#8220;coo&#8221;, etc.</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>A</strong> : sparse matrix</p>
+<blockquote class="last">
+<p>Sparse matrix which represents the operator given by applying
+stencil S at each vertex of a regular grid with given dimensions.</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The grid vertices are enumerated as arange(prod(grid)).reshape(grid).
+This implies that the last grid dimension cycles fastest, while the 
+first dimension cycles slowest.  For example, if grid=(2,3) then the
+grid vertices are ordered as (0,0), (0,1), (0,2), (1,0), (1,1), (1,2).</p>
+<p>This coincides with the ordering used by the NumPy functions 
+ndenumerate() and mgrid().</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">stencil</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="o">-</span><span class="mf">1</span><span class="p">]</span>  <span class="c"># 1D Poisson stencil</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">grid</span> <span class="o">=</span> <span class="p">(</span><span class="mf">5</span><span class="p">,)</span>          <span class="c"># 1D grid with 5 vertices</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">stencil_grid</span><span class="p">(</span><span class="n">stencil</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;csr&#39;</span><span class="p">)</span>   
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
+<span class="go">matrix([[ 2., -1.,  0.,  0.,  0.],</span>
+<span class="go">        [-1.,  2., -1.,  0.,  0.],</span>
+<span class="go">        [ 0., -1.,  2., -1.,  0.],</span>
+<span class="go">        [ 0.,  0., -1.,  2., -1.],</span>
+<span class="go">        [ 0.,  0.,  0., -1.,  2.]])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">stencil</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">0</span><span class="p">,</span><span class="o">-</span><span class="mf">1</span><span class="p">,</span><span class="mf">0</span><span class="p">],[</span><span class="o">-</span><span class="mf">1</span><span class="p">,</span><span class="mf">4</span><span class="p">,</span><span class="o">-</span><span class="mf">1</span><span class="p">],[</span><span class="mf">0</span><span class="p">,</span><span class="o">-</span><span class="mf">1</span><span class="p">,</span><span class="mf">0</span><span class="p">]]</span> <span class="c"># 2D Poisson stencil</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">grid</span> <span class="o">=</span> <span class="p">(</span><span class="mf">3</span><span class="p">,</span><span class="mf">3</span><span class="p">)</span>                            <span class="c"># 2D grid with shape 3x3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">stencil_grid</span><span class="p">(</span><span class="n">stencil</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;csr&#39;</span><span class="p">)</span>   
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
+<span class="go">matrix([[ 4., -1.,  0., -1.,  0.,  0.,  0.,  0.,  0.],</span>
+<span class="go">        [-1.,  4., -1.,  0., -1.,  0.,  0.,  0.,  0.],</span>
+<span class="go">        [ 0., -1.,  4.,  0.,  0., -1.,  0.,  0.,  0.],</span>
+<span class="go">        [-1.,  0.,  0.,  4., -1.,  0., -1.,  0.,  0.],</span>
+<span class="go">        [ 0., -1.,  0., -1.,  4., -1.,  0., -1.,  0.],</span>
+<span class="go">        [ 0.,  0., -1.,  0., -1.,  4.,  0.,  0., -1.],</span>
+<span class="go">        [ 0.,  0.,  0., -1.,  0.,  0.,  4., -1.,  0.],</span>
+<span class="go">        [ 0.,  0.,  0.,  0., -1.,  0., -1.,  4., -1.],</span>
+<span class="go">        [ 0.,  0.,  0.,  0.,  0., -1.,  0., -1.,  4.]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyamg.gallery.sprand">
+<h2>The <tt class="xref docutils literal"><span class="pre">sprand</span></tt> Module<a class="headerlink" href="#module-pyamg.gallery.sprand" title="Permalink to this headline">¶</a></h2>
+<p>Random sparse matrices</p>
+<dl class="function">
+<dt id="pyamg.gallery.sprand.sprand">
+<!--[pyamg.gallery.sprand.sprand]--><tt class="descclassname">pyamg.gallery.sprand.</tt><tt class="descname">sprand</tt><big>(</big><em>m</em>, <em>n</em>, <em>density</em>, <em>format='csr'</em><big>)</big><a class="headerlink" href="#pyamg.gallery.sprand.sprand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a random sparse matrix.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>m, n</strong> : int</p>
+<blockquote>
+<p>shape of the result</p>
+</blockquote>
+<p><strong>density</strong> : float</p>
+<blockquote>
+<p>target a matrix with nnz(A) = m*n*density, 0&lt;=density&lt;=1</p>
+</blockquote>
+<p><strong>format</strong> : string</p>
+<blockquote>
+<p>sparse matrix format to return, e.g. &#8216;csr&#8217;, &#8216;coo&#8217;, etc.</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>A</strong> : sparse matrix</p>
+<blockquote class="last">
+<p>m x n sparse matrix</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">import</span> <span class="nn">numpy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">sprand</span><span class="p">(</span><span class="mf">5</span><span class="p">,</span><span class="mf">5</span><span class="p">,</span><span class="mf">3</span><span class="o">/</span><span class="mf">5.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo_dropshadow_small.png" alt="Logo"/>
+            </a></p>
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference" href="">Gallery Documentation</a><ul>
+<li><a class="reference" href="#module-pyamg.gallery.example">The <tt class="docutils literal"><span class="pre">example</span></tt> Module</a></li>
+<li><a class="reference" href="#module-pyamg.gallery.laplacian">The <tt class="docutils literal"><span class="pre">laplacian</span></tt> Module</a></li>
+<li><a class="reference" href="#module-pyamg.gallery.diffusion">The <tt class="docutils literal"><span class="pre">diffusion</span></tt> Module</a></li>
+<li><a class="reference" href="#module-pyamg.gallery.elasticity">The <tt class="docutils literal"><span class="pre">elasticity</span></tt> Module</a></li>
+<li><a class="reference" href="#module-pyamg.gallery.mesh">The <tt class="docutils literal"><span class="pre">mesh</span></tt> Module</a></li>
+<li><a class="reference" href="#module-pyamg.gallery.setup">The <tt class="docutils literal"><span class="pre">setup</span></tt> Module</a></li>
+<li><a class="reference" href="#module-pyamg.gallery.demo">The <tt class="docutils literal"><span class="pre">demo</span></tt> Module</a></li>
+<li><a class="reference" href="#module-pyamg.gallery.stencil">The <tt class="docutils literal"><span class="pre">stencil</span></tt> Module</a></li>
+<li><a class="reference" href="#module-pyamg.gallery.sprand">The <tt class="docutils literal"><span class="pre">sprand</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="pyamg.krylov.html" title="previous chapter">Krylov Documentation</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="pyamg.aggregation.html" title="next chapter">Aggregation Documentation</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/pyamg.gallery.txt">Show Source</a></li>
+            </ul>
+          <h3>Quick search</h3>
+            <form class="search" action="search.html" method="get">
+              <input type="text" name="q" size="18" /> <input type="submit" value="Go" />
+              <input type="hidden" name="check_keywords" value="yes" />
+              <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="pyamg.aggregation.html" title="Aggregation Documentation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pyamg.krylov.html" title="Krylov Documentation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">PyAMG v1.0 documentation</a> &raquo;</li>
+          <li><a href="modules.html" accesskey="U">Project Documentation</a> &raquo;</li>
+          <li><a href="pyamg.html" accesskey="U">Pyamg Documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009, Nathan Bell, Luke Olson, Jacob Schroder.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.1.
+    </div>
+  </body>
+</html>

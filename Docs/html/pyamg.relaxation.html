@@ -1,0 +1,924 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Relaxation Documentation &mdash; PyAMG v1.0 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="PyAMG v1.0 documentation" href="index.html" />
+    <link rel="up" title="Pyamg Documentation" href="pyamg.html" />
+    <link rel="next" title="Classical Documentation" href="pyamg.classical.html" />
+    <link rel="prev" title="Amg_Core Documentation" href="pyamg.amg_core.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="pyamg.classical.html" title="Classical Documentation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pyamg.amg_core.html" title="Amg_Core Documentation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">PyAMG v1.0 documentation</a> &raquo;</li>
+          <li><a href="modules.html" accesskey="U">Project Documentation</a> &raquo;</li>
+          <li><a href="pyamg.html" accesskey="U">Pyamg Documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  
+  <div class="section" id="relaxation-documentation">
+<h1>Relaxation Documentation<a class="headerlink" href="#relaxation-documentation" title="Permalink to this headline">¶</a></h1>
+<p>This page contains the Relaxation Package documentation.</p>
+<div class="section" id="module-pyamg.relaxation.relaxation">
+<h2>The <tt class="xref docutils literal"><span class="pre">relaxation</span></tt> Module<a class="headerlink" href="#module-pyamg.relaxation.relaxation" title="Permalink to this headline">¶</a></h2>
+<p>Relaxation methods for linear systems</p>
+<dl class="function">
+<dt id="pyamg.relaxation.relaxation.sor">
+<!--[pyamg.relaxation.relaxation.sor]--><tt class="descclassname">pyamg.relaxation.relaxation.</tt><tt class="descname">sor</tt><big>(</big><em>A</em>, <em>x</em>, <em>b</em>, <em>omega</em>, <em>iterations=1</em>, <em>sweep='forward'</em><big>)</big><a class="headerlink" href="#pyamg.relaxation.relaxation.sor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform SOR iteration on the linear system Ax=b</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>A</strong> : {csr_matrix, bsr_matrix}</p>
+<blockquote>
+<p>Sparse NxN matrix</p>
+</blockquote>
+<p><strong>x</strong> : ndarray</p>
+<blockquote>
+<p>Approximate solution (length N)</p>
+</blockquote>
+<p><strong>b</strong> : ndarray</p>
+<blockquote>
+<p>Right-hand side (length N)</p>
+</blockquote>
+<p><strong>omega</strong> : scalar</p>
+<blockquote>
+<p>Damping parameter</p>
+</blockquote>
+<p><strong>iterations</strong> : int</p>
+<blockquote>
+<p>Number of iterations to perform</p>
+</blockquote>
+<p><strong>sweep</strong> : {&#8216;forward&#8217;,&#8217;backward&#8217;,&#8217;symmetric&#8217;}</p>
+<blockquote>
+<p>Direction of sweep</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Nothing, x will be modified in place.</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>When omega=1.0, SOR is equivalent to Gauss-Seidel.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c">## Use SOR as stand-along solver</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.relaxation</span> <span class="k">import</span> <span class="n">sor</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery</span> <span class="k">import</span> <span class="n">poisson</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.util.linalg</span> <span class="k">import</span> <span class="n">norm</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">import</span> <span class="nn">numpy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">poisson</span><span class="p">((</span><span class="mf">10</span><span class="p">,</span><span class="mf">10</span><span class="p">),</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;csr&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x0</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">],</span><span class="mf">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">],</span><span class="mf">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sor</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="mf">1.33</span><span class="p">,</span> <span class="n">iterations</span><span class="o">=</span><span class="mf">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">norm</span><span class="p">(</span><span class="n">b</span><span class="o">-</span><span class="n">A</span><span class="o">*</span><span class="n">x0</span><span class="p">)</span>
+<span class="go">3.03888724811</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">## Use SOR as the multigrid smoother </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg</span> <span class="k">import</span> <span class="n">smoothed_aggregation_solver</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sa</span> <span class="o">=</span> <span class="n">smoothed_aggregation_solver</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">],</span><span class="mf">1</span><span class="p">)),</span>
+<span class="gp">... </span>        <span class="n">coarse_solver</span><span class="o">=</span><span class="s">&#39;pinv2&#39;</span><span class="p">,</span> <span class="n">max_coarse</span><span class="o">=</span><span class="mf">50</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="n">presmoother</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;sor&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;sweep&#39;</span><span class="p">:</span><span class="s">&#39;symmetric&#39;</span><span class="p">,</span> <span class="s">&#39;omega&#39;</span> <span class="p">:</span> <span class="mf">1.33</span><span class="p">}),</span> 
+<span class="gp">... </span>        <span class="n">postsmoother</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;sor&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;sweep&#39;</span><span class="p">:</span><span class="s">&#39;symmetric&#39;</span><span class="p">,</span> <span class="s">&#39;omega&#39;</span> <span class="p">:</span> <span class="mf">1.33</span><span class="p">}))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x0</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">],</span><span class="mf">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">residuals</span><span class="o">=</span><span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">sa</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="n">x0</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span> <span class="n">residuals</span><span class="o">=</span><span class="n">residuals</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.relaxation.relaxation.gauss_seidel">
+<!--[pyamg.relaxation.relaxation.gauss_seidel]--><tt class="descclassname">pyamg.relaxation.relaxation.</tt><tt class="descname">gauss_seidel</tt><big>(</big><em>A</em>, <em>x</em>, <em>b</em>, <em>iterations=1</em>, <em>sweep='forward'</em><big>)</big><a class="headerlink" href="#pyamg.relaxation.relaxation.gauss_seidel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform Gauss-Seidel iteration on the linear system Ax=b</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>A</strong> : {csr_matrix, bsr_matrix}</p>
+<blockquote>
+<p>Sparse NxN matrix</p>
+</blockquote>
+<p><strong>x</strong> : ndarray</p>
+<blockquote>
+<p>Approximate solution (length N)</p>
+</blockquote>
+<p><strong>b</strong> : ndarray</p>
+<blockquote>
+<p>Right-hand side (length N)</p>
+</blockquote>
+<p><strong>iterations</strong> : int</p>
+<blockquote>
+<p>Number of iterations to perform</p>
+</blockquote>
+<p><strong>sweep</strong> : {&#8216;forward&#8217;,&#8217;backward&#8217;,&#8217;symmetric&#8217;}</p>
+<blockquote>
+<p>Direction of sweep</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Nothing, x will be modified in place.</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c">## Use Gauss-Seidel as a Stand-Alone Solver</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.relaxation</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery</span> <span class="k">import</span> <span class="n">poisson</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.util.linalg</span> <span class="k">import</span> <span class="n">norm</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">import</span> <span class="nn">numpy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">poisson</span><span class="p">((</span><span class="mf">10</span><span class="p">,</span><span class="mf">10</span><span class="p">),</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;csr&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x0</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">],</span><span class="mf">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">],</span><span class="mf">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gauss_seidel</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">iterations</span><span class="o">=</span><span class="mf">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">norm</span><span class="p">(</span><span class="n">b</span><span class="o">-</span><span class="n">A</span><span class="o">*</span><span class="n">x0</span><span class="p">)</span>
+<span class="go">4.00733716236</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">## Use Gauss-Seidel as the Multigrid Smoother</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg</span> <span class="k">import</span> <span class="n">smoothed_aggregation_solver</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sa</span> <span class="o">=</span> <span class="n">smoothed_aggregation_solver</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">],</span><span class="mf">1</span><span class="p">)),</span>
+<span class="gp">... </span>        <span class="n">coarse_solver</span><span class="o">=</span><span class="s">&#39;pinv2&#39;</span><span class="p">,</span> <span class="n">max_coarse</span><span class="o">=</span><span class="mf">50</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="n">presmoother</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;gauss_seidel&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;sweep&#39;</span><span class="p">:</span><span class="s">&#39;symmetric&#39;</span><span class="p">}),</span> 
+<span class="gp">... </span>        <span class="n">postsmoother</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;gauss_seidel&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;sweep&#39;</span><span class="p">:</span><span class="s">&#39;symmetric&#39;</span><span class="p">}))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x0</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">],</span><span class="mf">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">residuals</span><span class="o">=</span><span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">sa</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="n">x0</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span> <span class="n">residuals</span><span class="o">=</span><span class="n">residuals</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.relaxation.relaxation.jacobi">
+<!--[pyamg.relaxation.relaxation.jacobi]--><tt class="descclassname">pyamg.relaxation.relaxation.</tt><tt class="descname">jacobi</tt><big>(</big><em>A</em>, <em>x</em>, <em>b</em>, <em>iterations=1</em>, <em>omega=1.0</em><big>)</big><a class="headerlink" href="#pyamg.relaxation.relaxation.jacobi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform Jacobi iteration on the linear system Ax=b</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>A</strong> : csr_matrix</p>
+<blockquote>
+<p>Sparse NxN matrix</p>
+</blockquote>
+<p><strong>x</strong> : ndarray</p>
+<blockquote>
+<p>Approximate solution (length N)</p>
+</blockquote>
+<p><strong>b</strong> : ndarray</p>
+<blockquote>
+<p>Right-hand side (length N)</p>
+</blockquote>
+<p><strong>iterations</strong> : int</p>
+<blockquote>
+<p>Number of iterations to perform</p>
+</blockquote>
+<p><strong>omega</strong> : scalar</p>
+<blockquote>
+<p>Damping parameter</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Nothing, x will be modified in place.</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c">## Use Jacobi as a Stand-Alone Solver</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.relaxation</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery</span> <span class="k">import</span> <span class="n">poisson</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.util.linalg</span> <span class="k">import</span> <span class="n">norm</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">import</span> <span class="nn">numpy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">poisson</span><span class="p">((</span><span class="mf">10</span><span class="p">,</span><span class="mf">10</span><span class="p">),</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;csr&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x0</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">],</span><span class="mf">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">],</span><span class="mf">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">jacobi</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">iterations</span><span class="o">=</span><span class="mf">10</span><span class="p">,</span> <span class="n">omega</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">norm</span><span class="p">(</span><span class="n">b</span><span class="o">-</span><span class="n">A</span><span class="o">*</span><span class="n">x0</span><span class="p">)</span>
+<span class="go">5.83475132751</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">## Use Jacobi as the Multigrid Smoother</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg</span> <span class="k">import</span> <span class="n">smoothed_aggregation_solver</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sa</span> <span class="o">=</span> <span class="n">smoothed_aggregation_solver</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">],</span><span class="mf">1</span><span class="p">)),</span>
+<span class="gp">... </span>        <span class="n">coarse_solver</span><span class="o">=</span><span class="s">&#39;pinv2&#39;</span><span class="p">,</span> <span class="n">max_coarse</span><span class="o">=</span><span class="mf">50</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="n">presmoother</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;jacobi&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;omega&#39;</span><span class="p">:</span> <span class="mf">4.0</span><span class="o">/</span><span class="mf">3.0</span><span class="p">,</span> <span class="s">&#39;iterations&#39;</span> <span class="p">:</span> <span class="mf">2</span><span class="p">}),</span> 
+<span class="gp">... </span>        <span class="n">postsmoother</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;jacobi&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;omega&#39;</span><span class="p">:</span> <span class="mf">4.0</span><span class="o">/</span><span class="mf">3.0</span><span class="p">,</span> <span class="s">&#39;iterations&#39;</span> <span class="p">:</span> <span class="mf">2</span><span class="p">}))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x0</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">],</span><span class="mf">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">residuals</span><span class="o">=</span><span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">sa</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="n">x0</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span> <span class="n">residuals</span><span class="o">=</span><span class="n">residuals</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.relaxation.relaxation.polynomial">
+<!--[pyamg.relaxation.relaxation.polynomial]--><tt class="descclassname">pyamg.relaxation.relaxation.</tt><tt class="descname">polynomial</tt><big>(</big><em>A</em>, <em>x</em>, <em>b</em>, <em>coeffients</em>, <em>iterations=1</em><big>)</big><a class="headerlink" href="#pyamg.relaxation.relaxation.polynomial" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply a polynomial smoother to the system Ax=b</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>A</strong> : sparse matrix</p>
+<blockquote>
+<p>Sparse NxN matrix</p>
+</blockquote>
+<p><strong>x</strong> : ndarray</p>
+<blockquote>
+<p>Approximate solution (length N)</p>
+</blockquote>
+<p><strong>b</strong> : ndarray</p>
+<blockquote>
+<p>Right-hand side (length N)</p>
+</blockquote>
+<p><strong>coeffients</strong> : {array_like}</p>
+<blockquote>
+<p>Coefficients of the polynomial.  See Notes section for details.</p>
+</blockquote>
+<p><strong>iterations</strong> : int</p>
+<blockquote>
+<p>Number of iterations to perform</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Nothing, x will be modified in place.</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The smoother has the form  x[:] = x + p(A) (b - A*x) where p(A) is a 
+polynomial in A whose scalar coeffients are specified (in decending 
+order) by argument &#8216;coeffients&#8217;.</p>
+<ul>
+<li><dl class="first docutils">
+<dt>Richardson iteration p(A) = c_0:</dt>
+<dd><p class="first last">polynomial_smoother(A, x, b, [c_0])</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Linear smoother p(A) = c_1*A + c_0:</dt>
+<dd><p class="first last">polynomial_smoother(A, x, b, [c_1, c_0])</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Quadratic smoother p(A) = c_2*A^2 + c_1*A + c_0:</dt>
+<dd><p class="first last">polynomial_smoother(A, x, b, [c_2, c_1, c_0])</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Here, Horner&#8217;s Rule is applied to avoid computing A^k directly.</p>
+<p>For efficience, the method detects the case x = 0 one matrix-vector 
+product is avoided (since (b - A*x) is b).</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c">## The polynomial smoother is not currently used directly </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">## in PyAMG.  It is only used by the chebyshev smoothing option,</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">## which automatically calculates the correct coefficients.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery</span> <span class="k">import</span> <span class="n">poisson</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.util.linalg</span> <span class="k">import</span> <span class="n">norm</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">import</span> <span class="nn">numpy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.aggregation</span> <span class="k">import</span> <span class="n">smoothed_aggregation_solver</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">poisson</span><span class="p">((</span><span class="mf">10</span><span class="p">,</span><span class="mf">10</span><span class="p">),</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;csr&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">],</span><span class="mf">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sa</span> <span class="o">=</span> <span class="n">smoothed_aggregation_solver</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">],</span><span class="mf">1</span><span class="p">)),</span>
+<span class="gp">... </span>        <span class="n">coarse_solver</span><span class="o">=</span><span class="s">&#39;pinv2&#39;</span><span class="p">,</span> <span class="n">max_coarse</span><span class="o">=</span><span class="mf">50</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="n">presmoother</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;chebyshev&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;degree&#39;</span><span class="p">:</span><span class="mf">3</span><span class="p">,</span> <span class="s">&#39;iterations&#39;</span><span class="p">:</span><span class="mf">1</span><span class="p">}),</span> 
+<span class="gp">... </span>        <span class="n">postsmoother</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;chebyshev&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;degree&#39;</span><span class="p">:</span><span class="mf">3</span><span class="p">,</span> <span class="s">&#39;iterations&#39;</span><span class="p">:</span><span class="mf">1</span><span class="p">}))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x0</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">],</span><span class="mf">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">residuals</span><span class="o">=</span><span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">sa</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="n">x0</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span> <span class="n">residuals</span><span class="o">=</span><span class="n">residuals</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.relaxation.relaxation.kaczmarz_jacobi">
+<!--[pyamg.relaxation.relaxation.kaczmarz_jacobi]--><tt class="descclassname">pyamg.relaxation.relaxation.</tt><tt class="descname">kaczmarz_jacobi</tt><big>(</big><em>A</em>, <em>x</em>, <em>b</em>, <em>iterations=1</em>, <em>omega=1.0</em><big>)</big><a class="headerlink" href="#pyamg.relaxation.relaxation.kaczmarz_jacobi" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Perform Kaczmarz Jacobi iterations on the linear system A A.H x = A.H b</dt>
+<dd>(Also known as Cimmino relaxation)</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>A</strong> : csr_matrix</p>
+<blockquote>
+<p>Sparse NxN matrix</p>
+</blockquote>
+<p><strong>x</strong> : ndarray</p>
+<blockquote>
+<p>Approximate solution (length N)</p>
+</blockquote>
+<p><strong>b</strong> : ndarray</p>
+<blockquote>
+<p>Right-hand side (length N)</p>
+</blockquote>
+<p><strong>iterations</strong> : int</p>
+<blockquote>
+<p>Number of iterations to perform</p>
+</blockquote>
+<p><strong>omega</strong> : scalar</p>
+<blockquote>
+<p>Damping parameter</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Nothing, x will be modified in place.</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">References</p>
+<table class="docutils footnote" frame="void" id="id1" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id1">[24]</a></td><td>Brandt, Ta&#8217;asan.  
+&#8220;Multigrid Method For Nearly Singular And Slightly Indefinite Problems.&#8221;
+1985.  NASA Technical Report Numbers: ICASE-85-57; NAS 1.26:178026; NASA-CR-178026;</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id2" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id2">[25]</a></td><td>Kaczmarz.  Angenaeherte Aufloesung von Systemen Linearer Gleichungen. 
+Bull. Acad.  Polon. Sci. Lett. A 35, 355-57.  1937</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id3" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id3">[26]</a></td><td>Cimmino. La ricerca scientifica ser. II 1. 
+Pubbliz. dell&#8217;Inst. pre le Appl. del Calculo 34, 326-333, 1938.</td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c">## Use Kaczmarz Jacobi as a Stand-Alone Solver</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.relaxation</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery</span> <span class="k">import</span> <span class="n">poisson</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.util.linalg</span> <span class="k">import</span> <span class="n">norm</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">import</span> <span class="nn">numpy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">poisson</span><span class="p">((</span><span class="mf">50</span><span class="p">,</span><span class="mf">50</span><span class="p">),</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;csr&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x0</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">],</span><span class="mf">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">],</span><span class="mf">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kaczmarz_jacobi</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">iterations</span><span class="o">=</span><span class="mf">10</span><span class="p">,</span> <span class="n">omega</span><span class="o">=</span><span class="mf">2.0</span><span class="o">/</span><span class="mf">3.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">norm</span><span class="p">(</span><span class="n">b</span><span class="o">-</span><span class="n">A</span><span class="o">*</span><span class="n">x0</span><span class="p">)</span>
+<span class="go">49.3886046066</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">## Use Kaczmarz Jacobi as the Multigrid Smoother</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg</span> <span class="k">import</span> <span class="n">smoothed_aggregation_solver</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sa</span> <span class="o">=</span> <span class="n">smoothed_aggregation_solver</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">],</span><span class="mf">1</span><span class="p">)),</span>
+<span class="gp">... </span>        <span class="n">coarse_solver</span><span class="o">=</span><span class="s">&#39;pinv2&#39;</span><span class="p">,</span> <span class="n">max_coarse</span><span class="o">=</span><span class="mf">50</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="n">presmoother</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;kaczmarz_jacobi&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;iterations&#39;</span> <span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&#39;omega&#39;</span> <span class="p">:</span> <span class="mf">4.0</span><span class="o">/</span><span class="mf">3.0</span><span class="p">}),</span> 
+<span class="gp">... </span>        <span class="n">postsmoother</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;kaczmarz_jacobi&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;iterations&#39;</span> <span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&#39;omega&#39;</span> <span class="p">:</span> <span class="mf">4.0</span><span class="o">/</span><span class="mf">3.0</span><span class="p">}))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x0</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">],</span><span class="mf">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">residuals</span><span class="o">=</span><span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">sa</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="n">x0</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span> <span class="n">residuals</span><span class="o">=</span><span class="n">residuals</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.relaxation.relaxation.kaczmarz_richardson">
+<!--[pyamg.relaxation.relaxation.kaczmarz_richardson]--><tt class="descclassname">pyamg.relaxation.relaxation.</tt><tt class="descname">kaczmarz_richardson</tt><big>(</big><em>A</em>, <em>x</em>, <em>b</em>, <em>iterations=1</em>, <em>omega=1.0</em><big>)</big><a class="headerlink" href="#pyamg.relaxation.relaxation.kaczmarz_richardson" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform Kaczmarz Richardson iterations on the linear system A A.H x = A.H b</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>A</strong> : csr_matrix</p>
+<blockquote>
+<p>Sparse NxN matrix</p>
+</blockquote>
+<p><strong>x</strong> : ndarray</p>
+<blockquote>
+<p>Approximate solution (length N)</p>
+</blockquote>
+<p><strong>b</strong> : ndarray</p>
+<blockquote>
+<p>Right-hand side (length N)</p>
+</blockquote>
+<p><strong>iterations</strong> : int</p>
+<blockquote>
+<p>Number of iterations to perform</p>
+</blockquote>
+<p><strong>omega</strong> : scalar</p>
+<blockquote>
+<p>Damping parameter</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Nothing, x will be modified in place.</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">References</p>
+<table class="docutils footnote" frame="void" id="id4" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id4">[27]</a></td><td>Brandt, Ta&#8217;asan.  
+&#8220;Multigrid Method For Nearly Singular And Slightly Indefinite Problems.&#8221;
+1985.  NASA Technical Report Numbers: ICASE-85-57; NAS 1.26:178026; NASA-CR-178026;</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id5" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id5">[28]</a></td><td>Kaczmarz.  Angenaeherte Aufloesung von Systemen Linearer Gleichungen. 
+Bull. Acad.  Polon. Sci. Lett. A 35, 355-57.  1937</td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c">## Use Kaczmarz Richardson as the Multigrid Smoother</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg</span> <span class="k">import</span> <span class="n">smoothed_aggregation_solver</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery</span> <span class="k">import</span> <span class="n">poisson</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.util.linalg</span> <span class="k">import</span> <span class="n">norm</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">import</span> <span class="nn">numpy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">poisson</span><span class="p">((</span><span class="mf">10</span><span class="p">,</span><span class="mf">10</span><span class="p">),</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;csr&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">],</span><span class="mf">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sa</span> <span class="o">=</span> <span class="n">smoothed_aggregation_solver</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">],</span><span class="mf">1</span><span class="p">)),</span>
+<span class="gp">... </span>        <span class="n">coarse_solver</span><span class="o">=</span><span class="s">&#39;pinv2&#39;</span><span class="p">,</span> <span class="n">max_coarse</span><span class="o">=</span><span class="mf">50</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="n">presmoother</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;kaczmarz_richardson&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;iterations&#39;</span> <span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&#39;omega&#39;</span> <span class="p">:</span> <span class="mf">5.0</span><span class="o">/</span><span class="mf">3.0</span><span class="p">}),</span> 
+<span class="gp">... </span>        <span class="n">postsmoother</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;kaczmarz_richardson&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;iterations&#39;</span> <span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&#39;omega&#39;</span> <span class="p">:</span> <span class="mf">5.0</span><span class="o">/</span><span class="mf">3.0</span><span class="p">}))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x0</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">],</span><span class="mf">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">residuals</span><span class="o">=</span><span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">sa</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="n">x0</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span> <span class="n">residuals</span><span class="o">=</span><span class="n">residuals</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.relaxation.relaxation.kaczmarz_gauss_seidel">
+<!--[pyamg.relaxation.relaxation.kaczmarz_gauss_seidel]--><tt class="descclassname">pyamg.relaxation.relaxation.</tt><tt class="descname">kaczmarz_gauss_seidel</tt><big>(</big><em>A</em>, <em>x</em>, <em>b</em>, <em>iterations=1</em>, <em>sweep='forward'</em>, <em>Dinv=None</em><big>)</big><a class="headerlink" href="#pyamg.relaxation.relaxation.kaczmarz_gauss_seidel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform Kaczmarz Gauss-Seidel iterations on the linear system A A.H x = A.H b</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>A</strong> : csr_matrix</p>
+<blockquote>
+<p>Sparse NxN matrix</p>
+</blockquote>
+<p><strong>x</strong> : { ndarray }</p>
+<blockquote>
+<p>Approximate solution (length N)</p>
+</blockquote>
+<p><strong>b</strong> : { ndarray }</p>
+<blockquote>
+<p>Right-hand side (length N)</p>
+</blockquote>
+<p><strong>iterations</strong> : { int }</p>
+<blockquote>
+<p>Number of iterations to perform</p>
+</blockquote>
+<p><strong>sweep</strong> : {&#8216;forward&#8217;,&#8217;backward&#8217;,&#8217;symmetric&#8217;}</p>
+<blockquote>
+<p>Direction of sweep</p>
+</blockquote>
+<p><strong>Dinv</strong> : { ndarray}</p>
+<blockquote>
+<p>Inverse of diag(A A.H),  (length N)</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Nothing, x will be modified in place.</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">References</p>
+<table class="docutils footnote" frame="void" id="id6" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id6">[29]</a></td><td>Brandt, Ta&#8217;asan.  
+&#8220;Multigrid Method For Nearly Singular And Slightly Indefinite Problems.&#8221;
+1985.  NASA Technical Report Numbers: ICASE-85-57; NAS 1.26:178026; NASA-CR-178026;</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id7" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id7">[30]</a></td><td>Kaczmarz.  Angenaeherte Aufloesung von Systemen Linearer Gleichungen. 
+Bull. Acad.  Polon. Sci. Lett. A 35, 355-57.  1937</td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c">## Use Kaczmarz Gauss-Seidel as a Stand-Alone Solver</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.relaxation</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery</span> <span class="k">import</span> <span class="n">poisson</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.util.linalg</span> <span class="k">import</span> <span class="n">norm</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">import</span> <span class="nn">numpy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">poisson</span><span class="p">((</span><span class="mf">10</span><span class="p">,</span><span class="mf">10</span><span class="p">),</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;csr&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x0</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">],</span><span class="mf">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">],</span><span class="mf">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kaczmarz_gauss_seidel</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">iterations</span><span class="o">=</span><span class="mf">10</span><span class="p">,</span> <span class="n">sweep</span><span class="o">=</span><span class="s">&#39;symmetric&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">norm</span><span class="p">(</span><span class="n">b</span><span class="o">-</span><span class="n">A</span><span class="o">*</span><span class="n">x0</span><span class="p">)</span>
+<span class="go">8.47576806771</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">## Use Kaczmarz Gauss-Seidel as the Multigrid Smoother</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg</span> <span class="k">import</span> <span class="n">smoothed_aggregation_solver</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sa</span> <span class="o">=</span> <span class="n">smoothed_aggregation_solver</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">],</span><span class="mf">1</span><span class="p">)),</span>
+<span class="gp">... </span>        <span class="n">coarse_solver</span><span class="o">=</span><span class="s">&#39;pinv2&#39;</span><span class="p">,</span> <span class="n">max_coarse</span><span class="o">=</span><span class="mf">50</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="n">presmoother</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;kaczmarz_gauss_seidel&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;sweep&#39;</span> <span class="p">:</span> <span class="s">&#39;symmetric&#39;</span><span class="p">}),</span> 
+<span class="gp">... </span>        <span class="n">postsmoother</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;kaczmarz_gauss_seidel&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;sweep&#39;</span> <span class="p">:</span> <span class="s">&#39;symmetric&#39;</span><span class="p">}))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x0</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">],</span><span class="mf">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">residuals</span><span class="o">=</span><span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">sa</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="n">x0</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span> <span class="n">residuals</span><span class="o">=</span><span class="n">residuals</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.relaxation.relaxation.gauss_seidel_indexed">
+<!--[pyamg.relaxation.relaxation.gauss_seidel_indexed]--><tt class="descclassname">pyamg.relaxation.relaxation.</tt><tt class="descname">gauss_seidel_indexed</tt><big>(</big><em>A</em>, <em>x</em>, <em>b</em>, <em>indices</em>, <em>iterations=1</em>, <em>sweep='forward'</em><big>)</big><a class="headerlink" href="#pyamg.relaxation.relaxation.gauss_seidel_indexed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform indexed Gauss-Seidel iteration on the linear system Ax=b</p>
+<p>In indexed Gauss-Seidel, the sequence in which unknowns are relaxed is
+specified explicitly.  In contrast, the standard Gauss-Seidel method
+always performs complete sweeps of all variables in increasing or 
+decreasing order.  The indexed method may be used to implement 
+specialized smoothers, like F-smoothing in Classical AMG.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>A</strong> : csr_matrix</p>
+<blockquote>
+<p>Sparse NxN matrix</p>
+</blockquote>
+<p><strong>x</strong> : ndarray</p>
+<blockquote>
+<p>Approximate solution (length N)</p>
+</blockquote>
+<p><strong>b</strong> : ndarray</p>
+<blockquote>
+<p>Right-hand side (length N)</p>
+</blockquote>
+<p><strong>indices</strong> : ndarray</p>
+<blockquote>
+<p>Row indices to relax.</p>
+</blockquote>
+<p><strong>iterations</strong> : int</p>
+<blockquote>
+<p>Number of iterations to perform</p>
+</blockquote>
+<p><strong>sweep</strong> : {&#8216;forward&#8217;,&#8217;backward&#8217;,&#8217;symmetric&#8217;}</p>
+<blockquote>
+<p>Direction of sweep</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Nothing, x will be modified in place.</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery</span> <span class="k">import</span> <span class="n">poisson</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">import</span> <span class="nn">numpy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">poisson</span><span class="p">((</span><span class="mf">4</span><span class="p">,),</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;csr&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gauss_seidel_indexed</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="p">[</span><span class="mf">0</span><span class="p">,</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">3</span><span class="p">])</span>                <span class="c">#relax all four rows, in order</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gauss_seidel_indexed</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="p">[</span><span class="mf">0</span><span class="p">,</span><span class="mf">1</span><span class="p">])</span>                    <span class="c">#relax first two rows</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gauss_seidel_indexed</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="p">[</span><span class="mf">2</span><span class="p">,</span><span class="mf">0</span><span class="p">])</span>                    <span class="c">#relax row 2, then row 0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gauss_seidel_indexed</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="p">[</span><span class="mf">2</span><span class="p">,</span><span class="mf">3</span><span class="p">],</span> <span class="n">sweep</span><span class="o">=</span><span class="s">&#39;backward&#39;</span><span class="p">)</span>  <span class="c">#relax row 3, then row 2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gauss_seidel_indexed</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="p">[</span><span class="mf">2</span><span class="p">,</span><span class="mf">0</span><span class="p">,</span><span class="mf">2</span><span class="p">])</span>                  <span class="c">#relax row 2, then 0, then 2 again</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyamg.relaxation.smoothing">
+<h2>The <tt class="xref docutils literal"><span class="pre">smoothing</span></tt> Module<a class="headerlink" href="#module-pyamg.relaxation.smoothing" title="Permalink to this headline">¶</a></h2>
+<p>Method to create pre- and post-smoothers on the levels of a multilevel_solver</p>
+<dl class="function">
+<dt id="pyamg.relaxation.smoothing.setup_smoothers">
+<!--[pyamg.relaxation.smoothing.setup_smoothers]--><tt class="descclassname">pyamg.relaxation.smoothing.</tt><tt class="descname">setup_smoothers</tt><big>(</big><em>ml</em>, <em>presmoother</em>, <em>postsmoother</em><big>)</big><a class="headerlink" href="#pyamg.relaxation.smoothing.setup_smoothers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize pre- and post- smoothers throughout a multilevel_solver</p>
+<p>For each level of the multilevel_solver &#8216;ml&#8217; (except the coarsest level),
+initialize the .presmoother() and .postsmoother() methods used in the 
+multigrid cycle.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ml</strong> : multilevel_solver</p>
+<blockquote>
+<p>Data structure that stores the multigrid hierarchy.</p>
+</blockquote>
+<p><strong>pre, post</strong> : smoother configuration</p>
+<blockquote>
+<p>See &#8220;Smoother Configuration&#8221; below for available options</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>Nothing, ml will be changed in place.</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<ul>
+<li><p class="first">Arguments &#8216;pre&#8217; and &#8216;post&#8217; can be the name of a supported smoother, 
+e.g. &#8220;gauss_seidel&#8221; or a tuple of the form (&#8216;method&#8217;,&#8217;opts&#8217;) where 
+&#8216;method&#8217; is the name of a supported smoother and &#8216;opts&#8217; a dict of
+keyword arguments to the smoother.  See the Examples section for
+illustrations of the format.</p>
+</li>
+<li><p class="first">Parameter &#8216;omega&#8217; of the Jacobi, Richardson, Kaczmarz-Jacobi, and
+Kaczmarz-Richardson methods is scaled by the spectral radius of 
+the matrix on each level.  Therefore &#8216;omega&#8217; should be in the interval (0,2).</p>
+</li>
+<li><p class="first">Available smoother methods:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">gauss_seidel</span>
+<span class="n">jacobi</span>
+<span class="n">richardson</span>
+<span class="n">sor</span>
+<span class="n">chebyshev</span>
+<span class="n">kaczmarz_gauss_seidel</span>
+<span class="n">kaczmarz_jacobi</span>
+<span class="n">kaczmarz_richardson</span>
+<span class="n">cg</span>
+<span class="n">gmres</span>
+<span class="n">cgne</span>
+<span class="n">cgnr</span>
+<span class="bp">None</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.relaxation.smoothing</span> <span class="k">import</span> <span class="n">setup_smoothers</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery</span> <span class="k">import</span> <span class="n">poisson</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.aggregation</span> <span class="k">import</span> <span class="n">smoothed_aggregation_solver</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.util.linalg</span> <span class="k">import</span> <span class="n">norm</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">import</span> <span class="nn">numpy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">poisson</span><span class="p">((</span><span class="mf">10</span><span class="p">,</span><span class="mf">10</span><span class="p">),</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;csr&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">],</span><span class="mf">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ml</span> <span class="o">=</span> <span class="n">smoothed_aggregation_solver</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pre</span>  <span class="o">=</span> <span class="p">(</span><span class="s">&#39;gauss_seidel&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;iterations&#39;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&#39;sweep&#39;</span><span class="p">:</span><span class="s">&#39;symmetric&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">post</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;gauss_seidel&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;iterations&#39;</span><span class="p">:</span> <span class="mf">2</span><span class="p">,</span> <span class="s">&#39;sweep&#39;</span><span class="p">:</span><span class="s">&#39;symmetric&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">setup_smoothers</span><span class="p">(</span><span class="n">ml</span><span class="p">,</span> <span class="n">presmoother</span><span class="o">=</span><span class="n">pre</span><span class="p">,</span> <span class="n">postsmoother</span><span class="o">=</span><span class="n">post</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">residuals</span><span class="o">=</span><span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">ml</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span> <span class="n">residuals</span><span class="o">=</span><span class="n">residuals</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.relaxation.smoothing.change_smoothers">
+<!--[pyamg.relaxation.smoothing.change_smoothers]--><tt class="descclassname">pyamg.relaxation.smoothing.</tt><tt class="descname">change_smoothers</tt><big>(</big><em>ml</em>, <em>presmoother</em>, <em>postsmoother</em><big>)</big><a class="headerlink" href="#pyamg.relaxation.smoothing.change_smoothers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize pre- and post- smoothers throughout a multilevel_solver, with
+the option of having different smoothers at different levels</p>
+<p>For each level of the multilevel_solver &#8216;ml&#8217; (except the coarsest level),
+initialize the .presmoother() and .postsmoother() methods used in the 
+multigrid cycle.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ml</strong> : {pyamg multilevel hierarchy}</p>
+<blockquote>
+<p>Data structure that stores the multigrid hierarchy.</p>
+</blockquote>
+<p><strong>presmoother</strong> : {None, string, tuple, list}</p>
+<blockquote>
+<p>presmoother can be (1) the name of a supported smoother, 
+e.g. &#8220;gauss_seidel&#8221;, (2) a tuple of the form (&#8216;method&#8217;,&#8217;opts&#8217;) where 
+&#8216;method&#8217; is the name of a supported smoother and &#8216;opts&#8217; a dict of
+keyword arguments to the smoother, or (3) a list of instances of options 1 or 2.
+See the Examples section for illustrations of the format.</p>
+<p>If presmoother is a list, presmoother[i] determines the smoothing
+strategy for level i.  Else, presmoother defines the same strategy 
+for all levels.</p>
+<p>If len(presmoother) &lt; len(ml.levels), then 
+presmoother[-1] is used for all remaining levels</p>
+<p>If len(presmoother) &gt; len(ml.levels), then
+the remaining smoothing strategies are ignored</p>
+</blockquote>
+<p><strong>postsmoother</strong> : {string, tuple, list}</p>
+<blockquote>
+<p>Defines postsmoother in identical fashion to presmoother</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>ml changed in place</strong> :</p>
+<p><strong>ml.level[i].presmoother  &lt;===  presmoother[i]</strong> :</p>
+<p class="last"><strong>ml.level[i].postsmoother  &lt;===  postsmoother[i]</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<ul>
+<li><p class="first">Parameter &#8216;omega&#8217; of the Jacobi, Richardson, Kaczmarz-Jacobi, and
+Kaczmarz-Richardson methods is scaled by the spectral radius of 
+the matrix on each level.  Therefore &#8216;omega&#8217; should be in the interval (0,2).</p>
+</li>
+<li><p class="first">This function is most differs from setup_smoothers in that it allows 
+for different smoothing strategies on different levels.</p>
+</li>
+<li><p class="first">Available smoother methods:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">gauss_seidel</span>
+<span class="n">jacobi</span>
+<span class="n">richardson</span>
+<span class="n">sor</span>
+<span class="n">chebyshev</span>
+<span class="n">kaczmarz_gauss_seidel</span>
+<span class="n">kaczmarz_jacobi</span>
+<span class="n">kaczmarz_richardson</span>
+<span class="n">cg</span>
+<span class="n">gmres</span>
+<span class="n">cgne</span>
+<span class="n">cgnr</span>
+<span class="bp">None</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery</span> <span class="k">import</span> <span class="n">poisson</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.aggregation</span> <span class="k">import</span> <span class="n">smoothed_aggregation_solver</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.relaxation.smoothing</span> <span class="k">import</span> <span class="n">change_smoothers</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.util.linalg</span> <span class="k">import</span> <span class="n">norm</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">rand</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">mean</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">poisson</span><span class="p">((</span><span class="mf">10</span><span class="p">,</span><span class="mf">10</span><span class="p">),</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;csr&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">rand</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">],)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ml</span> <span class="o">=</span> <span class="n">smoothed_aggregation_solver</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">max_coarse</span><span class="o">=</span><span class="mf">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">## Set all levels to use gauss_seidel&#39;s defaults</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">smoothers</span> <span class="o">=</span> <span class="s">&#39;gauss_seidel&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">change_smoothers</span><span class="p">(</span><span class="n">ml</span><span class="p">,</span> <span class="n">presmoother</span><span class="o">=</span><span class="n">smoothers</span><span class="p">,</span> <span class="n">postsmoother</span><span class="o">=</span><span class="n">smoothers</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">residuals</span><span class="o">=</span><span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">ml</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span> <span class="n">residuals</span><span class="o">=</span><span class="n">residuals</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">## Set all levels to use three iterations of gauss_seidel&#39;s defaults</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">smoothers</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;gauss_seidel&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;iterations&#39;</span> <span class="p">:</span> <span class="mf">3</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">change_smoothers</span><span class="p">(</span><span class="n">ml</span><span class="p">,</span> <span class="n">presmoother</span><span class="o">=</span><span class="n">smoothers</span><span class="p">,</span> <span class="n">postsmoother</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">residuals</span><span class="o">=</span><span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">ml</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span> <span class="n">residuals</span><span class="o">=</span><span class="n">residuals</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">## Set level 0 to use gauss_seidel&#39;s defaults, and all  </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">## subsequent levels to use 5 iterations of cgnr</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">smoothers</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;gauss_seidel&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;cgnr&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;maxiter&#39;</span> <span class="p">:</span> <span class="mf">5</span><span class="p">})]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">change_smoothers</span><span class="p">(</span><span class="n">ml</span><span class="p">,</span> <span class="n">presmoother</span><span class="o">=</span><span class="n">smoothers</span><span class="p">,</span> <span class="n">postsmoother</span><span class="o">=</span><span class="n">smoothers</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">residuals</span><span class="o">=</span><span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">ml</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span> <span class="n">residuals</span><span class="o">=</span><span class="n">residuals</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyamg.relaxation.chebyshev">
+<h2>The <tt class="xref docutils literal"><span class="pre">chebyshev</span></tt> Module<a class="headerlink" href="#module-pyamg.relaxation.chebyshev" title="Permalink to this headline">¶</a></h2>
+<p>Compute coefficients for polynomial smoothers</p>
+<dl class="function">
+<dt id="pyamg.relaxation.chebyshev.chebyshev_polynomial_coefficients">
+<!--[pyamg.relaxation.chebyshev.chebyshev_polynomial_coefficients]--><tt class="descclassname">pyamg.relaxation.chebyshev.</tt><tt class="descname">chebyshev_polynomial_coefficients</tt><big>(</big><em>a</em>, <em>b</em>, <em>degree</em><big>)</big><a class="headerlink" href="#pyamg.relaxation.chebyshev.chebyshev_polynomial_coefficients" title="Permalink to this definition">¶</a></dt>
+<dd><p>Chebyshev polynomial coefficients for the interval [a,b]</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>a,b</strong> : float</p>
+<blockquote>
+<p>The left and right endpoints of the interval.</p>
+</blockquote>
+<p><strong>degree</strong> : int</p>
+<blockquote>
+<p>Degree of desired chebyshev polynomial</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>Coefficients of the Chebyshev polynomial C(t) with minimum</strong> :</p>
+<p><strong>magnitude on the interval [a,b] such that C(0) = 1.0.</strong> :</p>
+<p class="last"><strong>The coefficients are returned in descending order.</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>a,b typically represent the interval of the spectrum for some matrix
+that you wish to damp with a Chebyshev smoother.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.relaxation.chebyshev</span> <span class="k">import</span> <span class="n">chebyshev_polynomial_coefficients</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">chebyshev_polynomial_coefficients</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">3</span><span class="p">)</span>
+<span class="go">[-0.32323232  1.45454545 -2.12121212  1.        ]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyamg.relaxation.setup">
+<h2>The <tt class="xref docutils literal"><span class="pre">setup</span></tt> Module<a class="headerlink" href="#module-pyamg.relaxation.setup" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pyamg.relaxation.setup.configuration">
+<!--[pyamg.relaxation.setup.configuration]--><tt class="descclassname">pyamg.relaxation.setup.</tt><tt class="descname">configuration</tt><big>(</big><em>parent_package=''</em>, <em>top_path=None</em><big>)</big><a class="headerlink" href="#pyamg.relaxation.setup.configuration" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo_dropshadow_small.png" alt="Logo"/>
+            </a></p>
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference" href="">Relaxation Documentation</a><ul>
+<li><a class="reference" href="#module-pyamg.relaxation.relaxation">The <tt class="docutils literal"><span class="pre">relaxation</span></tt> Module</a></li>
+<li><a class="reference" href="#module-pyamg.relaxation.smoothing">The <tt class="docutils literal"><span class="pre">smoothing</span></tt> Module</a></li>
+<li><a class="reference" href="#module-pyamg.relaxation.chebyshev">The <tt class="docutils literal"><span class="pre">chebyshev</span></tt> Module</a></li>
+<li><a class="reference" href="#module-pyamg.relaxation.setup">The <tt class="docutils literal"><span class="pre">setup</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="pyamg.amg_core.html" title="previous chapter">Amg_Core Documentation</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="pyamg.classical.html" title="next chapter">Classical Documentation</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/pyamg.relaxation.txt">Show Source</a></li>
+            </ul>
+          <h3>Quick search</h3>
+            <form class="search" action="search.html" method="get">
+              <input type="text" name="q" size="18" /> <input type="submit" value="Go" />
+              <input type="hidden" name="check_keywords" value="yes" />
+              <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="pyamg.classical.html" title="Classical Documentation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pyamg.amg_core.html" title="Amg_Core Documentation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">PyAMG v1.0 documentation</a> &raquo;</li>
+          <li><a href="modules.html" accesskey="U">Project Documentation</a> &raquo;</li>
+          <li><a href="pyamg.html" accesskey="U">Pyamg Documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009, Nathan Bell, Luke Olson, Jacob Schroder.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.1.
+    </div>
+  </body>
+</html>

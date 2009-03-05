@@ -1,0 +1,955 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Pyamg Documentation &mdash; PyAMG v1.0 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="PyAMG v1.0 documentation" href="index.html" />
+    <link rel="up" title="Project Documentation" href="modules.html" />
+    <link rel="next" title="Vis Documentation" href="pyamg.vis.html" />
+    <link rel="prev" title="Project Documentation" href="modules.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="pyamg.vis.html" title="Vis Documentation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="Project Documentation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">PyAMG v1.0 documentation</a> &raquo;</li>
+          <li><a href="modules.html" accesskey="U">Project Documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  
+  <div class="section" id="pyamg-documentation">
+<h1>Pyamg Documentation<a class="headerlink" href="#pyamg-documentation" title="Permalink to this headline">¶</a></h1>
+<p>This page contains the Pyamg Package documentation.</p>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li class="toctree-l1"><a class="reference" href="pyamg.vis.html">Vis Documentation</a><ul>
+<li class="toctree-l2"><a class="reference" href="pyamg.vis.html#module-pyamg.vis.vis_coarse">The <tt class="docutils literal"><span class="pre">vis_coarse</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference" href="pyamg.vis.html#module-pyamg.vis.setup">The <tt class="docutils literal"><span class="pre">setup</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference" href="pyamg.vis.html#module-pyamg.vis.vtk_writer">The <tt class="docutils literal"><span class="pre">vtk_writer</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference" href="pyamg.krylov.html">Krylov Documentation</a><ul>
+<li class="toctree-l2"><a class="reference" href="pyamg.krylov.html#module-pyamg.krylov._gmres">The <tt class="docutils literal"><span class="pre">_gmres</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference" href="pyamg.krylov.html#module-pyamg.krylov._cgnr">The <tt class="docutils literal"><span class="pre">_cgnr</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference" href="pyamg.krylov.html#module-pyamg.krylov._fgmres">The <tt class="docutils literal"><span class="pre">_fgmres</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference" href="pyamg.krylov.html#module-pyamg.krylov._cgne">The <tt class="docutils literal"><span class="pre">_cgne</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference" href="pyamg.krylov.html#module-pyamg.krylov.setup">The <tt class="docutils literal"><span class="pre">setup</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference" href="pyamg.krylov.html#module-pyamg.krylov._cg">The <tt class="docutils literal"><span class="pre">_cg</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference" href="pyamg.krylov.html#module-pyamg.krylov._bicgstab">The <tt class="docutils literal"><span class="pre">_bicgstab</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference" href="pyamg.gallery.html">Gallery Documentation</a><ul>
+<li class="toctree-l2"><a class="reference" href="pyamg.gallery.html#module-pyamg.gallery.example">The <tt class="docutils literal"><span class="pre">example</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference" href="pyamg.gallery.html#module-pyamg.gallery.laplacian">The <tt class="docutils literal"><span class="pre">laplacian</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference" href="pyamg.gallery.html#module-pyamg.gallery.diffusion">The <tt class="docutils literal"><span class="pre">diffusion</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference" href="pyamg.gallery.html#module-pyamg.gallery.elasticity">The <tt class="docutils literal"><span class="pre">elasticity</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference" href="pyamg.gallery.html#module-pyamg.gallery.mesh">The <tt class="docutils literal"><span class="pre">mesh</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference" href="pyamg.gallery.html#module-pyamg.gallery.setup">The <tt class="docutils literal"><span class="pre">setup</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference" href="pyamg.gallery.html#module-pyamg.gallery.demo">The <tt class="docutils literal"><span class="pre">demo</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference" href="pyamg.gallery.html#module-pyamg.gallery.stencil">The <tt class="docutils literal"><span class="pre">stencil</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference" href="pyamg.gallery.html#module-pyamg.gallery.sprand">The <tt class="docutils literal"><span class="pre">sprand</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference" href="pyamg.aggregation.html">Aggregation Documentation</a><ul>
+<li class="toctree-l2"><a class="reference" href="pyamg.aggregation.html#module-pyamg.aggregation.aggregate">The <tt class="docutils literal"><span class="pre">aggregate</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference" href="pyamg.aggregation.html#module-pyamg.aggregation.aggregation">The <tt class="docutils literal"><span class="pre">aggregation</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference" href="pyamg.aggregation.html#module-pyamg.aggregation.tentative">The <tt class="docutils literal"><span class="pre">tentative</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference" href="pyamg.aggregation.html#module-pyamg.aggregation.setup">The <tt class="docutils literal"><span class="pre">setup</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference" href="pyamg.aggregation.html#module-pyamg.aggregation.adaptive">The <tt class="docutils literal"><span class="pre">adaptive</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference" href="pyamg.aggregation.html#module-pyamg.aggregation.smooth">The <tt class="docutils literal"><span class="pre">smooth</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference" href="pyamg.amg_core.html">Amg_Core Documentation</a><ul>
+<li class="toctree-l2"><a class="reference" href="pyamg.amg_core.html#module-pyamg.amg_core.amg_core">The <tt class="docutils literal"><span class="pre">amg_core</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference" href="pyamg.amg_core.html#module-pyamg.amg_core.setup">The <tt class="docutils literal"><span class="pre">setup</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference" href="pyamg.relaxation.html">Relaxation Documentation</a><ul>
+<li class="toctree-l2"><a class="reference" href="pyamg.relaxation.html#module-pyamg.relaxation.relaxation">The <tt class="docutils literal"><span class="pre">relaxation</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference" href="pyamg.relaxation.html#module-pyamg.relaxation.smoothing">The <tt class="docutils literal"><span class="pre">smoothing</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference" href="pyamg.relaxation.html#module-pyamg.relaxation.chebyshev">The <tt class="docutils literal"><span class="pre">chebyshev</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference" href="pyamg.relaxation.html#module-pyamg.relaxation.setup">The <tt class="docutils literal"><span class="pre">setup</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference" href="pyamg.classical.html">Classical Documentation</a><ul>
+<li class="toctree-l2"><a class="reference" href="pyamg.classical.html#module-pyamg.classical.cr">The <tt class="docutils literal"><span class="pre">cr</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference" href="pyamg.classical.html#module-pyamg.classical.setup">The <tt class="docutils literal"><span class="pre">setup</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference" href="pyamg.classical.html#module-pyamg.classical.classical">The <tt class="docutils literal"><span class="pre">classical</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference" href="pyamg.classical.html#module-pyamg.classical.split">The <tt class="docutils literal"><span class="pre">split</span></tt> Module</a><ul>
+<li class="toctree-l3"><a class="reference" href="pyamg.classical.html#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference" href="pyamg.classical.html#representation">Representation</a></li>
+<li class="toctree-l3"><a class="reference" href="pyamg.classical.html#c-f-splitting-methods">C/F Splitting Methods</a></li>
+<li class="toctree-l3"><a class="reference" href="pyamg.classical.html#summary">Summary</a></li>
+<li class="toctree-l3"><a class="reference" href="pyamg.classical.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference" href="pyamg.classical.html#module-pyamg.classical.interpolate">The <tt class="docutils literal"><span class="pre">interpolate</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference" href="pyamg.testing.html">Testing Documentation</a><ul>
+<li class="toctree-l2"><a class="reference" href="pyamg.testing.html#module-pyamg.testing">The <tt class="docutils literal"><span class="pre">testing</span></tt> Package</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference" href="pyamg.util.html">Util Documentation</a><ul>
+<li class="toctree-l2"><a class="reference" href="pyamg.util.html#module-pyamg.util.BSR_utils">The <tt class="docutils literal"><span class="pre">BSR_utils</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference" href="pyamg.util.html#module-pyamg.util.utils">The <tt class="docutils literal"><span class="pre">utils</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference" href="pyamg.util.html#module-pyamg.util.setup">The <tt class="docutils literal"><span class="pre">setup</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference" href="pyamg.util.html#module-pyamg.util.linalg">The <tt class="docutils literal"><span class="pre">linalg</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="module-pyamg.graph">
+<h2>The <tt class="xref docutils literal"><span class="pre">graph</span></tt> Module<a class="headerlink" href="#module-pyamg.graph" title="Permalink to this headline">¶</a></h2>
+<p>Algorithms related to graphs</p>
+<dl class="function">
+<dt id="pyamg.graph.maximal_independent_set">
+<!--[pyamg.graph.maximal_independent_set]--><tt class="descclassname">pyamg.graph.</tt><tt class="descname">maximal_independent_set</tt><big>(</big><em>G</em>, <em>algo='serial'</em>, <em>k=None</em><big>)</big><a class="headerlink" href="#pyamg.graph.maximal_independent_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute a maximal independent vertex set for a graph</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>G</strong> : sparse matrix</p>
+<blockquote>
+<p>Symmetric matrix, preferably in sparse CSR or CSC format
+The nonzeros of G represent the edges of an undirected graph.</p>
+</blockquote>
+<p><strong>algo</strong> : {&#8216;serial&#8217;, &#8216;parallel&#8217;}</p>
+<blockquote>
+<dl class="docutils">
+<dt>Algorithm used to compute the MIS</dt>
+<dd><ul class="first last simple">
+<li>serial   : greedy serial algorithm</li>
+<li>parallel : variant of Luby&#8217;s parallel MIS algorithm</li>
+</ul>
+</dd>
+</dl>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>An array S where</strong> :</p>
+<blockquote class="last">
+<p>S[i] = 1 if vertex i is in the MIS
+S[i] = 0 otherwise</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Diagonal entries in the G (self loops) will be ignored.</p>
+<p>Luby&#8217;s algorithm is significantly more expensive than the 
+greedy serial algorithm.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.graph.vertex_coloring">
+<!--[pyamg.graph.vertex_coloring]--><tt class="descclassname">pyamg.graph.</tt><tt class="descname">vertex_coloring</tt><big>(</big><em>G</em>, <em>method='MIS'</em><big>)</big><a class="headerlink" href="#pyamg.graph.vertex_coloring" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute a vertex coloring of a graph</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>G</strong> : sparse matrix</p>
+<blockquote>
+<p>Symmetric matrix, preferably in sparse CSR or CSC format
+The nonzeros of G represent the edges of an undirected graph.</p>
+</blockquote>
+<p><strong>method</strong> : {string}</p>
+<blockquote>
+<dl class="docutils">
+<dt>Algorithm used to compute the vertex coloring:</dt>
+<dd><ul class="first last simple">
+<li>&#8216;MIS&#8217; - Maximal Independent Set</li>
+<li>&#8216;JP&#8217;  - Jones-Plassmann (parallel)</li>
+<li>&#8216;LDF&#8217; - Largest-Degree-First (parallel)</li>
+</ul>
+</dd>
+</dl>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>An array of vertex colors (integers beginning at 0)</strong> :</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Diagonal entries in the G (self loops) will be ignored.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.graph.bellman_ford">
+<!--[pyamg.graph.bellman_ford]--><tt class="descclassname">pyamg.graph.</tt><tt class="descname">bellman_ford</tt><big>(</big><em>G</em>, <em>seeds</em>, <em>maxiter=None</em><big>)</big><a class="headerlink" href="#pyamg.graph.bellman_ford" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bellman-Ford iteration</p>
+<p class="rubric">References</p>
+<p>CLR</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.graph.lloyd_cluster">
+<!--[pyamg.graph.lloyd_cluster]--><tt class="descclassname">pyamg.graph.</tt><tt class="descname">lloyd_cluster</tt><big>(</big><em>G</em>, <em>seeds</em>, <em>maxiter=10</em><big>)</big><a class="headerlink" href="#pyamg.graph.lloyd_cluster" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform Lloyd clustering on graph with weighted edges</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>G</strong> : csr_matrix or csc_matrix</p>
+<blockquote>
+<p>A sparse NxN matrix where each nonzero entry G[i,j] is the distance 
+between nodes i and j.</p>
+</blockquote>
+<p><strong>seeds</strong> : {int, array}</p>
+<blockquote>
+<p>If seeds is an integer, then its value determines the number of clusters.
+Otherwise, seeds is an array of unique integers between 0 and N-1 that
+will be used as the initial seeds for clustering.</p>
+</blockquote>
+<p><strong>maxiter</strong> : int</p>
+<blockquote class="last">
+<p>The maximum number of iterations to perform.</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>If G has complex values, abs(G) is used instead.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.graph.connected_components">
+<!--[pyamg.graph.connected_components]--><tt class="descclassname">pyamg.graph.</tt><tt class="descname">connected_components</tt><big>(</big><em>G</em><big>)</big><a class="headerlink" href="#pyamg.graph.connected_components" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the connected components of a graph</p>
+<p>The connected components of a graph G, which is represented by a 
+symmetric sparse matrix, are labeled with the integers 0,1,..(K-1) where 
+K is the number of components.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>G</strong> : symmetric matrix, preferably in sparse CSR or CSC format</p>
+<blockquote>
+<p>The nonzeros of G represent the edges of an undirected graph.</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>components</strong> : ndarray</p>
+<blockquote class="last">
+<p>An array of component labels for each vertex of the graph.</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>If the nonzero structure of G is not symmetric, then the 
+result is undefined.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">connected_components</span><span class="p">(</span> <span class="p">[[</span><span class="mf">0</span><span class="p">,</span><span class="mf">1</span><span class="p">,</span><span class="mf">0</span><span class="p">],[</span><span class="mf">1</span><span class="p">,</span><span class="mf">0</span><span class="p">,</span><span class="mf">1</span><span class="p">],[</span><span class="mf">0</span><span class="p">,</span><span class="mf">1</span><span class="p">,</span><span class="mf">0</span><span class="p">]]</span> <span class="p">)</span>
+<span class="go">[0 0 0]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">connected_components</span><span class="p">(</span> <span class="p">[[</span><span class="mf">0</span><span class="p">,</span><span class="mf">1</span><span class="p">,</span><span class="mf">0</span><span class="p">],[</span><span class="mf">1</span><span class="p">,</span><span class="mf">0</span><span class="p">,</span><span class="mf">0</span><span class="p">],[</span><span class="mf">0</span><span class="p">,</span><span class="mf">0</span><span class="p">,</span><span class="mf">0</span><span class="p">]]</span> <span class="p">)</span>
+<span class="go">[0 0 1]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">connected_components</span><span class="p">(</span> <span class="p">[[</span><span class="mf">0</span><span class="p">,</span><span class="mf">0</span><span class="p">,</span><span class="mf">0</span><span class="p">],[</span><span class="mf">0</span><span class="p">,</span><span class="mf">0</span><span class="p">,</span><span class="mf">0</span><span class="p">],[</span><span class="mf">0</span><span class="p">,</span><span class="mf">0</span><span class="p">,</span><span class="mf">0</span><span class="p">]]</span> <span class="p">)</span>
+<span class="go">[0 1 2]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">connected_components</span><span class="p">(</span> <span class="p">[[</span><span class="mf">0</span><span class="p">,</span><span class="mf">1</span><span class="p">,</span><span class="mf">0</span><span class="p">,</span><span class="mf">0</span><span class="p">],[</span><span class="mf">1</span><span class="p">,</span><span class="mf">0</span><span class="p">,</span><span class="mf">0</span><span class="p">,</span><span class="mf">0</span><span class="p">],[</span><span class="mf">0</span><span class="p">,</span><span class="mf">0</span><span class="p">,</span><span class="mf">0</span><span class="p">,</span><span class="mf">1</span><span class="p">],[</span><span class="mf">0</span><span class="p">,</span><span class="mf">0</span><span class="p">,</span><span class="mf">1</span><span class="p">,</span><span class="mf">0</span><span class="p">]]</span> <span class="p">)</span>
+<span class="go">[0 0 1 1]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyamg.multilevel">
+<h2>The <tt class="xref docutils literal"><span class="pre">multilevel</span></tt> Module<a class="headerlink" href="#module-pyamg.multilevel" title="Permalink to this headline">¶</a></h2>
+<p>Generic AMG solver</p>
+<dl class="class">
+<dt id="pyamg.multilevel.multilevel_solver">
+<!--[pyamg.multilevel.multilevel_solver]-->class <tt class="descclassname">pyamg.multilevel.</tt><tt class="descname">multilevel_solver</tt><big>(</big><em>levels</em>, <em>coarse_solver='pinv2'</em><big>)</big><a class="headerlink" href="#pyamg.multilevel.multilevel_solver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stores multigrid hierarchy and implements the multigrid cycle</p>
+<p>The class constructs the cycling process and points to the methods for
+coarse grid solves.  A multilevel_solver object is typically returned from
+a particular AMG method (see ruge_stuben_solver or
+smoothed_aggregation_solver for example).  A call to
+multilevel_solver.solve() is a typical access point.  The class also
+defines methods for constructing operator, cycle, and grid complexities.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Attributes:</th><td class="field-body"><p class="first"><strong>levels</strong> : level array</p>
+<blockquote>
+<p>Array of level objects that contain A, R, and P.</p>
+</blockquote>
+<p><strong>coarse_solver</strong> : string</p>
+<blockquote>
+<p>String passed to coarse_grid_solver indicating the solve type</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Methods:</th><td class="field-body"><p class="first"><strong>aspreconditioner()</strong> :</p>
+<blockquote>
+<p>Create a preconditioner using this multigrid cycle</p>
+</blockquote>
+<p><strong>cycle_complexity()</strong> :</p>
+<blockquote>
+<p>A measure of the cost of a single multigrid cycle.</p>
+</blockquote>
+<p><strong>grid_complexity()</strong> :</p>
+<blockquote>
+<p>A measure of the rate of coarsening.</p>
+</blockquote>
+<p><strong>operator_complexity()</strong> :</p>
+<blockquote>
+<p>A measure of the size of the multigrid hierarchy.</p>
+</blockquote>
+<p><strong>solve()</strong> :</p>
+<blockquote class="last">
+<p>Iteratively solves a linear system for the right hand side.</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pyamg.multilevel.multilevel_solver.aspreconditioner">
+<!--[pyamg.multilevel.multilevel_solver.aspreconditioner]--><tt class="descname">aspreconditioner</tt><big>(</big><em>cycle='V'</em><big>)</big><a class="headerlink" href="#pyamg.multilevel.multilevel_solver.aspreconditioner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a preconditioner using this multigrid cycle</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>cycle</strong> : {&#8216;V&#8217;,&#8217;W&#8217;,&#8217;F&#8217;}</p>
+<blockquote>
+<p>Type of multigrid cycle to perform in each iteration.</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>precond</strong> : LinearOperator</p>
+<blockquote class="last">
+<p>Preconditioner suitable for the iterative solvers in defined in
+the scipy.sparse.linalg module (e.g. cg, gmres) and any other
+solver that uses the LinearOperator interface.  Refer to the 
+LinearOperator documentation in scipy.sparse.linalg</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a title="pyamg.multilevel.multilevel_solver.solve" class="reference" href="#pyamg.multilevel.multilevel_solver.solve"><tt class="xref docutils literal"><span class="pre">multilevel_solver.solve</span></tt></a>, <tt class="xref docutils literal"><span class="pre">scipy.sparse.linalg.LinearOperator</span></tt></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.aggregation</span> <span class="k">import</span> <span class="n">smoothed_aggregation_solver</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery</span> <span class="k">import</span> <span class="n">poisson</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">scipy.sparse.linalg</span> <span class="k">import</span> <span class="n">cg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">rand</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">poisson</span><span class="p">((</span><span class="mf">100</span><span class="p">,</span><span class="mf">100</span><span class="p">),</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;csr&#39;</span><span class="p">)</span>           <span class="c"># matrix</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">rand</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">])</span>                           <span class="c"># random RHS</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ml</span> <span class="o">=</span> <span class="n">smoothed_aggregation_solver</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>            <span class="c"># AMG solver</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">ml</span><span class="o">.</span><span class="n">aspreconditioner</span><span class="p">(</span><span class="n">cycle</span><span class="o">=</span><span class="s">&#39;V&#39;</span><span class="p">)</span>             <span class="c"># preconditioner</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span><span class="n">info</span> <span class="o">=</span> <span class="n">cg</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="mf">30</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="n">M</span><span class="p">)</span>   <span class="c"># solve with CG</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyamg.multilevel.multilevel_solver.cycle_complexity">
+<!--[pyamg.multilevel.multilevel_solver.cycle_complexity]--><tt class="descname">cycle_complexity</tt><big>(</big><em>cycle='V'</em><big>)</big><a class="headerlink" href="#pyamg.multilevel.multilevel_solver.cycle_complexity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cycle complexity of this Multigrid hierarchy</p>
+<p>Cycle complexity is an approximate measure of the number of
+floating point operations (FLOPs) required to perform a single 
+multigrid cycle relative to the cost a single smoothing operation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>cycle</strong> : {&#8216;V&#8217;,&#8217;W&#8217;,&#8217;F&#8217;}</p>
+<blockquote>
+<p>Type of multigrid cycle to perform in each iteration.</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>cc</strong> : float</p>
+<blockquote class="last">
+<p>Defined as F_sum / F_0, where
+F_sum is the total number of nonzeros in the matrix on all 
+levels encountered during a cycle and F_0 is the number of 
+nonzeros in the matrix on the finest level.</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>This is only a rough estimate of the true cycle complexity. The 
+estimate assumes that the cost of pre and post-smoothing are 
+(each) equal to the number of nonzeros in the matrix on that level.
+This assumption holds for smoothers like Jacobi and Gauss-Seidel.
+However, the true cycle complexity of cycle using more expensive 
+methods, like symmetric Gauss-Seidel and Chebyshev smoothers will 
+be underestimated.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyamg.multilevel.multilevel_solver.grid_complexity">
+<!--[pyamg.multilevel.multilevel_solver.grid_complexity]--><tt class="descname">grid_complexity</tt><big>(</big><big>)</big><a class="headerlink" href="#pyamg.multilevel.multilevel_solver.grid_complexity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Grid complexity of this multigrid heirarchy</p>
+<dl class="docutils">
+<dt>Defined as:</dt>
+<dd>Number of unknowns on all levels / 
+Number of unknowns on the finest level</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyamg.multilevel.multilevel_solver.level">
+<!--[pyamg.multilevel.multilevel_solver.level]--><tt class="descname">level</tt><big>(</big><big>)</big><a class="headerlink" href="#pyamg.multilevel.multilevel_solver.level" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stores one level of the multigrid hierarchy</p>
+<p>All level objects will have an &#8216;A&#8217; attribute referencing the matrix
+of that level.  All levels, except for the coarsest level, will 
+also have &#8216;P&#8217; and &#8216;R&#8217; attributes referencing the prolongation and 
+restriction operators that act between each level and the next 
+coarser level.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Attributes:</th><td class="field-body"><p class="first"><strong>A</strong> : csr_matrix</p>
+<blockquote>
+<p>Problem matrix for Ax=b</p>
+</blockquote>
+<p><strong>R</strong> : csr_matrix</p>
+<blockquote>
+<p>Restriction matrix between levels (often R = P.T)</p>
+</blockquote>
+<p><strong>P</strong> : csr_matrix</p>
+<blockquote class="last">
+<p>Prolongation or Interpolation matrix.</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The functionality of this class is a struct</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyamg.multilevel.multilevel_solver.operator_complexity">
+<!--[pyamg.multilevel.multilevel_solver.operator_complexity]--><tt class="descname">operator_complexity</tt><big>(</big><big>)</big><a class="headerlink" href="#pyamg.multilevel.multilevel_solver.operator_complexity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Operator complexity of this multigrid heirarchy</p>
+<dl class="docutils">
+<dt>Defined as:</dt>
+<dd>Number of nonzeros in the matrix on all levels / 
+Number of nonzeros in the matrix on the finest level</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyamg.multilevel.multilevel_solver.psolve">
+<!--[pyamg.multilevel.multilevel_solver.psolve]--><tt class="descname">psolve</tt><big>(</big><em>b</em><big>)</big><a class="headerlink" href="#pyamg.multilevel.multilevel_solver.psolve" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pyamg.multilevel.multilevel_solver.solve">
+<!--[pyamg.multilevel.multilevel_solver.solve]--><tt class="descname">solve</tt><big>(</big><em>b</em>, <em>x0=None</em>, <em>tol=1.0000000000000001e-05</em>, <em>maxiter=100</em>, <em>cycle='V'</em>, <em>accel=None</em>, <em>callback=None</em>, <em>residuals=None</em>, <em>return_residuals=False</em><big>)</big><a class="headerlink" href="#pyamg.multilevel.multilevel_solver.solve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main solution call to execute multigrid cycling.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>b</strong> : array</p>
+<blockquote>
+<p>Right hand side.</p>
+</blockquote>
+<p><strong>x0</strong> : array</p>
+<blockquote>
+<p>Initial guess.</p>
+</blockquote>
+<p><strong>tol</strong> : float</p>
+<blockquote>
+<p>Stopping criteria: relative residual r[k]/r[0] tolerance.</p>
+</blockquote>
+<p><strong>maxiter</strong> : int</p>
+<blockquote>
+<p>Stopping criteria: maximum number of allowable iterations.</p>
+</blockquote>
+<p><strong>cycle</strong> : {&#8216;V&#8217;,&#8217;W&#8217;,&#8217;F&#8217;}</p>
+<blockquote>
+<p>Type of multigrid cycle to perform in each iteration.</p>
+</blockquote>
+<p><strong>accel</strong> : {string, function}</p>
+<blockquote>
+<p>Defines acceleration method.  Can be a string such as &#8216;cg&#8217;
+or &#8216;gmres&#8217; which is the name of an iterative solver in
+pyamg.krylov (preferred) or scipy.sparse.linalg.isolve.
+If accel is not a string, it will be treated like a function 
+with the same interface provided by the iterative solvers in SciPy.</p>
+</blockquote>
+<p><strong>callback</strong> : function</p>
+<blockquote>
+<p>User-defined function called after each iteration.  It is
+called as callback(xk) where xk is the k-th iterate vector.</p>
+</blockquote>
+<p><strong>residuals</strong> : list</p>
+<blockquote>
+<p>List to contain residual norms at each iteration.</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>x</strong> : array</p>
+<blockquote class="last">
+<p>Approximate solution to Ax=b</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a title="pyamg.multilevel.multilevel_solver.aspreconditioner" class="reference" href="#pyamg.multilevel.multilevel_solver.aspreconditioner"><tt class="xref docutils literal"><span class="pre">aspreconditioner</span></tt></a></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">ones</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg</span> <span class="k">import</span> <span class="n">ruge_stuben_solver</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery</span> <span class="k">import</span> <span class="n">poisson</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">poisson</span><span class="p">((</span><span class="mf">100</span><span class="p">,</span><span class="mf">100</span><span class="p">),</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;csr&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">A</span><span class="o">*</span><span class="n">ones</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ml</span> <span class="o">=</span> <span class="n">ruge_stuben_solver</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">max_coarse</span><span class="o">=</span><span class="mf">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">residuals</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">ml</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">,</span> <span class="n">residuals</span><span class="o">=</span><span class="n">residuals</span><span class="p">)</span> <span class="c">#standalone solver</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.multilevel.coarse_grid_solver">
+<!--[pyamg.multilevel.coarse_grid_solver]--><tt class="descclassname">pyamg.multilevel.</tt><tt class="descname">coarse_grid_solver</tt><big>(</big><em>solver</em><big>)</big><a class="headerlink" href="#pyamg.multilevel.coarse_grid_solver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a coarse grid solver suitable for multilevel_solver</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>solver: {string, callable}</strong> :</p>
+<blockquote>
+<p>The solver method is either a string such as &#8216;splu&#8217; or &#8216;pinv&#8217; of a 
+callable object which received parameters (A, b) and returns an 
+(approximate or exact) solution to the linear system Ax = b. The set
+of valid string arguments is:
+- Sparse direct methods:</p>
+<blockquote>
+<ul class="simple">
+<li>splu         : sparse LU solver</li>
+</ul>
+</blockquote>
+<ul>
+<li><dl class="first docutils">
+<dt>Sparse iterative methods:</dt>
+<dd><ul class="first last simple">
+<li>the name of any method in scipy.sparse.linalg.isolve (e.g. &#8216;cg&#8217;)</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Dense methods:</dt>
+<dd><ul class="first last simple">
+<li>pinv     : pseudoinverse (QR)</li>
+<li>pinv2    : pseudoinverse (SVD)</li>
+<li>lu       : LU factorization</li>
+<li>cholesky : Cholesky factorization</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>ptr</strong> : generic_solver</p>
+<blockquote class="last">
+<p>A class for use as a standalone or coarse grids solver</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">ones</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">scipy.sparse</span> <span class="k">import</span> <span class="n">spdiags</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery</span> <span class="k">import</span> <span class="n">poisson</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg</span> <span class="k">import</span> <span class="n">coarse_grid_solver</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">poisson</span><span class="p">((</span><span class="mf">10</span><span class="p">,</span><span class="mf">10</span><span class="p">),</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;csr&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">A</span><span class="o">*</span><span class="n">ones</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cgs</span> <span class="o">=</span> <span class="n">coarse_grid_solver</span><span class="p">(</span><span class="s">&#39;lu&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">cgs</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">b</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyamg.strength">
+<h2>The <tt class="xref docutils literal"><span class="pre">strength</span></tt> Module<a class="headerlink" href="#module-pyamg.strength" title="Permalink to this headline">¶</a></h2>
+<p>Strength of Connection functions</p>
+<dl class="function">
+<dt id="pyamg.strength.classical_strength_of_connection">
+<!--[pyamg.strength.classical_strength_of_connection]--><tt class="descclassname">pyamg.strength.</tt><tt class="descname">classical_strength_of_connection</tt><big>(</big><em>A</em>, <em>theta=0.0</em><big>)</big><a class="headerlink" href="#pyamg.strength.classical_strength_of_connection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a strength of connection matrix using the classical AMG measure
+An off-diagonal entry A[i,j] is a strong connection iff:</p>
+<div class="highlight-python"><pre>| A[i,j] | &gt;= theta * max(| A[i,k] |), where k != i</pre>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>A</strong> : csr_matrix</p>
+<blockquote>
+<p>Matrix graph defined in sparse format.  Entry A[i,j] describes the
+strength of edge [i,j]</p>
+</blockquote>
+<p><strong>theta</strong> : float</p>
+<blockquote>
+<p>Threshold parameter in [0,1].</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>S</strong> : csr_matrix</p>
+<blockquote class="last">
+<p>Matrix graph defining strong connections.  S[i,j]=1 if vertex i
+is strongly influenced by vertex j.</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a title="pyamg.strength.symmetric_strength_of_connection" class="reference" href="#pyamg.strength.symmetric_strength_of_connection"><tt class="xref docutils literal"><span class="pre">symmetric_strength_of_connection</span></tt></a></dt>
+<dd>symmetric measure used in SA</dd>
+<dt><a title="pyamg.strength.ode_strength_of_connection" class="reference" href="#pyamg.strength.ode_strength_of_connection"><tt class="xref docutils literal"><span class="pre">ode_strength_of_connection</span></tt></a></dt>
+<dd>relaxation based strength measure</dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>A symmetric A does not necessarily yield a symmetric strength matrix S</li>
+<li>Calls C++ function classical_strength_of_connection</li>
+<li>The version as implemented is designed form M-matrices.  Trottenberg et
+al. use max A[i,k] over all negative entries, which is the same.  A
+positive edge weight never indicates a strong connection.</li>
+</ul>
+<p class="rubric">References</p>
+<table class="docutils footnote" frame="void" id="id1" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id1">[1]</a></td><td>Briggs, W. L., Henson, V. E., McCormick, S. F., &#8220;A multigrid tutorial&#8221;,
+Second edition. Society for Industrial and Applied Mathematics (SIAM),
+Philadelphia, PA, 2000. xii+193 pp. ISBN: 0-89871-462-1</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id2" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id2">[2]</a></td><td>Trottenberg, U., Oosterlee, C. W., Schuller, A., &#8220;Multigrid&#8221;,
+Academic Press, Inc., San Diego, CA, 2001. xvi+631 pp. ISBN: 0-12-701070-X</td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">import</span> <span class="nn">numpy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery</span> <span class="k">import</span> <span class="n">stencil_grid</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.strength</span> <span class="k">import</span> <span class="n">classical_strength_of_connection</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n</span><span class="o">=</span><span class="mf">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stencil</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span><span class="o">-</span><span class="mf">1.0</span><span class="p">],</span>
+<span class="gp">... </span>                       <span class="p">[</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">8.0</span><span class="p">,</span><span class="o">-</span><span class="mf">1.0</span><span class="p">],</span>
+<span class="gp">... </span>                       <span class="p">[</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span><span class="o">-</span><span class="mf">1.0</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">stencil_grid</span><span class="p">(</span><span class="n">stencil</span><span class="p">,</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">n</span><span class="p">),</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;csr&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span> <span class="o">=</span> <span class="n">classical_strength_of_connection</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.strength.symmetric_strength_of_connection">
+<!--[pyamg.strength.symmetric_strength_of_connection]--><tt class="descclassname">pyamg.strength.</tt><tt class="descname">symmetric_strength_of_connection</tt><big>(</big><em>A</em>, <em>theta=0</em><big>)</big><a class="headerlink" href="#pyamg.strength.symmetric_strength_of_connection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute a strength of connection matrix using the standard symmetric measure</p>
+<p>An off-diagonal connection A[i,j] is strong iff:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">abs</span><span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">])</span> <span class="o">&gt;=</span> <span class="n">theta</span> <span class="o">*</span> <span class="n">sqrt</span><span class="p">(</span> <span class="nb">abs</span><span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="nb">abs</span><span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">j</span><span class="p">])</span> <span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>A</strong> : csr_matrix</p>
+<blockquote>
+<p>Matrix graph defined in sparse format.  Entry A[i,j] describes the
+strength of edge [i,j]</p>
+</blockquote>
+<p><strong>theta</strong> : float</p>
+<blockquote>
+<p>Threshold parameter (positive).</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>S</strong> : csr_matrix</p>
+<blockquote class="last">
+<p>Matrix graph defining strong connections.  S[i,j]=1 if vertex i
+is strongly influenced by vertex j.</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a title="pyamg.strength.symmetric_strength_of_connection" class="reference" href="#pyamg.strength.symmetric_strength_of_connection"><tt class="xref docutils literal"><span class="pre">symmetric_strength_of_connection</span></tt></a></dt>
+<dd>symmetric measure used in SA</dd>
+<dt><a title="pyamg.strength.ode_strength_of_connection" class="reference" href="#pyamg.strength.ode_strength_of_connection"><tt class="xref docutils literal"><span class="pre">ode_strength_of_connection</span></tt></a></dt>
+<dd>relaxation based strength measure</dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
+<ul>
+<li><p class="first">For vector problems, standard strength measures may produce
+undesirable aggregates.  A &#8220;block approach&#8221; from Vanek et al. is used
+to replace vertex comparisons with block-type comparisons.  A
+connection between nodes i and j in the block case is strong if:</p>
+<div class="highlight-python"><pre>||AB[i,j]|| &gt;= theta * sqrt( ||AB[i,i]||*||AB[j,j]|| ) where AB[k,l]</pre>
+</div>
+<p>is the matrix block (degrees of freedom) associated with nodes k and
+l and ||.|| is a matrix norm, such a Frobenius.</p>
+</li>
+</ul>
+<p class="rubric">References</p>
+<table class="docutils footnote" frame="void" id="id3" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id3">[3]</a></td><td>Vanek, P. and Mandel, J. and Brezina, M., 
+&#8220;Algebraic Multigrid by Smoothed Aggregation for 
+Second and Fourth Order Elliptic Problems&#8221;, 
+Computing, vol. 56, no. 3, pp. 179&#8211;196, 1996.
+<a class="reference" href="http://citeseer.ist.psu.edu/vanek96algebraic.html">http://citeseer.ist.psu.edu/vanek96algebraic.html</a></td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">import</span> <span class="nn">numpy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery</span> <span class="k">import</span> <span class="n">stencil_grid</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.strength</span> <span class="k">import</span> <span class="n">symmetric_strength_of_connection</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n</span><span class="o">=</span><span class="mf">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stencil</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span><span class="o">-</span><span class="mf">1.0</span><span class="p">],</span>
+<span class="gp">... </span>                       <span class="p">[</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">8.0</span><span class="p">,</span><span class="o">-</span><span class="mf">1.0</span><span class="p">],</span>
+<span class="gp">... </span>                       <span class="p">[</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span><span class="o">-</span><span class="mf">1.0</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">stencil_grid</span><span class="p">(</span><span class="n">stencil</span><span class="p">,</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">n</span><span class="p">),</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;csr&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span> <span class="o">=</span> <span class="n">symmetric_strength_of_connection</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.strength.ode_strength_of_connection">
+<!--[pyamg.strength.ode_strength_of_connection]--><tt class="descclassname">pyamg.strength.</tt><tt class="descname">ode_strength_of_connection</tt><big>(</big><em>A</em>, <em>B</em>, <em>epsilon=4.0</em>, <em>k=2</em>, <em>proj_type='l2'</em><big>)</big><a class="headerlink" href="#pyamg.strength.ode_strength_of_connection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct an AMG strength of connection matrix using an ODE-based measure</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>A</strong> : {csr_matrix, bsr_matrix}</p>
+<blockquote>
+<p>Sparse NxN matrix</p>
+</blockquote>
+<p><strong>B</strong> : {array_like}</p>
+<blockquote>
+<p>Near-nullspace vector(s) stored in NxK array</p>
+</blockquote>
+<p><strong>epsilon</strong> : scalar</p>
+<blockquote>
+<p>Drop tolerance</p>
+</blockquote>
+<p><strong>k</strong> : integer</p>
+<blockquote>
+<p>ODE num time steps, step size is assumed to be 1/rho(DinvA)</p>
+</blockquote>
+<p><strong>proj_type</strong> : {&#8216;l2&#8217;,&#8217;D_A&#8217;}</p>
+<blockquote>
+<p>Define norm for constrained min prob, i.e. define projection</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>Atilde</strong> : {csr_matrix}</p>
+<blockquote class="last">
+<p>Sparse matrix of strength values</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">References</p>
+<table class="docutils footnote" frame="void" id="id4" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id4">[4]</a></td><td>Olson, L. N., Schroder, J., Tuminaro, R. S., 
+&#8220;A New Perspective on Strength Measures in Algebraic Multigrid&#8221;, 
+submitted, June, 2008.</td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">import</span> <span class="nn">numpy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery</span> <span class="k">import</span> <span class="n">stencil_grid</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.strength</span> <span class="k">import</span> <span class="n">ode_strength_of_connection</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n</span><span class="o">=</span><span class="mf">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stencil</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span><span class="o">-</span><span class="mf">1.0</span><span class="p">],</span>
+<span class="gp">... </span>                       <span class="p">[</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">8.0</span><span class="p">,</span><span class="o">-</span><span class="mf">1.0</span><span class="p">],</span>
+<span class="gp">... </span>                       <span class="p">[</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span><span class="o">-</span><span class="mf">1.0</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">stencil_grid</span><span class="p">(</span><span class="n">stencil</span><span class="p">,</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">n</span><span class="p">),</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;csr&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span> <span class="o">=</span> <span class="n">ode_strength_of_connection</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">],</span><span class="mf">1</span><span class="p">)))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyamg.setup">
+<h2>The <tt class="xref docutils literal"><span class="pre">setup</span></tt> Module<a class="headerlink" href="#module-pyamg.setup" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pyamg.setup.configuration">
+<!--[pyamg.setup.configuration]--><tt class="descclassname">pyamg.setup.</tt><tt class="descname">configuration</tt><big>(</big><em>parent_package=''</em>, <em>top_path=None</em><big>)</big><a class="headerlink" href="#pyamg.setup.configuration" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-pyamg.__config__">
+<h2>The <tt class="xref docutils literal"><span class="pre">__config__</span></tt> Module<a class="headerlink" href="#module-pyamg.__config__" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pyamg.__config__.get_info">
+<!--[pyamg.__config__.get_info]--><tt class="descclassname">pyamg.__config__.</tt><tt class="descname">get_info</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#pyamg.__config__.get_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="pyamg.__config__.show">
+<!--[pyamg.__config__.show]--><tt class="descclassname">pyamg.__config__.</tt><tt class="descname">show</tt><big>(</big><big>)</big><a class="headerlink" href="#pyamg.__config__.show" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo_dropshadow_small.png" alt="Logo"/>
+            </a></p>
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference" href="">Pyamg Documentation</a><ul>
+<li><a class="reference" href="#subpackages">Subpackages</a><ul>
+</ul>
+</li>
+<li><a class="reference" href="#module-pyamg.graph">The <tt class="docutils literal"><span class="pre">graph</span></tt> Module</a></li>
+<li><a class="reference" href="#module-pyamg.multilevel">The <tt class="docutils literal"><span class="pre">multilevel</span></tt> Module</a></li>
+<li><a class="reference" href="#module-pyamg.strength">The <tt class="docutils literal"><span class="pre">strength</span></tt> Module</a></li>
+<li><a class="reference" href="#module-pyamg.setup">The <tt class="docutils literal"><span class="pre">setup</span></tt> Module</a></li>
+<li><a class="reference" href="#module-pyamg.__config__">The <tt class="docutils literal"><span class="pre">__config__</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="modules.html" title="previous chapter">Project Documentation</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="pyamg.vis.html" title="next chapter">Vis Documentation</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/pyamg.txt">Show Source</a></li>
+            </ul>
+          <h3>Quick search</h3>
+            <form class="search" action="search.html" method="get">
+              <input type="text" name="q" size="18" /> <input type="submit" value="Go" />
+              <input type="hidden" name="check_keywords" value="yes" />
+              <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="pyamg.vis.html" title="Vis Documentation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="Project Documentation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">PyAMG v1.0 documentation</a> &raquo;</li>
+          <li><a href="modules.html" accesskey="U">Project Documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009, Nathan Bell, Luke Olson, Jacob Schroder.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.1.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,861 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Krylov Documentation &mdash; PyAMG v1.0 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="PyAMG v1.0 documentation" href="index.html" />
+    <link rel="up" title="Pyamg Documentation" href="pyamg.html" />
+    <link rel="next" title="Gallery Documentation" href="pyamg.gallery.html" />
+    <link rel="prev" title="Vis Documentation" href="pyamg.vis.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="pyamg.gallery.html" title="Gallery Documentation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pyamg.vis.html" title="Vis Documentation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">PyAMG v1.0 documentation</a> &raquo;</li>
+          <li><a href="modules.html" accesskey="U">Project Documentation</a> &raquo;</li>
+          <li><a href="pyamg.html" accesskey="U">Pyamg Documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  
+  <div class="section" id="krylov-documentation">
+<h1>Krylov Documentation<a class="headerlink" href="#krylov-documentation" title="Permalink to this headline">¶</a></h1>
+<p>This page contains the Krylov Package documentation.</p>
+<div class="section" id="module-pyamg.krylov._gmres">
+<h2>The <tt class="xref docutils literal"><span class="pre">_gmres</span></tt> Module<a class="headerlink" href="#module-pyamg.krylov._gmres" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pyamg.krylov._gmres.gmres">
+<!--[pyamg.krylov._gmres.gmres]--><tt class="descclassname">pyamg.krylov._gmres.</tt><tt class="descname">gmres</tt><big>(</big><em>A</em>, <em>b</em>, <em>x0=None</em>, <em>tol=1.0000000000000001e-05</em>, <em>restrt=None</em>, <em>maxiter=None</em>, <em>xtype=None</em>, <em>M=None</em>, <em>callback=None</em>, <em>residuals=None</em><big>)</big><a class="headerlink" href="#pyamg.krylov._gmres.gmres" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Generalized Minimum Residual Method (GMRES)</dt>
+<dd>GMRES iteratively refines the initial solution guess to the system Ax = b</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>A</strong> : {array, matrix, sparse matrix, LinearOperator}</p>
+<blockquote>
+<p>n x n, linear system to solve</p>
+</blockquote>
+<p><strong>b</strong> : {array, matrix}</p>
+<blockquote>
+<p>right hand side, shape is (n,) or (n,1)</p>
+</blockquote>
+<p><strong>x0</strong> : {array, matrix}</p>
+<blockquote>
+<p>initial guess, default is a vector of zeros</p>
+</blockquote>
+<p><strong>tol</strong> : float</p>
+<blockquote>
+<p>relative convergence tolerance, i.e. tol is scaled by ||b||</p>
+</blockquote>
+<p><strong>restrt</strong> : {None, int}</p>
+<blockquote>
+<ul class="simple">
+<li>if int, restrt is max number of inner iterations
+and maxiter is the max number of outer iterations</li>
+<li>if None, do not restart GMRES, and max number of inner iterations is maxiter</li>
+</ul>
+</blockquote>
+<p><strong>maxiter</strong> : {None, int}</p>
+<blockquote>
+<ul class="simple">
+<li>if restrt is None, maxiter is the max number of inner iterations 
+and GMRES does not restart</li>
+<li>if restrt is int, maxiter is the max number of outer iterations, 
+and restrt is the max number of inner iterations</li>
+</ul>
+</blockquote>
+<p><strong>xtype</strong> : type</p>
+<blockquote>
+<p>dtype for the solution, default is automatic type detection</p>
+</blockquote>
+<p><strong>M</strong> : {array, matrix, sparse matrix, LinearOperator}</p>
+<blockquote>
+<p>n x n, inverted preconditioner, i.e. solve M A x = b.</p>
+</blockquote>
+<p><strong>callback</strong> : function</p>
+<blockquote>
+<p>User-supplied funtion is called after each iteration as
+callback( ||rk||_2 ), where rk is the current residual vector</p>
+</blockquote>
+<p><strong>residuals</strong> : list</p>
+<blockquote>
+<p>residuals has the residual norm history,
+including the initial residual, appended to it</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>(xNew, info)</strong> :</p>
+<p><strong>xNew</strong> : an updated guess to the solution of Ax = b</p>
+<p><strong>info</strong> : halting status of gmres</p>
+<blockquote class="last">
+<table border="1" class="docutils">
+<colgroup>
+<col width="4%" />
+<col width="96%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><p class="first last">0</p>
+</td>
+<td><p class="first last">successful exit</p>
+</td>
+</tr>
+<tr><td><p class="first last">&gt;0</p>
+</td>
+<td><p class="first last">convergence to tolerance not achieved,
+return iteration count instead.  This value
+is precisely the order of the Krylov space.</p>
+</td>
+</tr>
+<tr><td><p class="first last">&lt;0</p>
+</td>
+<td><p class="first last">numerical breakdown, or illegal input</p>
+</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>The LinearOperator class is in scipy.sparse.linalg.interface.
+Use this class if you prefer to define A or M as a mat-vec routine
+as opposed to explicitly constructing the matrix.  A.psolve(..) is
+still supported as a legacy.</li>
+<li>For robustness, Householder reflections are used to orthonormalize the Krylov Space
+Givens Rotations are used to provide the residual norm each iteration</li>
+</ul>
+<p class="rubric">References</p>
+<table class="docutils footnote" frame="void" id="id1" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id1">[18]</a></td><td>Yousef Saad, &#8220;Iterative Methods for Sparse Linear Systems, 
+Second Edition&#8221;, SIAM, pp. 151-172, pp. 272-275, 2003
+<a class="reference" href="http://www-users.cs.umn.edu/~saad/books.html">http://www-users.cs.umn.edu/~saad/books.html</a></td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.krylov.gmres</span> <span class="k">import</span> <span class="n">gmres</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.util.linalg</span> <span class="k">import</span> <span class="n">norm</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">import</span> <span class="nn">numpy</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery</span> <span class="k">import</span> <span class="n">poisson</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">poisson</span><span class="p">((</span><span class="mf">10</span><span class="p">,</span><span class="mf">10</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">],))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">flag</span><span class="p">)</span> <span class="o">=</span> <span class="n">gmres</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">b</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="mf">2</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">norm</span><span class="p">(</span><span class="n">b</span> <span class="o">-</span> <span class="n">A</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>
+<span class="go">6.5428213057</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyamg.krylov._cgnr">
+<h2>The <tt class="xref docutils literal"><span class="pre">_cgnr</span></tt> Module<a class="headerlink" href="#module-pyamg.krylov._cgnr" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pyamg.krylov._cgnr.cgnr">
+<!--[pyamg.krylov._cgnr.cgnr]--><tt class="descclassname">pyamg.krylov._cgnr.</tt><tt class="descname">cgnr</tt><big>(</big><em>A</em>, <em>b</em>, <em>x0=None</em>, <em>tol=1.0000000000000001e-05</em>, <em>maxiter=None</em>, <em>xtype=None</em>, <em>M=None</em>, <em>callback=None</em>, <em>residuals=None</em><big>)</big><a class="headerlink" href="#pyamg.krylov._cgnr.cgnr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Conjugate Gradient, Normal Residual algorithm</p>
+<p>Applies CG to the normal equations, A.H A x = b. Left preconditioning 
+is supported.  Note that unless A is well-conditioned, the use of
+CGNR is inadvisable</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>A</strong> : {array, matrix, sparse matrix, LinearOperator}</p>
+<blockquote>
+<p>n x n, linear system to solve</p>
+</blockquote>
+<p><strong>b</strong> : {array, matrix}</p>
+<blockquote>
+<p>right hand side, shape is (n,) or (n,1)</p>
+</blockquote>
+<p><strong>x0</strong> : {array, matrix}</p>
+<blockquote>
+<p>initial guess, default is a vector of zeros</p>
+</blockquote>
+<p><strong>tol</strong> : float</p>
+<blockquote>
+<p>relative convergence tolerance, i.e. tol is scaled by ||b||</p>
+</blockquote>
+<p><strong>maxiter</strong> : int</p>
+<blockquote>
+<p>maximum number of allowed iterations</p>
+</blockquote>
+<p><strong>xtype</strong> : type</p>
+<blockquote>
+<p>dtype for the solution, default is automatic type detection</p>
+</blockquote>
+<p><strong>M</strong> : {array, matrix, sparse matrix, LinearOperator}</p>
+<blockquote>
+<p>n x n, inverted preconditioner, i.e. solve M A.H A x = b.</p>
+</blockquote>
+<p><strong>callback</strong> : function</p>
+<blockquote>
+<p>User-supplied funtion is called after each iteration as
+callback(xk), where xk is the current solution vector</p>
+</blockquote>
+<p><strong>residuals</strong> : list</p>
+<blockquote>
+<p>residuals has the residual norm history,
+including the initial residual, appended to it</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>(xNew, info)</strong> :</p>
+<p><strong>xNew</strong> : an updated guess to the solution of Ax = b</p>
+<p><strong>info</strong> : halting status of cgnr</p>
+<blockquote class="last">
+<table border="1" class="docutils">
+<colgroup>
+<col width="5%" />
+<col width="95%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><p class="first last">0</p>
+</td>
+<td><p class="first last">successful exit</p>
+</td>
+</tr>
+<tr><td><p class="first last">&gt;0</p>
+</td>
+<td><p class="first last">convergence to tolerance not achieved,
+return iteration count instead.</p>
+</td>
+</tr>
+<tr><td><p class="first last">&lt;0</p>
+</td>
+<td><p class="first last">numerical breakdown, or illegal input</p>
+</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The LinearOperator class is in scipy.sparse.linalg.interface.
+Use this class if you prefer to define A or M as a mat-vec routine
+as opposed to explicitly constructing the matrix.  A.psolve(..) is
+still supported as a legacy.</p>
+<p class="rubric">References</p>
+<table class="docutils footnote" frame="void" id="id2" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id2">[19]</a></td><td>Yousef Saad, &#8220;Iterative Methods for Sparse Linear Systems, 
+Second Edition&#8221;, SIAM, pp. 276-7, 2003
+<a class="reference" href="http://www-users.cs.umn.edu/~saad/books.html">http://www-users.cs.umn.edu/~saad/books.html</a></td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.krylov.cgnr</span> <span class="k">import</span> <span class="n">cgnr</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.util.linalg</span> <span class="k">import</span> <span class="n">norm</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">import</span> <span class="nn">numpy</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery</span> <span class="k">import</span> <span class="n">poisson</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">poisson</span><span class="p">((</span><span class="mf">10</span><span class="p">,</span><span class="mf">10</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">],))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">flag</span><span class="p">)</span> <span class="o">=</span> <span class="n">cgnr</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">b</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="mf">2</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">norm</span><span class="p">(</span><span class="n">b</span> <span class="o">-</span> <span class="n">A</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>
+<span class="go">9.3910201849</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyamg.krylov._fgmres">
+<h2>The <tt class="xref docutils literal"><span class="pre">_fgmres</span></tt> Module<a class="headerlink" href="#module-pyamg.krylov._fgmres" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pyamg.krylov._fgmres.fgmres">
+<!--[pyamg.krylov._fgmres.fgmres]--><tt class="descclassname">pyamg.krylov._fgmres.</tt><tt class="descname">fgmres</tt><big>(</big><em>A</em>, <em>b</em>, <em>x0=None</em>, <em>tol=1.0000000000000001e-05</em>, <em>restrt=None</em>, <em>maxiter=None</em>, <em>xtype=None</em>, <em>M=None</em>, <em>callback=None</em>, <em>residuals=None</em><big>)</big><a class="headerlink" href="#pyamg.krylov._fgmres.fgmres" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flexible Generalized Minimum Residual Method (fGMRES)</p>
+<p>fGMRES iteratively refines the initial solution guess to the
+system Ax = b.  fGMRES is flexibile in the sense thatthe right 
+preconditioner (M) can vary from iteration to iteration.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>A</strong> : {array, matrix, sparse matrix, LinearOperator}</p>
+<blockquote>
+<p>n x n, linear system to solve</p>
+</blockquote>
+<p><strong>b</strong> : {array, matrix}</p>
+<blockquote>
+<p>right hand side, shape is (n,) or (n,1)</p>
+</blockquote>
+<p><strong>x0</strong> : {array, matrix}</p>
+<blockquote>
+<p>initial guess, default is a vector of zeros</p>
+</blockquote>
+<p><strong>tol</strong> : float</p>
+<blockquote>
+<p>relative convergence tolerance, i.e. tol is scaled by ||b||</p>
+</blockquote>
+<p><strong>restrt</strong> : {None, int}</p>
+<blockquote>
+<ul class="simple">
+<li>if int, restrt is max number of inner iterations
+and maxiter is the max number of outer iterations</li>
+<li>if None, do not restart GMRES, and max number of inner iterations is maxiter</li>
+</ul>
+</blockquote>
+<p><strong>maxiter</strong> : {None, int}</p>
+<blockquote>
+<ul class="simple">
+<li>if restrt is None, maxiter is the max number of inner iterations 
+and GMRES does not restart</li>
+<li>if restrt is int, maxiter is the max number of outer iterations, 
+and restrt is the max number of inner iterations</li>
+</ul>
+</blockquote>
+<p><strong>xtype</strong> : type</p>
+<blockquote>
+<p>dtype for the solution, default is automatic type detection</p>
+</blockquote>
+<p><strong>M</strong> : {array, matrix, sparse matrix, LinearOperator}</p>
+<blockquote>
+<p>n x n, inverted preconditioner, i.e. solve A M x = b.
+M need not be stationary for fgmres</p>
+</blockquote>
+<p><strong>callback</strong> : function</p>
+<blockquote>
+<p>User-supplied funtion is called after each iteration as
+callback( ||rk||_2 ), where rk is the current residual vector</p>
+</blockquote>
+<p><strong>residuals</strong> : list</p>
+<blockquote>
+<p>residuals has the residual norm history,
+including the initial residual, appended to it</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>(xNew, info)</strong> :</p>
+<p><strong>xNew</strong> : an updated guess to the solution of Ax = b</p>
+<p><strong>info</strong> : halting status of gmres</p>
+<blockquote class="last">
+<table border="1" class="docutils">
+<colgroup>
+<col width="4%" />
+<col width="96%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><p class="first last">0</p>
+</td>
+<td><p class="first last">successful exit</p>
+</td>
+</tr>
+<tr><td><p class="first last">&gt;0</p>
+</td>
+<td><p class="first last">convergence to tolerance not achieved,
+return iteration count instead.  This value
+is precisely the order of the Krylov space.</p>
+</td>
+</tr>
+<tr><td><p class="first last">&lt;0</p>
+</td>
+<td><p class="first last">numerical breakdown, or illegal input</p>
+</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>The LinearOperator class is in scipy.sparse.linalg.interface.
+Use this class if you prefer to define A or M as a mat-vec routine
+as opposed to explicitly constructing the matrix.  A.psolve(..) is
+still supported as a legacy.</li>
+<li>fGMRES allows for nonstationary preconditioners, as opposed to GMRES</li>
+<li>For robustness, Householder reflections are used to orthonormalize the Krylov Space
+Givens Rotations are used to provide the residual norm each iteration
+Flexibility implies that the right preconditioner, M or A.psolve, can vary from 
+iteration to iteration</li>
+</ul>
+<p class="rubric">References</p>
+<table class="docutils footnote" frame="void" id="id3" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id3">[20]</a></td><td>Yousef Saad, &#8220;Iterative Methods for Sparse Linear Systems, 
+Second Edition&#8221;, SIAM, pp. 151-172, pp. 272-275, 2003
+<a class="reference" href="http://www-users.cs.umn.edu/~saad/books.html">http://www-users.cs.umn.edu/~saad/books.html</a></td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.krylov.fgmres</span> <span class="k">import</span> <span class="n">fgmres</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.util.linalg</span> <span class="k">import</span> <span class="n">norm</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">import</span> <span class="nn">numpy</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery</span> <span class="k">import</span> <span class="n">poisson</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">poisson</span><span class="p">((</span><span class="mf">10</span><span class="p">,</span><span class="mf">10</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">],))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">flag</span><span class="p">)</span> <span class="o">=</span> <span class="n">fgmres</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">b</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="mf">2</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">norm</span><span class="p">(</span><span class="n">b</span> <span class="o">-</span> <span class="n">A</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>
+<span class="go">6.5428213057</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyamg.krylov._cgne">
+<h2>The <tt class="xref docutils literal"><span class="pre">_cgne</span></tt> Module<a class="headerlink" href="#module-pyamg.krylov._cgne" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pyamg.krylov._cgne.cgne">
+<!--[pyamg.krylov._cgne.cgne]--><tt class="descclassname">pyamg.krylov._cgne.</tt><tt class="descname">cgne</tt><big>(</big><em>A</em>, <em>b</em>, <em>x0=None</em>, <em>tol=1.0000000000000001e-05</em>, <em>maxiter=None</em>, <em>xtype=None</em>, <em>M=None</em>, <em>callback=None</em>, <em>residuals=None</em><big>)</big><a class="headerlink" href="#pyamg.krylov._cgne.cgne" title="Permalink to this definition">¶</a></dt>
+<dd><p>Conjugate Gradient, Normal Error algorithm</p>
+<p>Applies CG to the normal equations, A.H A x = b. Left preconditioning 
+is supported.  Note that unless A is well-conditioned, the use of
+CGNE is inadvisable</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>A</strong> : {array, matrix, sparse matrix, LinearOperator}</p>
+<blockquote>
+<p>n x n, linear system to solve</p>
+</blockquote>
+<p><strong>b</strong> : {array, matrix}</p>
+<blockquote>
+<p>right hand side, shape is (n,) or (n,1)</p>
+</blockquote>
+<p><strong>x0</strong> : {array, matrix}</p>
+<blockquote>
+<p>initial guess, default is a vector of zeros</p>
+</blockquote>
+<p><strong>tol</strong> : float</p>
+<blockquote>
+<p>relative convergence tolerance, i.e. tol is scaled by ||b||</p>
+</blockquote>
+<p><strong>maxiter</strong> : int</p>
+<blockquote>
+<p>maximum number of allowed iterations</p>
+</blockquote>
+<p><strong>xtype</strong> : type</p>
+<blockquote>
+<p>dtype for the solution, default is automatic type detection</p>
+</blockquote>
+<p><strong>M</strong> : {array, matrix, sparse matrix, LinearOperator}</p>
+<blockquote>
+<p>n x n, inverted preconditioner, i.e. solve M A A.H x = b.</p>
+</blockquote>
+<p><strong>callback</strong> : function</p>
+<blockquote>
+<p>User-supplied funtion is called after each iteration as
+callback(xk), where xk is the current solution vector</p>
+</blockquote>
+<p><strong>residuals</strong> : list</p>
+<blockquote>
+<p>residuals has the residual norm history,
+including the initial residual, appended to it</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>(xNew, info)</strong> :</p>
+<p><strong>xNew</strong> : an updated guess to the solution of Ax = b</p>
+<p><strong>info</strong> : halting status of cgne</p>
+<blockquote class="last">
+<table border="1" class="docutils">
+<colgroup>
+<col width="5%" />
+<col width="95%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><p class="first last">0</p>
+</td>
+<td><p class="first last">successful exit</p>
+</td>
+</tr>
+<tr><td><p class="first last">&gt;0</p>
+</td>
+<td><p class="first last">convergence to tolerance not achieved,
+return iteration count instead.</p>
+</td>
+</tr>
+<tr><td><p class="first last">&lt;0</p>
+</td>
+<td><p class="first last">numerical breakdown, or illegal input</p>
+</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>The LinearOperator class is in scipy.sparse.linalg.interface.
+Use this class if you prefer to define A or M as a mat-vec routine
+as opposed to explicitly constructing the matrix.  A.psolve(..) is
+still supported as a legacy.</li>
+</ul>
+<p class="rubric">References</p>
+<table class="docutils footnote" frame="void" id="id4" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id4">[21]</a></td><td>Yousef Saad, &#8220;Iterative Methods for Sparse Linear Systems, 
+Second Edition&#8221;, SIAM, pp. 276-7, 2003
+<a class="reference" href="http://www-users.cs.umn.edu/~saad/books.html">http://www-users.cs.umn.edu/~saad/books.html</a></td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.krylov.cgne</span> <span class="k">import</span> <span class="n">cgne</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.util.linalg</span> <span class="k">import</span> <span class="n">norm</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">import</span> <span class="nn">numpy</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery</span> <span class="k">import</span> <span class="n">poisson</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">poisson</span><span class="p">((</span><span class="mf">10</span><span class="p">,</span><span class="mf">10</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">],))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">flag</span><span class="p">)</span> <span class="o">=</span> <span class="n">cgne</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">b</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="mf">2</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">norm</span><span class="p">(</span><span class="n">b</span> <span class="o">-</span> <span class="n">A</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>
+<span class="go">46.1547104367</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyamg.krylov.setup">
+<h2>The <tt class="xref docutils literal"><span class="pre">setup</span></tt> Module<a class="headerlink" href="#module-pyamg.krylov.setup" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pyamg.krylov.setup.configuration">
+<!--[pyamg.krylov.setup.configuration]--><tt class="descclassname">pyamg.krylov.setup.</tt><tt class="descname">configuration</tt><big>(</big><em>parent_package=''</em>, <em>top_path=None</em><big>)</big><a class="headerlink" href="#pyamg.krylov.setup.configuration" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-pyamg.krylov._cg">
+<h2>The <tt class="xref docutils literal"><span class="pre">_cg</span></tt> Module<a class="headerlink" href="#module-pyamg.krylov._cg" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pyamg.krylov._cg.cg">
+<!--[pyamg.krylov._cg.cg]--><tt class="descclassname">pyamg.krylov._cg.</tt><tt class="descname">cg</tt><big>(</big><em>A</em>, <em>b</em>, <em>x0=None</em>, <em>tol=1.0000000000000001e-05</em>, <em>maxiter=None</em>, <em>xtype=None</em>, <em>M=None</em>, <em>callback=None</em>, <em>residuals=None</em><big>)</big><a class="headerlink" href="#pyamg.krylov._cg.cg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Conjugate Gradient algorithm</p>
+<p>Solves the linear system Ax = b. Left preconditioning is supported.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>A</strong> : {array, matrix, sparse matrix, LinearOperator}</p>
+<blockquote>
+<p>n x n, linear system to solve</p>
+</blockquote>
+<p><strong>b</strong> : {array, matrix}</p>
+<blockquote>
+<p>right hand side, shape is (n,) or (n,1)</p>
+</blockquote>
+<p><strong>x0</strong> : {array, matrix}</p>
+<blockquote>
+<p>initial guess, default is a vector of zeros</p>
+</blockquote>
+<p><strong>tol</strong> : float</p>
+<blockquote>
+<p>relative convergence tolerance, i.e. tol is scaled by ||b||</p>
+</blockquote>
+<p><strong>maxiter</strong> : int</p>
+<blockquote>
+<p>maximum number of allowed iterations</p>
+</blockquote>
+<p><strong>xtype</strong> : type</p>
+<blockquote>
+<p>dtype for the solution, default is automatic type detection</p>
+</blockquote>
+<p><strong>M</strong> : {array, matrix, sparse matrix, LinearOperator}</p>
+<blockquote>
+<p>n x n, inverted preconditioner, i.e. solve M A A.H x = b.</p>
+</blockquote>
+<p><strong>callback</strong> : function</p>
+<blockquote>
+<p>User-supplied funtion is called after each iteration as
+callback(xk), where xk is the current solution vector</p>
+</blockquote>
+<p><strong>residuals</strong> : list</p>
+<blockquote>
+<p>residuals has the residual norm history,
+including the initial residual, appended to it</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>(xNew, info)</strong> :</p>
+<p><strong>xNew</strong> : an updated guess to the solution of Ax = b</p>
+<p><strong>info</strong> : halting status of cg</p>
+<blockquote class="last">
+<table border="1" class="docutils">
+<colgroup>
+<col width="5%" />
+<col width="95%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><p class="first last">0</p>
+</td>
+<td><p class="first last">successful exit</p>
+</td>
+</tr>
+<tr><td><p class="first last">&gt;0</p>
+</td>
+<td><p class="first last">convergence to tolerance not achieved,
+return iteration count instead.</p>
+</td>
+</tr>
+<tr><td><p class="first last">&lt;0</p>
+</td>
+<td><p class="first last">numerical breakdown, or illegal input</p>
+</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The LinearOperator class is in scipy.sparse.linalg.interface.
+Use this class if you prefer to define A or M as a mat-vec routine
+as opposed to explicitly constructing the matrix.  A.psolve(..) is
+still supported as a legacy.</p>
+<p class="rubric">References</p>
+<table class="docutils footnote" frame="void" id="id5" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id5">[22]</a></td><td>Yousef Saad, &#8220;Iterative Methods for Sparse Linear Systems, 
+Second Edition&#8221;, SIAM, pp. 262-67, 2003
+<a class="reference" href="http://www-users.cs.umn.edu/~saad/books.html">http://www-users.cs.umn.edu/~saad/books.html</a></td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.krylov.cg</span> <span class="k">import</span> <span class="n">cg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.util.linalg</span> <span class="k">import</span> <span class="n">norm</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">import</span> <span class="nn">numpy</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery</span> <span class="k">import</span> <span class="n">poisson</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">poisson</span><span class="p">((</span><span class="mf">10</span><span class="p">,</span><span class="mf">10</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">],))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">flag</span><span class="p">)</span> <span class="o">=</span> <span class="n">cg</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">b</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="mf">2</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">norm</span><span class="p">(</span><span class="n">b</span> <span class="o">-</span> <span class="n">A</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>
+<span class="go">10.9370700187</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyamg.krylov._bicgstab">
+<h2>The <tt class="xref docutils literal"><span class="pre">_bicgstab</span></tt> Module<a class="headerlink" href="#module-pyamg.krylov._bicgstab" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pyamg.krylov._bicgstab.bicgstab">
+<!--[pyamg.krylov._bicgstab.bicgstab]--><tt class="descclassname">pyamg.krylov._bicgstab.</tt><tt class="descname">bicgstab</tt><big>(</big><em>A</em>, <em>b</em>, <em>x0=None</em>, <em>tol=1.0000000000000001e-05</em>, <em>maxiter=None</em>, <em>xtype=None</em>, <em>M=None</em>, <em>callback=None</em>, <em>residuals=None</em><big>)</big><a class="headerlink" href="#pyamg.krylov._bicgstab.bicgstab" title="Permalink to this definition">¶</a></dt>
+<dd><p>Biconjugate Gradient Algorithm with Stabilization</p>
+<p>Solves the linear system Ax = b. Left preconditioning is supported.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>A</strong> : {array, matrix, sparse matrix, LinearOperator}</p>
+<blockquote>
+<p>n x n, linear system to solve</p>
+</blockquote>
+<p><strong>b</strong> : {array, matrix}</p>
+<blockquote>
+<p>right hand side, shape is (n,) or (n,1)</p>
+</blockquote>
+<p><strong>x0</strong> : {array, matrix}</p>
+<blockquote>
+<p>initial guess, default is a vector of zeros</p>
+</blockquote>
+<p><strong>tol</strong> : float</p>
+<blockquote>
+<p>relative convergence tolerance, i.e. tol is scaled by ||b||</p>
+</blockquote>
+<p><strong>maxiter</strong> : int</p>
+<blockquote>
+<p>maximum number of allowed iterations</p>
+</blockquote>
+<p><strong>xtype</strong> : type</p>
+<blockquote>
+<p>dtype for the solution, default is automatic type detection</p>
+</blockquote>
+<p><strong>M</strong> : {array, matrix, sparse matrix, LinearOperator}</p>
+<blockquote>
+<p>n x n, inverted preconditioner, i.e. solve M A A.H x = b.</p>
+</blockquote>
+<p><strong>callback</strong> : function</p>
+<blockquote>
+<p>User-supplied funtion is called after each iteration as
+callback(xk), where xk is the current solution vector</p>
+</blockquote>
+<p><strong>residuals</strong> : list</p>
+<blockquote>
+<p>residuals has the residual norm history,
+including the initial residual, appended to it</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>(xNew, info)</strong> :</p>
+<p><strong>xNew</strong> : an updated guess to the solution of Ax = b</p>
+<p><strong>info</strong> : halting status of bicgstab</p>
+<blockquote class="last">
+<table border="1" class="docutils">
+<colgroup>
+<col width="5%" />
+<col width="95%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><p class="first last">0</p>
+</td>
+<td><p class="first last">successful exit</p>
+</td>
+</tr>
+<tr><td><p class="first last">&gt;0</p>
+</td>
+<td><p class="first last">convergence to tolerance not achieved,
+return iteration count instead.</p>
+</td>
+</tr>
+<tr><td><p class="first last">&lt;0</p>
+</td>
+<td><p class="first last">numerical breakdown, or illegal input</p>
+</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The LinearOperator class is in scipy.sparse.linalg.interface.
+Use this class if you prefer to define A or M as a mat-vec routine
+as opposed to explicitly constructing the matrix.  A.psolve(..) is
+still supported as a legacy.</p>
+<p class="rubric">References</p>
+<table class="docutils footnote" frame="void" id="id6" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id6">[23]</a></td><td>Yousef Saad, &#8220;Iterative Methods for Sparse Linear Systems, 
+Second Edition&#8221;, SIAM, pp. 231-234, 2003
+<a class="reference" href="http://www-users.cs.umn.edu/~saad/books.html">http://www-users.cs.umn.edu/~saad/books.html</a></td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.krylov.bicgstab</span> <span class="k">import</span> <span class="n">bicgstab</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.util.linalg</span> <span class="k">import</span> <span class="n">norm</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">import</span> <span class="nn">numpy</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery</span> <span class="k">import</span> <span class="n">poisson</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">poisson</span><span class="p">((</span><span class="mf">10</span><span class="p">,</span><span class="mf">10</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">],))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">flag</span><span class="p">)</span> <span class="o">=</span> <span class="n">bicgstab</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">b</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="mf">2</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">norm</span><span class="p">(</span><span class="n">b</span> <span class="o">-</span> <span class="n">A</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>
+<span class="go">4.68163045309</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo_dropshadow_small.png" alt="Logo"/>
+            </a></p>
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference" href="">Krylov Documentation</a><ul>
+<li><a class="reference" href="#module-pyamg.krylov._gmres">The <tt class="docutils literal"><span class="pre">_gmres</span></tt> Module</a></li>
+<li><a class="reference" href="#module-pyamg.krylov._cgnr">The <tt class="docutils literal"><span class="pre">_cgnr</span></tt> Module</a></li>
+<li><a class="reference" href="#module-pyamg.krylov._fgmres">The <tt class="docutils literal"><span class="pre">_fgmres</span></tt> Module</a></li>
+<li><a class="reference" href="#module-pyamg.krylov._cgne">The <tt class="docutils literal"><span class="pre">_cgne</span></tt> Module</a></li>
+<li><a class="reference" href="#module-pyamg.krylov.setup">The <tt class="docutils literal"><span class="pre">setup</span></tt> Module</a></li>
+<li><a class="reference" href="#module-pyamg.krylov._cg">The <tt class="docutils literal"><span class="pre">_cg</span></tt> Module</a></li>
+<li><a class="reference" href="#module-pyamg.krylov._bicgstab">The <tt class="docutils literal"><span class="pre">_bicgstab</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="pyamg.vis.html" title="previous chapter">Vis Documentation</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="pyamg.gallery.html" title="next chapter">Gallery Documentation</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/pyamg.krylov.txt">Show Source</a></li>
+            </ul>
+          <h3>Quick search</h3>
+            <form class="search" action="search.html" method="get">
+              <input type="text" name="q" size="18" /> <input type="submit" value="Go" />
+              <input type="hidden" name="check_keywords" value="yes" />
+              <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="pyamg.gallery.html" title="Gallery Documentation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pyamg.vis.html" title="Vis Documentation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">PyAMG v1.0 documentation</a> &raquo;</li>
+          <li><a href="modules.html" accesskey="U">Project Documentation</a> &raquo;</li>
+          <li><a href="pyamg.html" accesskey="U">Pyamg Documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009, Nathan Bell, Luke Olson, Jacob Schroder.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.1.
+    </div>
+  </body>
+</html>

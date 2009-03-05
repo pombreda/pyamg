@@ -1,0 +1,358 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Amg_Core Documentation &mdash; PyAMG v1.0 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="PyAMG v1.0 documentation" href="index.html" />
+    <link rel="up" title="Pyamg Documentation" href="pyamg.html" />
+    <link rel="next" title="Relaxation Documentation" href="pyamg.relaxation.html" />
+    <link rel="prev" title="Aggregation Documentation" href="pyamg.aggregation.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="pyamg.relaxation.html" title="Relaxation Documentation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pyamg.aggregation.html" title="Aggregation Documentation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">PyAMG v1.0 documentation</a> &raquo;</li>
+          <li><a href="modules.html" accesskey="U">Project Documentation</a> &raquo;</li>
+          <li><a href="pyamg.html" accesskey="U">Pyamg Documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  
+  <div class="section" id="amg-core-documentation">
+<h1>Amg_Core Documentation<a class="headerlink" href="#amg-core-documentation" title="Permalink to this headline">¶</a></h1>
+<p>This page contains the Amg_Core Package documentation.</p>
+<div class="section" id="module-pyamg.amg_core.amg_core">
+<h2>The <tt class="xref docutils literal"><span class="pre">amg_core</span></tt> Module<a class="headerlink" href="#module-pyamg.amg_core.amg_core" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pyamg.amg_core.amg_core.apply_distance_filter">
+<!--[pyamg.amg_core.amg_core.apply_distance_filter]--><tt class="descclassname">pyamg.amg_core.amg_core.</tt><tt class="descname">apply_distance_filter</tt><big>(</big><em>int n_row</em>, <em>float epsilon</em>, <em>int Sp</em>, <em>int Sj</em>, <em>float Sx) apply_distance_filter(int n_row</em>, <em>double epsilon</em>, <em>int Sp</em>, <em>int Sj</em>, <em>double Sx</em><big>)</big><a class="headerlink" href="#pyamg.amg_core.amg_core.apply_distance_filter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="pyamg.amg_core.amg_core.apply_givens">
+<!--[pyamg.amg_core.amg_core.apply_givens]--><tt class="descclassname">pyamg.amg_core.amg_core.</tt><tt class="descname">apply_givens</tt><big>(</big><em>float B</em>, <em>float x</em>, <em>int n</em>, <em>int nrot) apply_givens(double B</em>, <em>double x</em>, <em>int n</em>, <em>int nrot) apply_givens(npy_cfloat_wrapper B</em>, <em>npy_cfloat_wrapper x</em>, <em>int n</em>, <em>int nrot) apply_givens(npy_cdouble_wrapper B</em>, <em>npy_cdouble_wrapper x</em>, <em>int n</em>, <em>int nrot</em><big>)</big><a class="headerlink" href="#pyamg.amg_core.amg_core.apply_givens" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="pyamg.amg_core.amg_core.apply_householders">
+<!--[pyamg.amg_core.amg_core.apply_householders]--><tt class="descclassname">pyamg.amg_core.amg_core.</tt><tt class="descname">apply_householders</tt><big>(</big><em>float z</em>, <em>float B</em>, <em>int n</em>, <em>int start</em>, <em>int stop</em>, <em>int step) apply_householders(double z</em>, <em>double B</em>, <em>int n</em>, <em>int start</em>, <em>int stop</em>, <em>int step) apply_householders(npy_cfloat_wrapper z</em>, <em>npy_cfloat_wrapper B</em>, <em>int n</em>, <em>int start</em>, <em>int stop</em>, <em>int step) apply_householders(npy_cdouble_wrapper z</em>, <em>npy_cdouble_wrapper B</em>, <em>int n</em>, <em>int start</em>, <em>int stop</em>, <em>int step</em><big>)</big><a class="headerlink" href="#pyamg.amg_core.amg_core.apply_householders" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="pyamg.amg_core.amg_core.bellman_ford">
+<!--[pyamg.amg_core.amg_core.bellman_ford]--><tt class="descclassname">pyamg.amg_core.amg_core.</tt><tt class="descname">bellman_ford</tt><big>(</big><em>int num_rows</em>, <em>int Ap</em>, <em>int Aj</em>, <em>int Ax</em>, <em>int x</em>, <em>int y) bellman_ford(int num_rows</em>, <em>int Ap</em>, <em>int Aj</em>, <em>float Ax</em>, <em>float x</em>, <em>int y) bellman_ford(int num_rows</em>, <em>int Ap</em>, <em>int Aj</em>, <em>double Ax</em>, <em>double x</em>, <em>int y</em><big>)</big><a class="headerlink" href="#pyamg.amg_core.amg_core.bellman_ford" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="pyamg.amg_core.amg_core.block_gauss_seidel">
+<!--[pyamg.amg_core.amg_core.block_gauss_seidel]--><tt class="descclassname">pyamg.amg_core.amg_core.</tt><tt class="descname">block_gauss_seidel</tt><big>(</big><em>int Ap</em>, <em>int Aj</em>, <em>float Ax</em>, <em>float x</em>, <em>float b</em>, <em>int row_start</em>, <em>int row_stop</em>, <em>int row_step</em>, <em>int blocksize) block_gauss_seidel(int Ap</em>, <em>int Aj</em>, <em>double Ax</em>, <em>double x</em>, <em>double b</em>, <em>int row_start</em>, <em>int row_stop</em>, <em>int row_step</em>, <em>int blocksize) block_gauss_seidel(int Ap</em>, <em>int Aj</em>, <em>npy_cfloat_wrapper Ax</em>, <em>npy_cfloat_wrapper x</em>, <em>npy_cfloat_wrapper b</em>, <em>int row_start</em>, <em>int row_stop</em>, <em>int row_step</em>, <em>int blocksize) block_gauss_seidel(int Ap</em>, <em>int Aj</em>, <em>npy_cdouble_wrapper Ax</em>, <em>npy_cdouble_wrapper x</em>, <em>npy_cdouble_wrapper b</em>, <em>int row_start</em>, <em>int row_stop</em>, <em>int row_step</em>, <em>int blocksize</em><big>)</big><a class="headerlink" href="#pyamg.amg_core.amg_core.block_gauss_seidel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="pyamg.amg_core.amg_core.breadth_first_search">
+<!--[pyamg.amg_core.amg_core.breadth_first_search]--><tt class="descclassname">pyamg.amg_core.amg_core.</tt><tt class="descname">breadth_first_search</tt><big>(</big><em>int Ap</em>, <em>int Aj</em>, <em>int seed</em>, <em>int order</em>, <em>int level</em><big>)</big><a class="headerlink" href="#pyamg.amg_core.amg_core.breadth_first_search" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="pyamg.amg_core.amg_core.calc_BtB">
+<!--[pyamg.amg_core.amg_core.calc_BtB]--><tt class="descclassname">pyamg.amg_core.amg_core.</tt><tt class="descname">calc_BtB</tt><big>(</big><em>int NullDim</em>, <em>int Nnodes</em>, <em>int ColsPerBlock</em>, <em>float b</em>, <em>int BsqCols</em>, <em>float x</em>, <em>int Sp</em>, <em>int Sj) calc_BtB(int NullDim</em>, <em>int Nnodes</em>, <em>int ColsPerBlock</em>, <em>double b</em>, <em>int BsqCols</em>, <em>double x</em>, <em>int Sp</em>, <em>int Sj) calc_BtB(int NullDim</em>, <em>int Nnodes</em>, <em>int ColsPerBlock</em>, <em>npy_cfloat_wrapper b</em>, <em>int BsqCols</em>, <em>npy_cfloat_wrapper x</em>, <em>int Sp</em>, <em>int Sj) calc_BtB(int NullDim</em>, <em>int Nnodes</em>, <em>int ColsPerBlock</em>, <em>npy_cdouble_wrapper b</em>, <em>int BsqCols</em>, <em>npy_cdouble_wrapper x</em>, <em>int Sp</em>, <em>int Sj</em><big>)</big><a class="headerlink" href="#pyamg.amg_core.amg_core.calc_BtB" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="pyamg.amg_core.amg_core.classical_strength_of_connection">
+<!--[pyamg.amg_core.amg_core.classical_strength_of_connection]--><tt class="descclassname">pyamg.amg_core.amg_core.</tt><tt class="descname">classical_strength_of_connection</tt><big>(</big><em>int n_row</em>, <em>float theta</em>, <em>int Ap</em>, <em>int Aj</em>, <em>float Ax</em>, <em>int Sp</em>, <em>int Sj</em>, <em>float Sx) classical_strength_of_connection(int n_row</em>, <em>double theta</em>, <em>int Ap</em>, <em>int Aj</em>, <em>double Ax</em>, <em>int Sp</em>, <em>int Sj</em>, <em>double Sx) classical_strength_of_connection(int n_row</em>, <em>float theta</em>, <em>int Ap</em>, <em>int Aj</em>, <em>npy_cfloat_wrapper Ax</em>, <em>int Sp</em>, <em>int Sj</em>, <em>npy_cfloat_wrapper Sx) classical_strength_of_connection(int n_row</em>, <em>double theta</em>, <em>int Ap</em>, <em>int Aj</em>, <em>npy_cdouble_wrapper Ax</em>, <em>int Sp</em>, <em>int Sj</em>, <em>npy_cdouble_wrapper Sx</em><big>)</big><a class="headerlink" href="#pyamg.amg_core.amg_core.classical_strength_of_connection" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="pyamg.amg_core.amg_core.conjugate">
+<!--[pyamg.amg_core.amg_core.conjugate]--><tt class="descclassname">pyamg.amg_core.amg_core.</tt><tt class="descname">conjugate</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#pyamg.amg_core.amg_core.conjugate" title="Permalink to this definition">¶</a></dt>
+<dd>conjugate(float x) -&gt; float
+conjugate(double x) -&gt; double
+conjugate(npy_cfloat_wrapper x) -&gt; npy_cfloat_wrapper
+conjugate(npy_cdouble_wrapper x) -&gt; npy_cdouble_wrapper</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.amg_core.amg_core.connected_components">
+<!--[pyamg.amg_core.amg_core.connected_components]--><tt class="descclassname">pyamg.amg_core.amg_core.</tt><tt class="descname">connected_components</tt><big>(</big><em>int num_nodes</em>, <em>int Ap</em>, <em>int Aj</em>, <em>int components</em><big>)</big><a class="headerlink" href="#pyamg.amg_core.amg_core.connected_components" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="pyamg.amg_core.amg_core.fit_candidates">
+<!--[pyamg.amg_core.amg_core.fit_candidates]--><tt class="descclassname">pyamg.amg_core.amg_core.</tt><tt class="descname">fit_candidates</tt><big>(</big><em>int n_row</em>, <em>int n_col</em>, <em>int K1</em>, <em>int K2</em>, <em>int Ap</em>, <em>int Ai</em>, <em>float Ax</em>, <em>float B</em>, <em>float R</em>, <em>float tol) fit_candidates(int n_row</em>, <em>int n_col</em>, <em>int K1</em>, <em>int K2</em>, <em>int Ap</em>, <em>int Ai</em>, <em>double Ax</em>, <em>double B</em>, <em>double R</em>, <em>double tol) fit_candidates(int n_row</em>, <em>int n_col</em>, <em>int K1</em>, <em>int K2</em>, <em>int Ap</em>, <em>int Ai</em>, <em>npy_cfloat_wrapper Ax</em>, <em>npy_cfloat_wrapper B</em>, <em>npy_cfloat_wrapper R</em>, <em>float tol) fit_candidates(int n_row</em>, <em>int n_col</em>, <em>int K1</em>, <em>int K2</em>, <em>int Ap</em>, <em>int Ai</em>, <em>npy_cdouble_wrapper Ax</em>, <em>npy_cdouble_wrapper B</em>, <em>npy_cdouble_wrapper R</em>, <em>double tol</em><big>)</big><a class="headerlink" href="#pyamg.amg_core.amg_core.fit_candidates" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="pyamg.amg_core.amg_core.gauss_seidel">
+<!--[pyamg.amg_core.amg_core.gauss_seidel]--><tt class="descclassname">pyamg.amg_core.amg_core.</tt><tt class="descname">gauss_seidel</tt><big>(</big><em>int Ap</em>, <em>int Aj</em>, <em>float Ax</em>, <em>float x</em>, <em>float b</em>, <em>int row_start</em>, <em>int row_stop</em>, <em>int row_step) gauss_seidel(int Ap</em>, <em>int Aj</em>, <em>double Ax</em>, <em>double x</em>, <em>double b</em>, <em>int row_start</em>, <em>int row_stop</em>, <em>int row_step) gauss_seidel(int Ap</em>, <em>int Aj</em>, <em>npy_cfloat_wrapper Ax</em>, <em>npy_cfloat_wrapper x</em>, <em>npy_cfloat_wrapper b</em>, <em>int row_start</em>, <em>int row_stop</em>, <em>int row_step) gauss_seidel(int Ap</em>, <em>int Aj</em>, <em>npy_cdouble_wrapper Ax</em>, <em>npy_cdouble_wrapper x</em>, <em>npy_cdouble_wrapper b</em>, <em>int row_start</em>, <em>int row_stop</em>, <em>int row_step</em><big>)</big><a class="headerlink" href="#pyamg.amg_core.amg_core.gauss_seidel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="pyamg.amg_core.amg_core.gauss_seidel_indexed">
+<!--[pyamg.amg_core.amg_core.gauss_seidel_indexed]--><tt class="descclassname">pyamg.amg_core.amg_core.</tt><tt class="descname">gauss_seidel_indexed</tt><big>(</big><em>int Ap</em>, <em>int Aj</em>, <em>float Ax</em>, <em>float x</em>, <em>float b</em>, <em>int Id</em>, <em>int row_start</em>, <em>int row_stop</em>, <em>int row_step) gauss_seidel_indexed(int Ap</em>, <em>int Aj</em>, <em>double Ax</em>, <em>double x</em>, <em>double b</em>, <em>int Id</em>, <em>int row_start</em>, <em>int row_stop</em>, <em>int row_step</em><big>)</big><a class="headerlink" href="#pyamg.amg_core.amg_core.gauss_seidel_indexed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="pyamg.amg_core.amg_core.householder_hornerscheme">
+<!--[pyamg.amg_core.amg_core.householder_hornerscheme]--><tt class="descclassname">pyamg.amg_core.amg_core.</tt><tt class="descname">householder_hornerscheme</tt><big>(</big><em>float z</em>, <em>float B</em>, <em>float y</em>, <em>int n</em>, <em>int start</em>, <em>int stop</em>, <em>int step) householder_hornerscheme(double z</em>, <em>double B</em>, <em>double y</em>, <em>int n</em>, <em>int start</em>, <em>int stop</em>, <em>int step) householder_hornerscheme(npy_cfloat_wrapper z</em>, <em>npy_cfloat_wrapper B</em>, <em>npy_cfloat_wrapper y</em>, <em>int n</em>, <em>int start</em>, <em>int stop</em>, <em>int step) householder_hornerscheme(npy_cdouble_wrapper z</em>, <em>npy_cdouble_wrapper B</em>, <em>npy_cdouble_wrapper y</em>, <em>int n</em>, <em>int start</em>, <em>int stop</em>, <em>int step</em><big>)</big><a class="headerlink" href="#pyamg.amg_core.amg_core.householder_hornerscheme" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="pyamg.amg_core.amg_core.imag">
+<!--[pyamg.amg_core.amg_core.imag]--><tt class="descclassname">pyamg.amg_core.amg_core.</tt><tt class="descname">imag</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#pyamg.amg_core.amg_core.imag" title="Permalink to this definition">¶</a></dt>
+<dd>imag(float x) -&gt; float
+imag(double x) -&gt; double
+imag(npy_cfloat_wrapper x) -&gt; float
+imag(npy_cdouble_wrapper x) -&gt; double</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.amg_core.amg_core.incomplete_BSRmatmat">
+<!--[pyamg.amg_core.amg_core.incomplete_BSRmatmat]--><tt class="descclassname">pyamg.amg_core.amg_core.</tt><tt class="descname">incomplete_BSRmatmat</tt><big>(</big><em>int Ap</em>, <em>int Aj</em>, <em>float Ax</em>, <em>int Bp</em>, <em>int Bj</em>, <em>float Bx</em>, <em>int Sp</em>, <em>int Sj</em>, <em>float Sx</em>, <em>int n</em>, <em>int brows</em>, <em>int bcols) incomplete_BSRmatmat(int Ap</em>, <em>int Aj</em>, <em>double Ax</em>, <em>int Bp</em>, <em>int Bj</em>, <em>double Bx</em>, <em>int Sp</em>, <em>int Sj</em>, <em>double Sx</em>, <em>int n</em>, <em>int brows</em>, <em>int bcols) incomplete_BSRmatmat(int Ap</em>, <em>int Aj</em>, <em>npy_cfloat_wrapper Ax</em>, <em>int Bp</em>, <em>int Bj</em>, <em>npy_cfloat_wrapper Bx</em>, <em>int Sp</em>, <em>int Sj</em>, <em>npy_cfloat_wrapper Sx</em>, <em>int n</em>, <em>int brows</em>, <em>int bcols) incomplete_BSRmatmat(int Ap</em>, <em>int Aj</em>, <em>npy_cdouble_wrapper Ax</em>, <em>int Bp</em>, <em>int Bj</em>, <em>npy_cdouble_wrapper Bx</em>, <em>int Sp</em>, <em>int Sj</em>, <em>npy_cdouble_wrapper Sx</em>, <em>int n</em>, <em>int brows</em>, <em>int bcols</em><big>)</big><a class="headerlink" href="#pyamg.amg_core.amg_core.incomplete_BSRmatmat" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="pyamg.amg_core.amg_core.incomplete_matmat">
+<!--[pyamg.amg_core.amg_core.incomplete_matmat]--><tt class="descclassname">pyamg.amg_core.amg_core.</tt><tt class="descname">incomplete_matmat</tt><big>(</big><em>int Ap</em>, <em>int Aj</em>, <em>float Ax</em>, <em>int Bp</em>, <em>int Bj</em>, <em>float Bx</em>, <em>int Sp</em>, <em>int Sj</em>, <em>float Sx</em>, <em>int num_rows) incomplete_matmat(int Ap</em>, <em>int Aj</em>, <em>double Ax</em>, <em>int Bp</em>, <em>int Bj</em>, <em>double Bx</em>, <em>int Sp</em>, <em>int Sj</em>, <em>double Sx</em>, <em>int num_rows) incomplete_matmat(int Ap</em>, <em>int Aj</em>, <em>npy_cfloat_wrapper Ax</em>, <em>int Bp</em>, <em>int Bj</em>, <em>npy_cfloat_wrapper Bx</em>, <em>int Sp</em>, <em>int Sj</em>, <em>npy_cfloat_wrapper Sx</em>, <em>int num_rows) incomplete_matmat(int Ap</em>, <em>int Aj</em>, <em>npy_cdouble_wrapper Ax</em>, <em>int Bp</em>, <em>int Bj</em>, <em>npy_cdouble_wrapper Bx</em>, <em>int Sp</em>, <em>int Sj</em>, <em>npy_cdouble_wrapper Sx</em>, <em>int num_rows</em><big>)</big><a class="headerlink" href="#pyamg.amg_core.amg_core.incomplete_matmat" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="pyamg.amg_core.amg_core.jacobi">
+<!--[pyamg.amg_core.amg_core.jacobi]--><tt class="descclassname">pyamg.amg_core.amg_core.</tt><tt class="descname">jacobi</tt><big>(</big><em>int Ap</em>, <em>int Aj</em>, <em>float Ax</em>, <em>float x</em>, <em>float b</em>, <em>float temp</em>, <em>int row_start</em>, <em>int row_stop</em>, <em>int row_step</em>, <em>float omega) jacobi(int Ap</em>, <em>int Aj</em>, <em>double Ax</em>, <em>double x</em>, <em>double b</em>, <em>double temp</em>, <em>int row_start</em>, <em>int row_stop</em>, <em>int row_step</em>, <em>double omega) jacobi(int Ap</em>, <em>int Aj</em>, <em>npy_cfloat_wrapper Ax</em>, <em>npy_cfloat_wrapper x</em>, <em>npy_cfloat_wrapper b</em>, <em>npy_cfloat_wrapper temp</em>, <em>int row_start</em>, <em>int row_stop</em>, <em>int row_step</em>, <em>npy_cfloat_wrapper omega) jacobi(int Ap</em>, <em>int Aj</em>, <em>npy_cdouble_wrapper Ax</em>, <em>npy_cdouble_wrapper x</em>, <em>npy_cdouble_wrapper b</em>, <em>npy_cdouble_wrapper temp</em>, <em>int row_start</em>, <em>int row_stop</em>, <em>int row_step</em>, <em>npy_cdouble_wrapper omega</em><big>)</big><a class="headerlink" href="#pyamg.amg_core.amg_core.jacobi" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="pyamg.amg_core.amg_core.kaczmarz_gauss_seidel">
+<!--[pyamg.amg_core.amg_core.kaczmarz_gauss_seidel]--><tt class="descclassname">pyamg.amg_core.amg_core.</tt><tt class="descname">kaczmarz_gauss_seidel</tt><big>(</big><em>int Ap</em>, <em>int Aj</em>, <em>float Ax</em>, <em>float x</em>, <em>float b</em>, <em>int row_start</em>, <em>int row_stop</em>, <em>int row_step</em>, <em>float Tx) kaczmarz_gauss_seidel(int Ap</em>, <em>int Aj</em>, <em>double Ax</em>, <em>double x</em>, <em>double b</em>, <em>int row_start</em>, <em>int row_stop</em>, <em>int row_step</em>, <em>double Tx) kaczmarz_gauss_seidel(int Ap</em>, <em>int Aj</em>, <em>npy_cfloat_wrapper Ax</em>, <em>npy_cfloat_wrapper x</em>, <em>npy_cfloat_wrapper b</em>, <em>int row_start</em>, <em>int row_stop</em>, <em>int row_step</em>, <em>npy_cfloat_wrapper Tx) kaczmarz_gauss_seidel(int Ap</em>, <em>int Aj</em>, <em>npy_cdouble_wrapper Ax</em>, <em>npy_cdouble_wrapper x</em>, <em>npy_cdouble_wrapper b</em>, <em>int row_start</em>, <em>int row_stop</em>, <em>int row_step</em>, <em>npy_cdouble_wrapper Tx</em><big>)</big><a class="headerlink" href="#pyamg.amg_core.amg_core.kaczmarz_gauss_seidel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="pyamg.amg_core.amg_core.kaczmarz_jacobi">
+<!--[pyamg.amg_core.amg_core.kaczmarz_jacobi]--><tt class="descclassname">pyamg.amg_core.amg_core.</tt><tt class="descname">kaczmarz_jacobi</tt><big>(</big><em>int Ap</em>, <em>int Aj</em>, <em>float Ax</em>, <em>float x</em>, <em>float b</em>, <em>float Tx</em>, <em>float temp</em>, <em>int row_start</em>, <em>int row_stop</em>, <em>int row_step</em>, <em>float omega) kaczmarz_jacobi(int Ap</em>, <em>int Aj</em>, <em>double Ax</em>, <em>double x</em>, <em>double b</em>, <em>double Tx</em>, <em>double temp</em>, <em>int row_start</em>, <em>int row_stop</em>, <em>int row_step</em>, <em>double omega) kaczmarz_jacobi(int Ap</em>, <em>int Aj</em>, <em>npy_cfloat_wrapper Ax</em>, <em>npy_cfloat_wrapper x</em>, <em>npy_cfloat_wrapper b</em>, <em>npy_cfloat_wrapper Tx</em>, <em>npy_cfloat_wrapper temp</em>, <em>int row_start</em>, <em>int row_stop</em>, <em>int row_step</em>, <em>npy_cfloat_wrapper omega) kaczmarz_jacobi(int Ap</em>, <em>int Aj</em>, <em>npy_cdouble_wrapper Ax</em>, <em>npy_cdouble_wrapper x</em>, <em>npy_cdouble_wrapper b</em>, <em>npy_cdouble_wrapper Tx</em>, <em>npy_cdouble_wrapper temp</em>, <em>int row_start</em>, <em>int row_stop</em>, <em>int row_step</em>, <em>npy_cdouble_wrapper omega</em><big>)</big><a class="headerlink" href="#pyamg.amg_core.amg_core.kaczmarz_jacobi" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="pyamg.amg_core.amg_core.lloyd_cluster">
+<!--[pyamg.amg_core.amg_core.lloyd_cluster]--><tt class="descclassname">pyamg.amg_core.amg_core.</tt><tt class="descname">lloyd_cluster</tt><big>(</big><em>int num_rows</em>, <em>int Ap</em>, <em>int Aj</em>, <em>int Ax</em>, <em>int num_seeds</em>, <em>int x</em>, <em>int y</em>, <em>int z) lloyd_cluster(int num_rows</em>, <em>int Ap</em>, <em>int Aj</em>, <em>float Ax</em>, <em>int num_seeds</em>, <em>float x</em>, <em>int y</em>, <em>int z) lloyd_cluster(int num_rows</em>, <em>int Ap</em>, <em>int Aj</em>, <em>double Ax</em>, <em>int num_seeds</em>, <em>double x</em>, <em>int y</em>, <em>int z</em><big>)</big><a class="headerlink" href="#pyamg.amg_core.amg_core.lloyd_cluster" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="pyamg.amg_core.amg_core.maximal_independent_set_k_parallel">
+<!--[pyamg.amg_core.amg_core.maximal_independent_set_k_parallel]--><tt class="descclassname">pyamg.amg_core.amg_core.</tt><tt class="descname">maximal_independent_set_k_parallel</tt><big>(</big><em>int num_rows</em>, <em>int Ap</em>, <em>int Aj</em>, <em>int k</em>, <em>int x</em>, <em>double y</em>, <em>int max_iters = -1) maximal_independent_set_k_parallel(int num_rows</em>, <em>int Ap</em>, <em>int Aj</em>, <em>int k</em>, <em>int x</em>, <em>double y</em><big>)</big><a class="headerlink" href="#pyamg.amg_core.amg_core.maximal_independent_set_k_parallel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="pyamg.amg_core.amg_core.maximal_independent_set_parallel">
+<!--[pyamg.amg_core.amg_core.maximal_independent_set_parallel]--><tt class="descclassname">pyamg.amg_core.amg_core.</tt><tt class="descname">maximal_independent_set_parallel</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#pyamg.amg_core.amg_core.maximal_independent_set_parallel" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>maximal_independent_set_parallel(int num_rows, int Ap, int Aj, int active, int C, int F, </dt>
+<dd>int x, double y, int max_iters = -1) -&gt; int</dd>
+<dt>maximal_independent_set_parallel(int num_rows, int Ap, int Aj, int active, int C, int F, </dt>
+<dd>int x, double y) -&gt; int</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.amg_core.amg_core.maximal_independent_set_serial">
+<!--[pyamg.amg_core.amg_core.maximal_independent_set_serial]--><tt class="descclassname">pyamg.amg_core.amg_core.</tt><tt class="descname">maximal_independent_set_serial</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#pyamg.amg_core.amg_core.maximal_independent_set_serial" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>maximal_independent_set_serial(int num_rows, int Ap, int Aj, int active, int C, int F, </dt>
+<dd>int x) -&gt; int</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.amg_core.amg_core.min_blocks">
+<!--[pyamg.amg_core.amg_core.min_blocks]--><tt class="descclassname">pyamg.amg_core.amg_core.</tt><tt class="descname">min_blocks</tt><big>(</big><em>int n_blocks</em>, <em>int blocksize</em>, <em>float Sx</em>, <em>float Tx) min_blocks(int n_blocks</em>, <em>int blocksize</em>, <em>double Sx</em>, <em>double Tx</em><big>)</big><a class="headerlink" href="#pyamg.amg_core.amg_core.min_blocks" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="pyamg.amg_core.amg_core.mynorm">
+<!--[pyamg.amg_core.amg_core.mynorm]--><tt class="descclassname">pyamg.amg_core.amg_core.</tt><tt class="descname">mynorm</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#pyamg.amg_core.amg_core.mynorm" title="Permalink to this definition">¶</a></dt>
+<dd>mynorm(float x) -&gt; float
+mynorm(double x) -&gt; double
+mynorm(npy_cfloat_wrapper x) -&gt; float
+mynorm(npy_cdouble_wrapper x) -&gt; double</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.amg_core.amg_core.mynormsq">
+<!--[pyamg.amg_core.amg_core.mynormsq]--><tt class="descclassname">pyamg.amg_core.amg_core.</tt><tt class="descname">mynormsq</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#pyamg.amg_core.amg_core.mynormsq" title="Permalink to this definition">¶</a></dt>
+<dd>mynormsq(float x) -&gt; float
+mynormsq(double x) -&gt; double
+mynormsq(npy_cfloat_wrapper x) -&gt; float
+mynormsq(npy_cdouble_wrapper x) -&gt; double</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.amg_core.amg_core.ode_strength_helper">
+<!--[pyamg.amg_core.amg_core.ode_strength_helper]--><tt class="descclassname">pyamg.amg_core.amg_core.</tt><tt class="descname">ode_strength_helper</tt><big>(</big><em>float Sx</em>, <em>int Sp</em>, <em>int Sj</em>, <em>int nrows</em>, <em>float x</em>, <em>float y</em>, <em>float b</em>, <em>int BDBCols</em>, <em>int NullDim) ode_strength_helper(double Sx</em>, <em>int Sp</em>, <em>int Sj</em>, <em>int nrows</em>, <em>double x</em>, <em>double y</em>, <em>double b</em>, <em>int BDBCols</em>, <em>int NullDim) ode_strength_helper(npy_cfloat_wrapper Sx</em>, <em>int Sp</em>, <em>int Sj</em>, <em>int nrows</em>, <em>npy_cfloat_wrapper x</em>, <em>npy_cfloat_wrapper y</em>, <em>npy_cfloat_wrapper b</em>, <em>int BDBCols</em>, <em>int NullDim) ode_strength_helper(npy_cdouble_wrapper Sx</em>, <em>int Sp</em>, <em>int Sj</em>, <em>int nrows</em>, <em>npy_cdouble_wrapper x</em>, <em>npy_cdouble_wrapper y</em>, <em>npy_cdouble_wrapper b</em>, <em>int BDBCols</em>, <em>int NullDim</em><big>)</big><a class="headerlink" href="#pyamg.amg_core.amg_core.ode_strength_helper" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="pyamg.amg_core.amg_core.pinv_array">
+<!--[pyamg.amg_core.amg_core.pinv_array]--><tt class="descclassname">pyamg.amg_core.amg_core.</tt><tt class="descname">pinv_array</tt><big>(</big><em>float Ax</em>, <em>int m</em>, <em>int n</em>, <em>char TransA) pinv_array(double Ax</em>, <em>int m</em>, <em>int n</em>, <em>char TransA) pinv_array(npy_cfloat_wrapper Ax</em>, <em>int m</em>, <em>int n</em>, <em>char TransA) pinv_array(npy_cdouble_wrapper Ax</em>, <em>int m</em>, <em>int n</em>, <em>char TransA</em><big>)</big><a class="headerlink" href="#pyamg.amg_core.amg_core.pinv_array" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="pyamg.amg_core.amg_core.real">
+<!--[pyamg.amg_core.amg_core.real]--><tt class="descclassname">pyamg.amg_core.amg_core.</tt><tt class="descname">real</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#pyamg.amg_core.amg_core.real" title="Permalink to this definition">¶</a></dt>
+<dd>real(float x) -&gt; float
+real(double x) -&gt; double
+real(npy_cfloat_wrapper x) -&gt; float
+real(npy_cdouble_wrapper x) -&gt; double</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.amg_core.amg_core.rs_cf_splitting">
+<!--[pyamg.amg_core.amg_core.rs_cf_splitting]--><tt class="descclassname">pyamg.amg_core.amg_core.</tt><tt class="descname">rs_cf_splitting</tt><big>(</big><em>int n_nodes</em>, <em>int Sp</em>, <em>int Sj</em>, <em>int Tp</em>, <em>int Tj</em>, <em>int splitting</em><big>)</big><a class="headerlink" href="#pyamg.amg_core.amg_core.rs_cf_splitting" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="pyamg.amg_core.amg_core.rs_direct_interpolation_pass1">
+<!--[pyamg.amg_core.amg_core.rs_direct_interpolation_pass1]--><tt class="descclassname">pyamg.amg_core.amg_core.</tt><tt class="descname">rs_direct_interpolation_pass1</tt><big>(</big><em>int n_nodes</em>, <em>int Sp</em>, <em>int Sj</em>, <em>int splitting</em>, <em>int Bp</em><big>)</big><a class="headerlink" href="#pyamg.amg_core.amg_core.rs_direct_interpolation_pass1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="pyamg.amg_core.amg_core.rs_direct_interpolation_pass2">
+<!--[pyamg.amg_core.amg_core.rs_direct_interpolation_pass2]--><tt class="descclassname">pyamg.amg_core.amg_core.</tt><tt class="descname">rs_direct_interpolation_pass2</tt><big>(</big><em>int n_nodes</em>, <em>int Ap</em>, <em>int Aj</em>, <em>float Ax</em>, <em>int Sp</em>, <em>int Sj</em>, <em>float Sx</em>, <em>int splitting</em>, <em>int Bp</em>, <em>int Bj</em>, <em>float Bx) rs_direct_interpolation_pass2(int n_nodes</em>, <em>int Ap</em>, <em>int Aj</em>, <em>double Ax</em>, <em>int Sp</em>, <em>int Sj</em>, <em>double Sx</em>, <em>int splitting</em>, <em>int Bp</em>, <em>int Bj</em>, <em>double Bx</em><big>)</big><a class="headerlink" href="#pyamg.amg_core.amg_core.rs_direct_interpolation_pass2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="pyamg.amg_core.amg_core.satisfy_constraints_helper">
+<!--[pyamg.amg_core.amg_core.satisfy_constraints_helper]--><tt class="descclassname">pyamg.amg_core.amg_core.</tt><tt class="descname">satisfy_constraints_helper</tt><big>(</big><em>int RowsPerBlock</em>, <em>int ColsPerBlock</em>, <em>int num_blocks</em>, <em>int num_block_rows</em>, <em>float x</em>, <em>float y</em>, <em>float z</em>, <em>int Sp</em>, <em>int Sj</em>, <em>float Sx) satisfy_constraints_helper(int RowsPerBlock</em>, <em>int ColsPerBlock</em>, <em>int num_blocks</em>, <em>int num_block_rows</em>, <em>double x</em>, <em>double y</em>, <em>double z</em>, <em>int Sp</em>, <em>int Sj</em>, <em>double Sx) satisfy_constraints_helper(int RowsPerBlock</em>, <em>int ColsPerBlock</em>, <em>int num_blocks</em>, <em>int num_block_rows</em>, <em>npy_cfloat_wrapper x</em>, <em>npy_cfloat_wrapper y</em>, <em>npy_cfloat_wrapper z</em>, <em>int Sp</em>, <em>int Sj</em>, <em>npy_cfloat_wrapper Sx) satisfy_constraints_helper(int RowsPerBlock</em>, <em>int ColsPerBlock</em>, <em>int num_blocks</em>, <em>int num_block_rows</em>, <em>npy_cdouble_wrapper x</em>, <em>npy_cdouble_wrapper y</em>, <em>npy_cdouble_wrapper z</em>, <em>int Sp</em>, <em>int Sj</em>, <em>npy_cdouble_wrapper Sx</em><big>)</big><a class="headerlink" href="#pyamg.amg_core.amg_core.satisfy_constraints_helper" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="pyamg.amg_core.amg_core.signof">
+<!--[pyamg.amg_core.amg_core.signof]--><tt class="descclassname">pyamg.amg_core.amg_core.</tt><tt class="descname">signof</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#pyamg.amg_core.amg_core.signof" title="Permalink to this definition">¶</a></dt>
+<dd>signof(int a) -&gt; int
+signof(float a) -&gt; float
+signof(double a) -&gt; double</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.amg_core.amg_core.standard_aggregation">
+<!--[pyamg.amg_core.amg_core.standard_aggregation]--><tt class="descclassname">pyamg.amg_core.amg_core.</tt><tt class="descname">standard_aggregation</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#pyamg.amg_core.amg_core.standard_aggregation" title="Permalink to this definition">¶</a></dt>
+<dd>standard_aggregation(int n_row, int Ap, int Aj, int x) -&gt; int</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.amg_core.amg_core.symmetric_strength_of_connection">
+<!--[pyamg.amg_core.amg_core.symmetric_strength_of_connection]--><tt class="descclassname">pyamg.amg_core.amg_core.</tt><tt class="descname">symmetric_strength_of_connection</tt><big>(</big><em>int n_row</em>, <em>float theta</em>, <em>int Ap</em>, <em>int Aj</em>, <em>float Ax</em>, <em>int Sp</em>, <em>int Sj</em>, <em>float Sx) symmetric_strength_of_connection(int n_row</em>, <em>double theta</em>, <em>int Ap</em>, <em>int Aj</em>, <em>double Ax</em>, <em>int Sp</em>, <em>int Sj</em>, <em>double Sx) symmetric_strength_of_connection(int n_row</em>, <em>float theta</em>, <em>int Ap</em>, <em>int Aj</em>, <em>npy_cfloat_wrapper Ax</em>, <em>int Sp</em>, <em>int Sj</em>, <em>npy_cfloat_wrapper Sx) symmetric_strength_of_connection(int n_row</em>, <em>double theta</em>, <em>int Ap</em>, <em>int Aj</em>, <em>npy_cdouble_wrapper Ax</em>, <em>int Sp</em>, <em>int Sj</em>, <em>npy_cdouble_wrapper Sx</em><big>)</big><a class="headerlink" href="#pyamg.amg_core.amg_core.symmetric_strength_of_connection" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="pyamg.amg_core.amg_core.vertex_coloring_LDF">
+<!--[pyamg.amg_core.amg_core.vertex_coloring_LDF]--><tt class="descclassname">pyamg.amg_core.amg_core.</tt><tt class="descname">vertex_coloring_LDF</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#pyamg.amg_core.amg_core.vertex_coloring_LDF" title="Permalink to this definition">¶</a></dt>
+<dd>vertex_coloring_LDF(int num_rows, int Ap, int Aj, int x, double y) -&gt; int</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.amg_core.amg_core.vertex_coloring_jones_plassmann">
+<!--[pyamg.amg_core.amg_core.vertex_coloring_jones_plassmann]--><tt class="descclassname">pyamg.amg_core.amg_core.</tt><tt class="descname">vertex_coloring_jones_plassmann</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#pyamg.amg_core.amg_core.vertex_coloring_jones_plassmann" title="Permalink to this definition">¶</a></dt>
+<dd>vertex_coloring_jones_plassmann(int num_rows, int Ap, int Aj, int x, double y) -&gt; int</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.amg_core.amg_core.vertex_coloring_mis">
+<!--[pyamg.amg_core.amg_core.vertex_coloring_mis]--><tt class="descclassname">pyamg.amg_core.amg_core.</tt><tt class="descname">vertex_coloring_mis</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#pyamg.amg_core.amg_core.vertex_coloring_mis" title="Permalink to this definition">¶</a></dt>
+<dd>vertex_coloring_mis(int num_rows, int Ap, int Aj, int x) -&gt; int</dd></dl>
+
+</div>
+<div class="section" id="module-pyamg.amg_core.setup">
+<h2>The <tt class="xref docutils literal"><span class="pre">setup</span></tt> Module<a class="headerlink" href="#module-pyamg.amg_core.setup" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pyamg.amg_core.setup.configuration">
+<!--[pyamg.amg_core.setup.configuration]--><tt class="descclassname">pyamg.amg_core.setup.</tt><tt class="descname">configuration</tt><big>(</big><em>parent_package=''</em>, <em>top_path=None</em><big>)</big><a class="headerlink" href="#pyamg.amg_core.setup.configuration" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo_dropshadow_small.png" alt="Logo"/>
+            </a></p>
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference" href="">Amg_Core Documentation</a><ul>
+<li><a class="reference" href="#module-pyamg.amg_core.amg_core">The <tt class="docutils literal"><span class="pre">amg_core</span></tt> Module</a></li>
+<li><a class="reference" href="#module-pyamg.amg_core.setup">The <tt class="docutils literal"><span class="pre">setup</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="pyamg.aggregation.html" title="previous chapter">Aggregation Documentation</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="pyamg.relaxation.html" title="next chapter">Relaxation Documentation</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/pyamg.amg_core.txt">Show Source</a></li>
+            </ul>
+          <h3>Quick search</h3>
+            <form class="search" action="search.html" method="get">
+              <input type="text" name="q" size="18" /> <input type="submit" value="Go" />
+              <input type="hidden" name="check_keywords" value="yes" />
+              <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="pyamg.relaxation.html" title="Relaxation Documentation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pyamg.aggregation.html" title="Aggregation Documentation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">PyAMG v1.0 documentation</a> &raquo;</li>
+          <li><a href="modules.html" accesskey="U">Project Documentation</a> &raquo;</li>
+          <li><a href="pyamg.html" accesskey="U">Pyamg Documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009, Nathan Bell, Luke Olson, Jacob Schroder.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.1.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,946 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Aggregation Documentation &mdash; PyAMG v1.0 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="PyAMG v1.0 documentation" href="index.html" />
+    <link rel="up" title="Pyamg Documentation" href="pyamg.html" />
+    <link rel="next" title="Amg_Core Documentation" href="pyamg.amg_core.html" />
+    <link rel="prev" title="Gallery Documentation" href="pyamg.gallery.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="pyamg.amg_core.html" title="Amg_Core Documentation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pyamg.gallery.html" title="Gallery Documentation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">PyAMG v1.0 documentation</a> &raquo;</li>
+          <li><a href="modules.html" accesskey="U">Project Documentation</a> &raquo;</li>
+          <li><a href="pyamg.html" accesskey="U">Pyamg Documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  
+  <div class="section" id="aggregation-documentation">
+<h1>Aggregation Documentation<a class="headerlink" href="#aggregation-documentation" title="Permalink to this headline">¶</a></h1>
+<p>This page contains the Aggregation Package documentation.</p>
+<div class="section" id="module-pyamg.aggregation.aggregate">
+<h2>The <tt class="xref docutils literal"><span class="pre">aggregate</span></tt> Module<a class="headerlink" href="#module-pyamg.aggregation.aggregate" title="Permalink to this headline">¶</a></h2>
+<p>Aggregation methods</p>
+<dl class="function">
+<dt id="pyamg.aggregation.aggregate.standard_aggregation">
+<!--[pyamg.aggregation.aggregate.standard_aggregation]--><tt class="descclassname">pyamg.aggregation.aggregate.</tt><tt class="descname">standard_aggregation</tt><big>(</big><em>C</em><big>)</big><a class="headerlink" href="#pyamg.aggregation.aggregate.standard_aggregation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the sparsity pattern of the tentative prolongator</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>C</strong> : csr_matrix</p>
+<blockquote>
+<p>strength of connection matrix</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>AggOp</strong> : csr_matrix</p>
+<blockquote class="last">
+<p>aggregation operator which determines the sparsity pattern 
+of the tentative prolongator</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><tt class="xref docutils literal"><span class="pre">amg_core.standard_aggregation</span></tt></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">scipy.sparse</span> <span class="k">import</span> <span class="n">csr_matrix</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery</span> <span class="k">import</span> <span class="n">poisson</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.aggregation.aggregate</span> <span class="k">import</span> <span class="n">standard_aggregation</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">poisson</span><span class="p">((</span><span class="mf">4</span><span class="p">,),</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;csr&#39;</span><span class="p">)</span>   <span class="c"># 1D mesh with 4 vertices</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
+<span class="go">matrix([[ 2., -1.,  0.,  0.],</span>
+<span class="go">        [-1.,  2., -1.,  0.],</span>
+<span class="go">        [ 0., -1.,  2., -1.],</span>
+<span class="go">        [ 0.,  0., -1.,  2.]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">standard_aggregation</span><span class="p">(</span><span class="n">A</span><span class="p">)</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span> <span class="c"># two aggregates</span>
+<span class="go">matrix([[1, 0],</span>
+<span class="go">        [1, 0],</span>
+<span class="go">        [0, 1],</span>
+<span class="go">        [0, 1]], dtype=int8)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">csr_matrix</span><span class="p">([[</span><span class="mf">1</span><span class="p">,</span><span class="mf">0</span><span class="p">,</span><span class="mf">0</span><span class="p">],[</span><span class="mf">0</span><span class="p">,</span><span class="mf">1</span><span class="p">,</span><span class="mf">1</span><span class="p">],[</span><span class="mf">0</span><span class="p">,</span><span class="mf">1</span><span class="p">,</span><span class="mf">1</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>                      <span class="c"># first vertex is isolated</span>
+<span class="go">matrix([[1, 0, 0],</span>
+<span class="go">        [0, 1, 1],</span>
+<span class="go">        [0, 1, 1]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">standard_aggregation</span><span class="p">(</span><span class="n">A</span><span class="p">)</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span> <span class="c"># one aggregate</span>
+<span class="go">matrix([[0],</span>
+<span class="go">        [1],</span>
+<span class="go">        [1]], dtype=int8)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.aggregation.aggregate.lloyd_aggregation">
+<!--[pyamg.aggregation.aggregate.lloyd_aggregation]--><tt class="descclassname">pyamg.aggregation.aggregate.</tt><tt class="descname">lloyd_aggregation</tt><big>(</big><em>C</em>, <em>ratio=0.029999999999999999</em>, <em>distance='unit'</em>, <em>maxiter=10</em><big>)</big><a class="headerlink" href="#pyamg.aggregation.aggregate.lloyd_aggregation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Aggregated nodes using Lloyd Clustering</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>C</strong> : csr_matrix</p>
+<blockquote>
+<p>strength of connection matrix</p>
+</blockquote>
+<p><strong>ratio</strong> : scalar</p>
+<blockquote>
+<p>Fraction of the nodes which will be seeds.</p>
+</blockquote>
+<p><strong>distance</strong> : [&#8216;unit&#8217;,&#8217;abs&#8217;,&#8217;inv&#8217;,None]</p>
+<blockquote>
+<p>Distance assigned to each edge of the graph G used in Lloyd clustering</p>
+<p>For each nonzero value C[i,j]:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="21%" />
+<col width="79%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><p class="first last">&#8216;unit&#8217;</p>
+</td>
+<td><p class="first last">G[i,j] = 1</p>
+</td>
+</tr>
+<tr><td><p class="first last">&#8216;abs&#8217;</p>
+</td>
+<td><p class="first last">G[i,j] = abs(C[i,j])</p>
+</td>
+</tr>
+<tr><td><p class="first last">&#8216;inv&#8217;</p>
+</td>
+<td><p class="first last">G[i,j] = 1.0/abs(C[i,j])</p>
+</td>
+</tr>
+<tr><td><p class="first last">&#8216;same&#8217;</p>
+</td>
+<td><p class="first last">G[i,j] = C[i,j]</p>
+</td>
+</tr>
+<tr><td><p class="first last">&#8216;sub&#8217;</p>
+</td>
+<td><p class="first last">G[i,j] = C[i,j] - min(C)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p><strong>maxiter</strong> : int</p>
+<blockquote>
+<p>Maximum number of iterations to perform</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>AggOp</strong> : csr_matrix</p>
+<blockquote class="last">
+<p>aggregation operator which determines the sparsity pattern 
+of the tentative prolongator</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><tt class="xref docutils literal"><span class="pre">amg_core.standard_aggregation</span></tt></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">scipy.sparse</span> <span class="k">import</span> <span class="n">csr_matrix</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery</span> <span class="k">import</span> <span class="n">poisson</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.aggregation.aggregate</span> <span class="k">import</span> <span class="n">lloyd_aggregation</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">poisson</span><span class="p">((</span><span class="mf">4</span><span class="p">,),</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;csr&#39;</span><span class="p">)</span>   <span class="c"># 1D mesh with 4 vertices</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
+<span class="go">matrix([[ 2., -1.,  0.,  0.],</span>
+<span class="go">        [-1.,  2., -1.,  0.],</span>
+<span class="go">        [ 0., -1.,  2., -1.],</span>
+<span class="go">        [ 0.,  0., -1.,  2.]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lloyd_aggregation</span><span class="p">(</span><span class="n">A</span><span class="p">)</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span> <span class="c"># one aggregate</span>
+<span class="go">matrix([[1],</span>
+<span class="go">        [1],</span>
+<span class="go">        [1],</span>
+<span class="go">        [1]], dtype=int8)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lloyd_aggregation</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">ratio</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span> <span class="c"># more seeding for two aggregates</span>
+<span class="go">matrix([[0, 1],</span>
+<span class="go">        [0, 1],</span>
+<span class="go">        [1, 0],</span>
+<span class="go">        [1, 0]], dtype=int8)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyamg.aggregation.aggregation">
+<h2>The <tt class="xref docutils literal"><span class="pre">aggregation</span></tt> Module<a class="headerlink" href="#module-pyamg.aggregation.aggregation" title="Permalink to this headline">¶</a></h2>
+<p>Support for aggregation-based AMG</p>
+<dl class="function">
+<dt id="pyamg.aggregation.aggregation.smoothed_aggregation_solver">
+<!--[pyamg.aggregation.aggregation.smoothed_aggregation_solver]--><tt class="descclassname">pyamg.aggregation.aggregation.</tt><tt class="descname">smoothed_aggregation_solver</tt><big>(</big><em>A</em>, <em>B=None</em>, <em>mat_flag='hermitian'</em>, <em>strength='symmetric'</em>, <em>aggregate='standard'</em>, <em>smooth=('jacobi'</em>, <em>{'omega': 1.3333333333333333})</em>, <em>presmoother=('gauss_seidel'</em>, <em>{'sweep': 'symmetric'})</em>, <em>postsmoother=('gauss_seidel'</em>, <em>{'sweep': 'symmetric'})</em>, <em>max_levels=10</em>, <em>max_coarse=500</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#pyamg.aggregation.aggregation.smoothed_aggregation_solver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a multilevel solver using Smoothed Aggregation (SA)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>A</strong> : {csr_matrix, bsr_matrix}</p>
+<blockquote>
+<p>Sparse NxN matrix in CSR or BSR format</p>
+</blockquote>
+<p><strong>B</strong> : {None, array_like}</p>
+<blockquote>
+<p>Near-nullspace candidates stored in the columns of an NxK array.
+The default value B=None is equivalent to B=ones((N,1))</p>
+</blockquote>
+<p><strong>mat_flag</strong> : {string}</p>
+<blockquote>
+<p>&#8216;symmetric&#8217; refers to both real and complex symmetric
+&#8216;hermitian&#8217; refers to both complex Hermitian and real Hermitian
+Note that for the strictly real case, these two options are the same
+Note that this flag does not denote definiteness of the operator</p>
+</blockquote>
+<p><strong>strength</strong> : [&#8216;symmetric&#8217;, &#8216;classical&#8217;, &#8216;ode&#8217;, None]</p>
+<blockquote>
+<p>Method used to determine the strength of connection between unknowns
+of the linear system.  Method-specific parameters may be passed in
+using a tuple, e.g. strength=(&#8216;symmetric&#8217;,{&#8216;theta&#8217; : 0.25 }). If
+strength=None, all nonzero entries of the matrix are considered strong.</p>
+</blockquote>
+<p><strong>aggregate</strong> : [&#8216;standard&#8217;, &#8216;lloyd&#8217;, (&#8216;predefined&#8217;,[csr_matrix, ...])]</p>
+<blockquote>
+<p>Method used to aggregate nodes.  A predefined aggregation is specified
+with a sequence of csr_matrices that represent the aggregation
+operators on each level of the hierarchy.  For instance [ Agg0, Agg1 ]
+defines a three-level hierarchy where the dimensions of A, Agg0 and
+Agg1 are compatible, i.e.  Agg0.shape[1] == A.shape[0] and
+Agg1.shape[1] == Agg0.shape[0].</p>
+</blockquote>
+<p><strong>smooth</strong> : [&#8216;jacobi&#8217;, &#8216;richardson&#8217;, &#8216;energy&#8217;, &#8216;kaczmarz_jacobi&#8217;, &#8216;kaczmarz_richardson&#8217;, None]</p>
+<blockquote>
+<p>Method used used to smooth the tentative prolongator.</p>
+</blockquote>
+<p><strong>max_levels</strong> : {integer}</p>
+<blockquote>
+<p>Maximum number of levels to be used in the multilevel solver.</p>
+</blockquote>
+<p><strong>max_coarse</strong> : {integer}</p>
+<blockquote>
+<p>Maximum number of variables permitted on the coarse grid.</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>ml</strong> : multilevel_solver</p>
+<blockquote class="last">
+<p>Multigrid hierarchy of matrices and prolongation operators</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><tt class="xref docutils literal"><span class="pre">multilevel_solver</span></tt>, <tt class="xref docutils literal"><span class="pre">classical.ruge_stuben_solver</span></tt></p>
+</div>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>The additional parameters are passed through as arguments to
+multilevel_solver.  Refer to pyamg.multilevel_solver for additional
+documentation.</li>
+<li>At each level, four steps are executed in order to define the coarser
+level operator.<ol class="arabic">
+<li>Matrix A is given and used to derive a strength matrix, C.</li>
+<li>Based on the strength matrix, indices are grouped or aggregated.</li>
+<li>The aggregates define coarse nodes and a tentative prolongation 
+operator T is defined by injection</li>
+<li>The tentative prolongation operator is smoothed by a relaxation
+scheme to improve the quality and extent of interpolation from the
+aggregates to fine nodes.</li>
+</ol>
+</li>
+</ul>
+<p class="rubric">References</p>
+<table class="docutils footnote" frame="void" id="id1" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id1">[5]</a></td><td>Vanek, P. and Mandel, J. and Brezina, M., 
+&#8220;Algebraic Multigrid by Smoothed Aggregation for 
+Second and Fourth Order Elliptic Problems&#8221;, 
+Computing, vol. 56, no. 3, pp. 179&#8211;196, 1996.
+<a class="reference" href="http://citeseer.ist.psu.edu/vanek96algebraic.html">http://citeseer.ist.psu.edu/vanek96algebraic.html</a></td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg</span> <span class="k">import</span> <span class="n">smoothed_aggregation_solver</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery</span> <span class="k">import</span> <span class="n">poisson</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">scipy.sparse.linalg</span> <span class="k">import</span> <span class="n">cg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">import</span> <span class="nn">numpy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">poisson</span><span class="p">((</span><span class="mf">100</span><span class="p">,</span><span class="mf">100</span><span class="p">),</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;csr&#39;</span><span class="p">)</span>           <span class="c"># matrix</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">]))</span>                         <span class="c"># random RHS</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ml</span> <span class="o">=</span> <span class="n">smoothed_aggregation_solver</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>            <span class="c"># AMG solver</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">M</span> <span class="o">=</span> <span class="n">ml</span><span class="o">.</span><span class="n">aspreconditioner</span><span class="p">(</span><span class="n">cycle</span><span class="o">=</span><span class="s">&#39;V&#39;</span><span class="p">)</span>             <span class="c"># preconditioner</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span><span class="n">info</span> <span class="o">=</span> <span class="n">cg</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="mf">30</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="n">M</span><span class="p">)</span>   <span class="c"># solve with CG</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyamg.aggregation.tentative">
+<h2>The <tt class="xref docutils literal"><span class="pre">tentative</span></tt> Module<a class="headerlink" href="#module-pyamg.aggregation.tentative" title="Permalink to this headline">¶</a></h2>
+<p>Tentative prolongator</p>
+<dl class="function">
+<dt id="pyamg.aggregation.tentative.fit_candidates">
+<!--[pyamg.aggregation.tentative.fit_candidates]--><tt class="descclassname">pyamg.aggregation.tentative.</tt><tt class="descname">fit_candidates</tt><big>(</big><em>AggOp</em>, <em>B</em>, <em>tol=1e-10</em><big>)</big><a class="headerlink" href="#pyamg.aggregation.tentative.fit_candidates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit near-nullspace candidates to form the tentative prolongator</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>AggOp</strong> : csr_matrix</p>
+<blockquote>
+<p>Describes the sparsity pattern of the tentative prolongator.
+Has dimension (#blocks, #aggregates)</p>
+</blockquote>
+<p><strong>B</strong> : array</p>
+<blockquote>
+<p>The near-nullspace candidates stored in columnwise fashion.
+Has dimension (#blocks * blocksize, #candidates)</p>
+</blockquote>
+<p><strong>tol</strong> : scalar</p>
+<blockquote>
+<p>Threshold for eliminating local basis functions.
+If after orthogonalization a local basis function Q[:,j] is small, 
+i.e. ||Q[:,j]|| &lt; tol, then Q[:,j] is set to zero.</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>(Q,R)</strong> : (bsr_matrix,array)</p>
+<blockquote class="last">
+<p>The tentative prolongator Q is a sparse block matrix with dimensions 
+(#blocks * blocksize, #aggregates * #candidates) formed by dense blocks
+of size (blocksize, #candidates).  The coarse level candidates are 
+stored in R which has dimensions (#aggregates * #candidates, #candidates).</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><tt class="xref docutils literal"><span class="pre">amg_core.fit_candidates</span></tt></p>
+</div>
+<p class="rubric">Notes</p>
+<p>Assuming that each row of AggOp contains exactly one non-zero entry,
+i.e. all unknowns belong to an aggregate, then Q and R statisfy the 
+relationship B = Q*R.  In other words, the near-nullspace candidates
+are represented exactly by the tentative prolongator.</p>
+<p>If AggOp contains rows with no non-zero entries, then the range of the
+tentative prolongator will not include those degrees of freedom. This
+situation is illustrated in the examples below.</p>
+<p class="rubric">References</p>
+<table class="docutils footnote" frame="void" id="id2" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id2">[6]</a></td><td>Vanek, P. and Mandel, J. and Brezina, M., 
+&#8220;Algebraic Multigrid by Smoothed Aggregation for 
+Second and Fourth Order Elliptic Problems&#8221;, 
+Computing, vol. 56, no. 3, pp. 179&#8211;196, 1996.
+<a class="reference" href="http://citeseer.ist.psu.edu/vanek96algebraic.html">http://citeseer.ist.psu.edu/vanek96algebraic.html</a></td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">scipy.sparse</span> <span class="k">import</span> <span class="n">csr_matrix</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.aggregation.tentative</span> <span class="k">import</span> <span class="n">fit_candidates</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># four nodes divided into two aggregates</span>
+<span class="gp">... </span><span class="n">AggOp</span> <span class="o">=</span> <span class="n">csr_matrix</span><span class="p">(</span> <span class="p">[[</span><span class="mf">1</span><span class="p">,</span><span class="mf">0</span><span class="p">],</span>
+<span class="gp">... </span>                     <span class="p">[</span><span class="mf">1</span><span class="p">,</span><span class="mf">0</span><span class="p">],</span>
+<span class="gp">... </span>                     <span class="p">[</span><span class="mf">0</span><span class="p">,</span><span class="mf">1</span><span class="p">],</span>
+<span class="gp">... </span>                     <span class="p">[</span><span class="mf">0</span><span class="p">,</span><span class="mf">1</span><span class="p">]]</span> <span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># B contains one candidate, the constant vector</span>
+<span class="gp">... </span><span class="n">B</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">1</span><span class="p">],</span>
+<span class="gp">... </span>     <span class="p">[</span><span class="mf">1</span><span class="p">],</span>
+<span class="gp">... </span>     <span class="p">[</span><span class="mf">1</span><span class="p">],</span>
+<span class="gp">... </span>     <span class="p">[</span><span class="mf">1</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Q</span><span class="p">,</span><span class="n">R</span> <span class="o">=</span> <span class="n">fit_candidates</span><span class="p">(</span><span class="n">AggOp</span><span class="p">,</span> <span class="n">B</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Q</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
+<span class="go">matrix([[ 0.70710678,  0.        ],</span>
+<span class="go">        [ 0.70710678,  0.        ],</span>
+<span class="go">        [ 0.        ,  0.70710678],</span>
+<span class="go">        [ 0.        ,  0.70710678]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">R</span>
+<span class="go">array([[ 1.41421356],</span>
+<span class="go">       [ 1.41421356]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Two candidates, the constant vector and a linear function</span>
+<span class="gp">... </span><span class="n">B</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">1</span><span class="p">,</span><span class="mf">0</span><span class="p">],</span>
+<span class="gp">... </span>     <span class="p">[</span><span class="mf">1</span><span class="p">,</span><span class="mf">1</span><span class="p">],</span>
+<span class="gp">... </span>     <span class="p">[</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">],</span>
+<span class="gp">... </span>     <span class="p">[</span><span class="mf">1</span><span class="p">,</span><span class="mf">3</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Q</span><span class="p">,</span><span class="n">R</span> <span class="o">=</span> <span class="n">fit_candidates</span><span class="p">(</span><span class="n">AggOp</span><span class="p">,</span> <span class="n">B</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Q</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
+<span class="go">matrix([[ 0.70710678, -0.70710678,  0.        ,  0.        ],</span>
+<span class="go">        [ 0.70710678,  0.70710678,  0.        ,  0.        ],</span>
+<span class="go">        [ 0.        ,  0.        ,  0.70710678, -0.70710678],</span>
+<span class="go">        [ 0.        ,  0.        ,  0.70710678,  0.70710678]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">R</span>
+<span class="go">array([[ 1.41421356,  0.70710678],</span>
+<span class="go">       [ 0.        ,  0.70710678],</span>
+<span class="go">       [ 1.41421356,  3.53553391],</span>
+<span class="go">       [ 0.        ,  0.70710678]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># aggregation excludes the third node</span>
+<span class="gp">... </span><span class="n">AggOp</span> <span class="o">=</span> <span class="n">csr_matrix</span><span class="p">(</span> <span class="p">[[</span><span class="mf">1</span><span class="p">,</span><span class="mf">0</span><span class="p">],</span>
+<span class="gp">... </span>                     <span class="p">[</span><span class="mf">1</span><span class="p">,</span><span class="mf">0</span><span class="p">],</span>
+<span class="gp">... </span>                     <span class="p">[</span><span class="mf">0</span><span class="p">,</span><span class="mf">0</span><span class="p">],</span>
+<span class="gp">... </span>                     <span class="p">[</span><span class="mf">0</span><span class="p">,</span><span class="mf">1</span><span class="p">]]</span> <span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">B</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">1</span><span class="p">],</span>
+<span class="gp">... </span>     <span class="p">[</span><span class="mf">1</span><span class="p">],</span>
+<span class="gp">... </span>     <span class="p">[</span><span class="mf">1</span><span class="p">],</span>
+<span class="gp">... </span>     <span class="p">[</span><span class="mf">1</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Q</span><span class="p">,</span><span class="n">R</span> <span class="o">=</span> <span class="n">fit_candidates</span><span class="p">(</span><span class="n">AggOp</span><span class="p">,</span> <span class="n">B</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Q</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
+<span class="go">matrix([[ 0.70710678,  0.        ],</span>
+<span class="go">        [ 0.70710678,  0.        ],</span>
+<span class="go">        [ 0.        ,  0.        ],</span>
+<span class="go">        [ 0.        ,  1.        ]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">R</span>
+<span class="go">array([[ 1.41421356],</span>
+<span class="go">       [ 1.        ]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyamg.aggregation.setup">
+<h2>The <tt class="xref docutils literal"><span class="pre">setup</span></tt> Module<a class="headerlink" href="#module-pyamg.aggregation.setup" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pyamg.aggregation.setup.configuration">
+<!--[pyamg.aggregation.setup.configuration]--><tt class="descclassname">pyamg.aggregation.setup.</tt><tt class="descname">configuration</tt><big>(</big><em>parent_package=''</em>, <em>top_path=None</em><big>)</big><a class="headerlink" href="#pyamg.aggregation.setup.configuration" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-pyamg.aggregation.adaptive">
+<h2>The <tt class="xref docutils literal"><span class="pre">adaptive</span></tt> Module<a class="headerlink" href="#module-pyamg.aggregation.adaptive" title="Permalink to this headline">¶</a></h2>
+<p>Adaptive Smoothed Aggregation</p>
+<dl class="function">
+<dt id="pyamg.aggregation.adaptive.adaptive_sa_solver">
+<!--[pyamg.aggregation.adaptive.adaptive_sa_solver]--><tt class="descclassname">pyamg.aggregation.adaptive.</tt><tt class="descname">adaptive_sa_solver</tt><big>(</big><em>A</em>, <em>mat_flag='hermitian'</em>, <em>pdef=True</em>, <em>num_candidates=1</em>, <em>candidate_iters=5</em>, <em>improvement_iters=0</em>, <em>epsilon=0.10000000000000001</em>, <em>max_levels=10</em>, <em>max_coarse=100</em>, <em>aggregation=None</em>, <em>prepostsmoother=('gauss_seidel'</em>, <em>{'sweep': 'symmetric'})</em>, <em>smooth=('jacobi'</em>, <em>{})</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#pyamg.aggregation.adaptive.adaptive_sa_solver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a multilevel solver using Adaptive Smoothed Aggregation (aSA)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>A</strong> : {csr_matrix, bsr_matrix}</p>
+<blockquote>
+<p>Square matrix in CSR or BSR format</p>
+</blockquote>
+<p><strong>mat_flag</strong> : {string}</p>
+<blockquote>
+<p>&#8216;symmetric&#8217; refers to both real and complex symmetric
+&#8216;hermitian&#8217; refers to both complex Hermitian and real Hermitian
+Note that for the strictly real case, these two options are the same
+Note that this flag does not denote definiteness of the operator</p>
+</blockquote>
+<p><strong>pdef</strong> : {bool}</p>
+<blockquote>
+<p>True or False, whether A is known to be positive definite or not</p>
+</blockquote>
+<p><strong>num_candidates</strong> : {integer}</p>
+<blockquote>
+<p>Number of near-nullspace candidates to generate</p>
+</blockquote>
+<p><strong>candidate_iters</strong> : {integer}</p>
+<blockquote>
+<p>Number of smoothing passes/multigrid cycles used at each level of 
+the adaptive setup phase</p>
+</blockquote>
+<p><strong>improvement_iters</strong> : {integer}</p>
+<blockquote>
+<p>Number of times each candidate is improved</p>
+</blockquote>
+<p><strong>epsilon</strong> : {float}</p>
+<blockquote>
+<p>Target convergence factor</p>
+</blockquote>
+<p><strong>prepostsmoother</strong> : {string or dict}</p>
+<blockquote>
+<p>Pre- and post-smoother used in the adaptive method</p>
+</blockquote>
+<p><strong>smooth</strong> : {string or dict }</p>
+<blockquote class="last">
+<p>[&#8216;jacobi&#8217;, &#8216;richardson&#8217;, &#8216;energy&#8217;, &#8216;kaczmarz_jacobi&#8217;, &#8216;kaczmarz_richardson&#8217;, None]
+Method used used to smooth the tentative prolongator.</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Unlike the standard Smoothed Aggregation (SA) method, adaptive SA
+does not require knowledge of near-nullspace candidate vectors.
+Instead, an adaptive procedure computes one or more candidates 
+&#8216;from scratch&#8217;.  This approach is useful when no candidates are known
+or the candidates have been invalidated due to changes to matrix A.</p>
+<p class="rubric">References</p>
+<table class="docutils footnote" frame="void" id="id3" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id3">[7]</a></td><td>Brezina, Falgout, MacLachlan, Manteuffel, McCormick, and Ruge
+&#8220;Adaptive Smoothed Aggregation ($lpha$SA) Multigrid&#8221;
+SIAM Review Volume 47,  Issue 2  (2005)
+<a class="reference" href="http://www.cs.umn.edu/~maclach/research/aSA2.pdf">http://www.cs.umn.edu/~maclach/research/aSA2.pdf</a></td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery</span> <span class="k">import</span> <span class="n">stencil_grid</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.aggregation</span> <span class="k">import</span> <span class="n">adaptive_sa_solver</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">import</span> <span class="nn">numpy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="o">=</span><span class="n">stencil_grid</span><span class="p">([[</span><span class="o">-</span><span class="mf">1</span><span class="p">,</span><span class="o">-</span><span class="mf">1</span><span class="p">,</span><span class="o">-</span><span class="mf">1</span><span class="p">],[</span><span class="o">-</span><span class="mf">1</span><span class="p">,</span><span class="mf">8.0</span><span class="p">,</span><span class="o">-</span><span class="mf">1</span><span class="p">],[</span><span class="o">-</span><span class="mf">1</span><span class="p">,</span><span class="o">-</span><span class="mf">1</span><span class="p">,</span><span class="o">-</span><span class="mf">1</span><span class="p">]],</span> <span class="p">(</span><span class="mf">31</span><span class="p">,</span><span class="mf">31</span><span class="p">),</span><span class="n">format</span><span class="o">=</span><span class="s">&#39;csr&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">asa</span> <span class="o">=</span> <span class="n">adaptive_sa_solver</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">num_candidates</span><span class="o">=</span><span class="mf">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">residuals</span><span class="o">=</span><span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">=</span><span class="n">asa</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">b</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">],)),</span><span class="n">x0</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">],)),</span><span class="n">residuals</span><span class="o">=</span><span class="n">residuals</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyamg.aggregation.smooth">
+<h2>The <tt class="xref docutils literal"><span class="pre">smooth</span></tt> Module<a class="headerlink" href="#module-pyamg.aggregation.smooth" title="Permalink to this headline">¶</a></h2>
+<p>Methods to smooth tentative prolongation operators</p>
+<dl class="function">
+<dt id="pyamg.aggregation.smooth.jacobi_prolongation_smoother">
+<!--[pyamg.aggregation.smooth.jacobi_prolongation_smoother]--><tt class="descclassname">pyamg.aggregation.smooth.</tt><tt class="descname">jacobi_prolongation_smoother</tt><big>(</big><em>S</em>, <em>T</em>, <em>omega=1.3333333333333333</em>, <em>degree=1</em><big>)</big><a class="headerlink" href="#pyamg.aggregation.smooth.jacobi_prolongation_smoother" title="Permalink to this definition">¶</a></dt>
+<dd><p>Jacobi prolongation smoother</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>S</strong> : {csr_matrix, bsr_matrix}</p>
+<blockquote>
+<p>Sparse NxN matrix used for smoothing.  Typically, A or the
+&#8220;filtered matrix&#8221; obtained from A by lumping weak connections
+onto the diagonal of A.</p>
+</blockquote>
+<p><strong>T</strong> : {csr_matrix, bsr_matrix}</p>
+<blockquote>
+<p>Tentative prolongator</p>
+</blockquote>
+<p><strong>omega</strong> : {scalar}</p>
+<blockquote>
+<p>Damping parameter</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>P</strong> : {csr_matrix, bsr_matrix}</p>
+<blockquote class="last">
+<p>Smoothed (final) prolongator defined by P = (I - omega/rho(K) K) * T
+where K = diag(S)^-1 * S and rho(K) is an approximation to the 
+spectral radius of K.</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.aggregation</span> <span class="k">import</span> <span class="n">jacobi_prolongation_smoother</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery</span> <span class="k">import</span> <span class="n">poisson</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">scipy.sparse</span> <span class="k">import</span> <span class="n">coo_matrix</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">import</span> <span class="nn">numpy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mf">6</span><span class="p">,))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">row</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0</span><span class="p">,</span><span class="mf">6</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">kron</span><span class="p">([</span><span class="mf">0</span><span class="p">,</span><span class="mf">1</span><span class="p">],</span><span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mf">3</span><span class="p">,)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">T</span> <span class="o">=</span> <span class="n">coo_matrix</span><span class="p">((</span><span class="n">data</span><span class="p">,(</span><span class="n">row</span><span class="p">,</span><span class="n">col</span><span class="p">)),</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mf">6</span><span class="p">,</span><span class="mf">2</span><span class="p">))</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">T</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
+<span class="go">matrix([[ 1.,  0.],</span>
+<span class="go">        [ 1.,  0.],</span>
+<span class="go">        [ 1.,  0.],</span>
+<span class="go">        [ 0.,  1.],</span>
+<span class="go">        [ 0.,  1.],</span>
+<span class="go">        [ 0.,  1.]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">poisson</span><span class="p">((</span><span class="mf">6</span><span class="p">,),</span><span class="n">format</span><span class="o">=</span><span class="s">&#39;csr&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">P</span> <span class="o">=</span> <span class="n">jacobi_prolongation_smoother</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">T</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">P</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
+<span class="go">matrix([[ 0.64930164,  0.        ],</span>
+<span class="go">        [ 1.        ,  0.        ],</span>
+<span class="go">        [ 0.64930164,  0.35069836],</span>
+<span class="go">        [ 0.35069836,  0.64930164],</span>
+<span class="go">        [ 0.        ,  1.        ],</span>
+<span class="go">        [ 0.        ,  0.64930164]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.aggregation.smooth.richardson_prolongation_smoother">
+<!--[pyamg.aggregation.smooth.richardson_prolongation_smoother]--><tt class="descclassname">pyamg.aggregation.smooth.</tt><tt class="descname">richardson_prolongation_smoother</tt><big>(</big><em>S</em>, <em>T</em>, <em>omega=1.3333333333333333</em>, <em>degree=1</em><big>)</big><a class="headerlink" href="#pyamg.aggregation.smooth.richardson_prolongation_smoother" title="Permalink to this definition">¶</a></dt>
+<dd><p>Richardson prolongation smoother</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>S</strong> : {csr_matrix, bsr_matrix}</p>
+<blockquote>
+<p>Sparse NxN matrix used for smoothing.  Typically, A or the
+&#8220;filtered matrix&#8221; obtained from A by lumping weak connections
+onto the diagonal of A.</p>
+</blockquote>
+<p><strong>T</strong> : {csr_matrix, bsr_matrix}</p>
+<blockquote>
+<p>Tentative prolongator</p>
+</blockquote>
+<p><strong>omega</strong> : {scalar}</p>
+<blockquote>
+<p>Damping parameter</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>P</strong> : {csr_matrix, bsr_matrix}</p>
+<blockquote class="last">
+<p>Smoothed (final) prolongator defined by P = (I - omega/rho(S) S) * T
+where rho(S) is an approximation to the spectral radius of S.</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.aggregation</span> <span class="k">import</span> <span class="n">richardson_prolongation_smoother</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery</span> <span class="k">import</span> <span class="n">poisson</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">scipy.sparse</span> <span class="k">import</span> <span class="n">coo_matrix</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">import</span> <span class="nn">numpy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mf">6</span><span class="p">,))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">row</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0</span><span class="p">,</span><span class="mf">6</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">kron</span><span class="p">([</span><span class="mf">0</span><span class="p">,</span><span class="mf">1</span><span class="p">],</span><span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mf">3</span><span class="p">,)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">T</span> <span class="o">=</span> <span class="n">coo_matrix</span><span class="p">((</span><span class="n">data</span><span class="p">,(</span><span class="n">row</span><span class="p">,</span><span class="n">col</span><span class="p">)),</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mf">6</span><span class="p">,</span><span class="mf">2</span><span class="p">))</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">T</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
+<span class="go">matrix([[ 1.,  0.],</span>
+<span class="go">        [ 1.,  0.],</span>
+<span class="go">        [ 1.,  0.],</span>
+<span class="go">        [ 0.,  1.],</span>
+<span class="go">        [ 0.,  1.],</span>
+<span class="go">        [ 0.,  1.]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">poisson</span><span class="p">((</span><span class="mf">6</span><span class="p">,),</span><span class="n">format</span><span class="o">=</span><span class="s">&#39;csr&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">P</span> <span class="o">=</span> <span class="n">richardson_prolongation_smoother</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">T</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">P</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
+<span class="go">matrix([[ 0.64930164,  0.        ],</span>
+<span class="go">        [ 1.        ,  0.        ],</span>
+<span class="go">        [ 0.64930164,  0.35069836],</span>
+<span class="go">        [ 0.35069836,  0.64930164],</span>
+<span class="go">        [ 0.        ,  1.        ],</span>
+<span class="go">        [ 0.        ,  0.64930164]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.aggregation.smooth.energy_prolongation_smoother">
+<!--[pyamg.aggregation.smooth.energy_prolongation_smoother]--><tt class="descclassname">pyamg.aggregation.smooth.</tt><tt class="descname">energy_prolongation_smoother</tt><big>(</big><em>A</em>, <em>T</em>, <em>Atilde</em>, <em>B</em>, <em>SPD=True</em>, <em>maxiter=4</em>, <em>tol=1e-08</em>, <em>degree=1</em><big>)</big><a class="headerlink" href="#pyamg.aggregation.smooth.energy_prolongation_smoother" title="Permalink to this definition">¶</a></dt>
+<dd><p>Minimize the energy of the coarse basis functions (columns of T)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>A</strong> : {csr_matrix, bsr_matrix}</p>
+<blockquote>
+<p>Sparse NxN matrix</p>
+</blockquote>
+<p><strong>T</strong> : {bsr_matrix}</p>
+<blockquote>
+<p>Tentative prolongator, a NxM sparse matrix (M &lt; N)</p>
+</blockquote>
+<p><strong>Atilde</strong> : {csr_matrix}</p>
+<blockquote>
+<p>Strength of connection matrix</p>
+</blockquote>
+<p><strong>B</strong> : {array}</p>
+<blockquote>
+<p>Near-nullspace modes for coarse grid.  Has shape (M,k) where
+k is the number of coarse candidate vectors.</p>
+</blockquote>
+<p><strong>SPD</strong> : boolean</p>
+<blockquote>
+<p>Booolean denoting symmetric (or Hermitian) positive-definiteness of A</p>
+</blockquote>
+<p><strong>maxiter</strong> : integer</p>
+<blockquote>
+<p>Number of energy minimization steps to apply to the prolongator</p>
+</blockquote>
+<p><strong>tol</strong> : scalar</p>
+<blockquote>
+<p>Minimization tolerance</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>P</strong> : {bsr_matrix}</p>
+<blockquote class="last">
+<p>Smoothed prolongator</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">References</p>
+<table class="docutils footnote" frame="void" id="id4" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id4">[8]</a></td><td>Jan Mandel, Marian Brezina, and Petr Vanek
+&#8220;Energy Optimization of Algebraic Multigrid Bases&#8221;
+Computing 62, 205-228, 1999
+<a class="reference" href="http://dx.doi.org/10.1007/s006070050022">http://dx.doi.org/10.1007/s006070050022</a></td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.aggregation</span> <span class="k">import</span> <span class="n">energy_prolongation_smoother</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery</span> <span class="k">import</span> <span class="n">poisson</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">scipy.sparse</span> <span class="k">import</span> <span class="n">coo_matrix</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">import</span> <span class="nn">numpy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mf">6</span><span class="p">,))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">row</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0</span><span class="p">,</span><span class="mf">6</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">kron</span><span class="p">([</span><span class="mf">0</span><span class="p">,</span><span class="mf">1</span><span class="p">],</span><span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mf">3</span><span class="p">,)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">T</span> <span class="o">=</span> <span class="n">coo_matrix</span><span class="p">((</span><span class="n">data</span><span class="p">,(</span><span class="n">row</span><span class="p">,</span><span class="n">col</span><span class="p">)),</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mf">6</span><span class="p">,</span><span class="mf">2</span><span class="p">))</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">T</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
+<span class="go">[[ 1.  0.]</span>
+<span class="go"> [ 1.  0.]</span>
+<span class="go"> [ 1.  0.]</span>
+<span class="go"> [ 0.  1.]</span>
+<span class="go"> [ 0.  1.]</span>
+<span class="go"> [ 0.  1.]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">poisson</span><span class="p">((</span><span class="mf">6</span><span class="p">,),</span><span class="n">format</span><span class="o">=</span><span class="s">&#39;csr&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">P</span> <span class="o">=</span> <span class="n">energy_prolongation_smoother</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">T</span><span class="p">,</span><span class="n">A</span><span class="p">,</span><span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mf">2</span><span class="p">,</span><span class="mf">1</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">P</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
+<span class="go">[[ 1.          0.        ]</span>
+<span class="go"> [ 1.          0.        ]</span>
+<span class="go"> [ 0.66666667  0.33333333]</span>
+<span class="go"> [ 0.33333333  0.66666667]</span>
+<span class="go"> [ 0.          1.        ]</span>
+<span class="go"> [ 0.          1.        ]]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.aggregation.smooth.kaczmarz_richardson_prolongation_smoother">
+<!--[pyamg.aggregation.smooth.kaczmarz_richardson_prolongation_smoother]--><tt class="descclassname">pyamg.aggregation.smooth.</tt><tt class="descname">kaczmarz_richardson_prolongation_smoother</tt><big>(</big><em>S</em>, <em>T</em>, <em>omega=1.3333333333333333</em>, <em>degree=1</em><big>)</big><a class="headerlink" href="#pyamg.aggregation.smooth.kaczmarz_richardson_prolongation_smoother" title="Permalink to this definition">¶</a></dt>
+<dd><p>Richardson prolongation smoother for the normal equations (i.e. Kaczmarz)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>S</strong> : {csr_matrix, bsr_matrix}</p>
+<blockquote>
+<p>Sparse NxN matrix used for smoothing.  Typically, A or the
+&#8220;filtered matrix&#8221; obtained from A by lumping weak connections
+onto the diagonal of A.</p>
+</blockquote>
+<p><strong>T</strong> : {csr_matrix, bsr_matrix}</p>
+<blockquote>
+<p>Tentative prolongator</p>
+</blockquote>
+<p><strong>omega</strong> : {scalar}</p>
+<blockquote>
+<p>Damping parameter</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>P</strong> : {csr_matrix, bsr_matrix}</p>
+<blockquote class="last">
+<p>Smoothed (final) prolongator</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.aggregation</span> <span class="k">import</span> <span class="n">kaczmarz_richardson_prolongation_smoother</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery</span> <span class="k">import</span> <span class="n">poisson</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">scipy.sparse</span> <span class="k">import</span> <span class="n">coo_matrix</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">import</span> <span class="nn">numpy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mf">6</span><span class="p">,))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">row</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0</span><span class="p">,</span><span class="mf">6</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">kron</span><span class="p">([</span><span class="mf">0</span><span class="p">,</span><span class="mf">1</span><span class="p">],</span><span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mf">3</span><span class="p">,)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">T</span> <span class="o">=</span> <span class="n">coo_matrix</span><span class="p">((</span><span class="n">data</span><span class="p">,(</span><span class="n">row</span><span class="p">,</span><span class="n">col</span><span class="p">)),</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mf">6</span><span class="p">,</span><span class="mf">2</span><span class="p">))</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">T</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
+<span class="go">matrix([[ 1.,  0.],</span>
+<span class="go">        [ 1.,  0.],</span>
+<span class="go">        [ 1.,  0.],</span>
+<span class="go">        [ 0.,  1.],</span>
+<span class="go">        [ 0.,  1.],</span>
+<span class="go">        [ 0.,  1.]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">poisson</span><span class="p">((</span><span class="mf">6</span><span class="p">,),</span><span class="n">format</span><span class="o">=</span><span class="s">&#39;csr&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">P</span> <span class="o">=</span> <span class="n">kaczmarz_richardson_prolongation_smoother</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">T</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">P</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
+<span class="go">matrix([[ 0.81551599,  0.        ],</span>
+<span class="go">        [ 1.18448401, -0.09224201],</span>
+<span class="go">        [ 0.72327398,  0.27672602],</span>
+<span class="go">        [ 0.27672602,  0.72327398],</span>
+<span class="go">        [-0.09224201,  1.18448401],</span>
+<span class="go">        [ 0.        ,  0.81551599]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.aggregation.smooth.kaczmarz_jacobi_prolongation_smoother">
+<!--[pyamg.aggregation.smooth.kaczmarz_jacobi_prolongation_smoother]--><tt class="descclassname">pyamg.aggregation.smooth.</tt><tt class="descname">kaczmarz_jacobi_prolongation_smoother</tt><big>(</big><em>S</em>, <em>T</em>, <em>omega=1.3333333333333333</em>, <em>degree=1</em><big>)</big><a class="headerlink" href="#pyamg.aggregation.smooth.kaczmarz_jacobi_prolongation_smoother" title="Permalink to this definition">¶</a></dt>
+<dd><p>Jacobi prolongation smoother for the normal equations (i.e. Kaczmarz)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>S</strong> : {csr_matrix, bsr_matrix}</p>
+<blockquote>
+<p>Sparse NxN matrix used for smoothing.  Typically, A or the
+&#8220;filtered matrix&#8221; obtained from A by lumping weak connections
+onto the diagonal of A.</p>
+</blockquote>
+<p><strong>T</strong> : {csr_matrix, bsr_matrix}</p>
+<blockquote>
+<p>Tentative prolongator</p>
+</blockquote>
+<p><strong>omega</strong> : {scalar}</p>
+<blockquote>
+<p>Damping parameter</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>P</strong> : {csr_matrix, bsr_matrix}</p>
+<blockquote class="last">
+<p>Smoothed (final) prolongator</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.aggregation</span> <span class="k">import</span> <span class="n">kaczmarz_jacobi_prolongation_smoother</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery</span> <span class="k">import</span> <span class="n">poisson</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">scipy.sparse</span> <span class="k">import</span> <span class="n">coo_matrix</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">import</span> <span class="nn">numpy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mf">6</span><span class="p">,))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">row</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0</span><span class="p">,</span><span class="mf">6</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">kron</span><span class="p">([</span><span class="mf">0</span><span class="p">,</span><span class="mf">1</span><span class="p">],</span><span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mf">3</span><span class="p">,)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">T</span> <span class="o">=</span> <span class="n">coo_matrix</span><span class="p">((</span><span class="n">data</span><span class="p">,(</span><span class="n">row</span><span class="p">,</span><span class="n">col</span><span class="p">)),</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mf">6</span><span class="p">,</span><span class="mf">2</span><span class="p">))</span><span class="o">.</span><span class="n">tocsr</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">T</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
+<span class="go">matrix([[ 1.,  0.],</span>
+<span class="go">        [ 1.,  0.],</span>
+<span class="go">        [ 1.,  0.],</span>
+<span class="go">        [ 0.,  1.],</span>
+<span class="go">        [ 0.,  1.],</span>
+<span class="go">        [ 0.,  1.]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">poisson</span><span class="p">((</span><span class="mf">6</span><span class="p">,),</span><span class="n">format</span><span class="o">=</span><span class="s">&#39;csr&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">P</span> <span class="o">=</span> <span class="n">kaczmarz_jacobi_prolongation_smoother</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">T</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">P</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
+<span class="go">matrix([[ 0.78365913,  0.        ],</span>
+<span class="go">        [ 1.19831246, -0.09014203],</span>
+<span class="go">        [ 0.72957391,  0.27042609],</span>
+<span class="go">        [ 0.27042609,  0.72957391],</span>
+<span class="go">        [-0.09014203,  1.19831246],</span>
+<span class="go">        [ 0.        ,  0.78365913]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo_dropshadow_small.png" alt="Logo"/>
+            </a></p>
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference" href="">Aggregation Documentation</a><ul>
+<li><a class="reference" href="#module-pyamg.aggregation.aggregate">The <tt class="docutils literal"><span class="pre">aggregate</span></tt> Module</a></li>
+<li><a class="reference" href="#module-pyamg.aggregation.aggregation">The <tt class="docutils literal"><span class="pre">aggregation</span></tt> Module</a></li>
+<li><a class="reference" href="#module-pyamg.aggregation.tentative">The <tt class="docutils literal"><span class="pre">tentative</span></tt> Module</a></li>
+<li><a class="reference" href="#module-pyamg.aggregation.setup">The <tt class="docutils literal"><span class="pre">setup</span></tt> Module</a></li>
+<li><a class="reference" href="#module-pyamg.aggregation.adaptive">The <tt class="docutils literal"><span class="pre">adaptive</span></tt> Module</a></li>
+<li><a class="reference" href="#module-pyamg.aggregation.smooth">The <tt class="docutils literal"><span class="pre">smooth</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="pyamg.gallery.html" title="previous chapter">Gallery Documentation</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="pyamg.amg_core.html" title="next chapter">Amg_Core Documentation</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/pyamg.aggregation.txt">Show Source</a></li>
+            </ul>
+          <h3>Quick search</h3>
+            <form class="search" action="search.html" method="get">
+              <input type="text" name="q" size="18" /> <input type="submit" value="Go" />
+              <input type="hidden" name="check_keywords" value="yes" />
+              <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="pyamg.amg_core.html" title="Amg_Core Documentation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pyamg.gallery.html" title="Gallery Documentation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">PyAMG v1.0 documentation</a> &raquo;</li>
+          <li><a href="modules.html" accesskey="U">Project Documentation</a> &raquo;</li>
+          <li><a href="pyamg.html" accesskey="U">Pyamg Documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009, Nathan Bell, Luke Olson, Jacob Schroder.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.1.
+    </div>
+  </body>
+</html>

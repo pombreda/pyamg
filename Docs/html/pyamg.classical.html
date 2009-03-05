@@ -1,0 +1,728 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Classical Documentation &mdash; PyAMG v1.0 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="PyAMG v1.0 documentation" href="index.html" />
+    <link rel="up" title="Pyamg Documentation" href="pyamg.html" />
+    <link rel="next" title="Testing Documentation" href="pyamg.testing.html" />
+    <link rel="prev" title="Relaxation Documentation" href="pyamg.relaxation.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="pyamg.testing.html" title="Testing Documentation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pyamg.relaxation.html" title="Relaxation Documentation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">PyAMG v1.0 documentation</a> &raquo;</li>
+          <li><a href="modules.html" accesskey="U">Project Documentation</a> &raquo;</li>
+          <li><a href="pyamg.html" accesskey="U">Pyamg Documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  
+  <div class="section" id="classical-documentation">
+<h1>Classical Documentation<a class="headerlink" href="#classical-documentation" title="Permalink to this headline">¶</a></h1>
+<p>This page contains the Classical Package documentation.</p>
+<div class="section" id="module-pyamg.classical.cr">
+<h2>The <tt class="xref docutils literal"><span class="pre">cr</span></tt> Module<a class="headerlink" href="#module-pyamg.classical.cr" title="Permalink to this headline">¶</a></h2>
+<p>Compatible Relaxation</p>
+<dl class="function">
+<dt id="pyamg.classical.cr.CR">
+<!--[pyamg.classical.cr.CR]--><tt class="descclassname">pyamg.classical.cr.</tt><tt class="descname">CR</tt><big>(</big><em>S</em>, <em>method='habituated'</em>, <em>maxiter=20</em><big>)</big><a class="headerlink" href="#pyamg.classical.cr.CR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use Compatible Relaxation to compute a C/F splitting</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>S</strong> : csr_matrix</p>
+<blockquote>
+<p>sparse matrix (n x n) usually matrix A of Ax=b</p>
+</blockquote>
+<p><strong>method</strong> : {&#8216;habituated&#8217;,&#8217;concurrent&#8217;}</p>
+<blockquote>
+<dl class="docutils">
+<dt>Method used during relaxation:</dt>
+<dd><ul class="first last simple">
+<li>concurrent: GS relaxation on F-points, leaving e_c = 0</li>
+<li>habituated: full relaxation, setting e_c = 0</li>
+</ul>
+</dd>
+</dl>
+</blockquote>
+<p><strong>maxiter</strong> : int</p>
+<blockquote>
+<p>maximum number of outer iterations (lambda)</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>splitting</strong> : array</p>
+<blockquote class="last">
+<p>C/F list of 1&#8217;s (coarse pt) and 0&#8217;s (fine pt) (n x 1)</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">References</p>
+<table class="docutils footnote" frame="void" id="id1" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id1">[9]</a></td><td>Livne, O.E., &#8220;Coarsening by compatible relaxation.&#8221;
+Numer. Linear Algebra Appl. 11, No. 2-3, 205-227 (2004).</td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery</span> <span class="k">import</span> <span class="n">poisson</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.classical.cr</span> <span class="k">import</span> <span class="n">CR</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">poisson</span><span class="p">((</span><span class="mf">20</span><span class="p">,</span><span class="mf">20</span><span class="p">),</span><span class="n">format</span><span class="o">=</span><span class="s">&#39;csr&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">splitting</span> <span class="o">=</span> <span class="n">CR</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.classical.cr.binormalize">
+<!--[pyamg.classical.cr.binormalize]--><tt class="descclassname">pyamg.classical.cr.</tt><tt class="descname">binormalize</tt><big>(</big><em>A</em>, <em>tol=1.0000000000000001e-05</em>, <em>maxiter=10</em><big>)</big><a class="headerlink" href="#pyamg.classical.cr.binormalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Binormalize matrix A.  Attempt to create unit l_1 norm rows.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>A</strong> : csr_matrix</p>
+<blockquote>
+<p>sparse matrix (n x n)</p>
+</blockquote>
+<p><strong>tol</strong> : float</p>
+<blockquote>
+<p>tolerance</p>
+</blockquote>
+<p><strong>x</strong> : array</p>
+<blockquote>
+<p>guess at the diagonal</p>
+</blockquote>
+<p><strong>maxiter</strong> : int</p>
+<blockquote>
+<p>maximum number of iterations to try</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>C</strong> : csr_matrix</p>
+<blockquote class="last">
+<p>diagonally scaled A, C=DAD</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>Goal: Scale A so that l_1 norm of the rows are equal to 1:</li>
+<li>B = DAD</li>
+<li>want row sum of B = 1</li>
+<li>easily done with tol=0 if B=DA, but this is not symmetric</li>
+<li>algorithm is O(N log (1.0/tol))</li>
+</ul>
+<p class="rubric">References</p>
+<table class="docutils footnote" frame="void" id="id2" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id2">[10]</a></td><td>Livne, Golub, &#8220;Scaling by Binormalization&#8221;
+Tech Report SCCM-03-12, SCCM, Stanford, 2003
+<a class="reference" href="http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.3.1679">http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.3.1679</a></td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery</span> <span class="k">import</span> <span class="n">poisson</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.classical</span> <span class="k">import</span> <span class="n">binormalize</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">poisson</span><span class="p">((</span><span class="mf">10</span><span class="p">,),</span><span class="n">format</span><span class="o">=</span><span class="s">&#39;csr&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span> <span class="o">=</span> <span class="n">binormalize</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyamg.classical.setup">
+<h2>The <tt class="xref docutils literal"><span class="pre">setup</span></tt> Module<a class="headerlink" href="#module-pyamg.classical.setup" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pyamg.classical.setup.configuration">
+<!--[pyamg.classical.setup.configuration]--><tt class="descclassname">pyamg.classical.setup.</tt><tt class="descname">configuration</tt><big>(</big><em>parent_package=''</em>, <em>top_path=None</em><big>)</big><a class="headerlink" href="#pyamg.classical.setup.configuration" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-pyamg.classical.classical">
+<h2>The <tt class="xref docutils literal"><span class="pre">classical</span></tt> Module<a class="headerlink" href="#module-pyamg.classical.classical" title="Permalink to this headline">¶</a></h2>
+<p>Classical AMG (Ruge-Stuben AMG)</p>
+<dl class="function">
+<dt id="pyamg.classical.classical.ruge_stuben_solver">
+<!--[pyamg.classical.classical.ruge_stuben_solver]--><tt class="descclassname">pyamg.classical.classical.</tt><tt class="descname">ruge_stuben_solver</tt><big>(</big><em>A</em>, <em>strength=('classical'</em>, <em>{'theta': 0.25})</em>, <em>CF='RS'</em>, <em>presmoother=('gauss_seidel'</em>, <em>{'sweep': 'symmetric'})</em>, <em>postsmoother=('gauss_seidel'</em>, <em>{'sweep': 'symmetric'})</em>, <em>max_levels=10</em>, <em>max_coarse=500</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#pyamg.classical.classical.ruge_stuben_solver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a multilevel solver using Classical AMG (Ruge-Stuben AMG)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>A</strong> : csr_matrix</p>
+<blockquote>
+<p>Square matrix in CSR format</p>
+</blockquote>
+<p><strong>strength</strong> : [&#8216;symmetric&#8217;, &#8216;classical&#8217;, &#8216;ode&#8217;, None]</p>
+<blockquote>
+<p>Method used to determine the strength of connection between unknowns
+of the linear system.  Method-specific parameters may be passed in
+using a tuple, e.g. strength=(&#8216;symmetric&#8217;,{&#8216;theta&#8217; : 0.25 }). If
+strength=None, all nonzero entries of the matrix are considered strong.</p>
+</blockquote>
+<p><strong>CF</strong> : {string}</p>
+<blockquote>
+<p>Method used for coarse grid selection (C/F splitting)
+Supported methods are RS, PMIS, PMISc, CLJP, and CLJPc</p>
+</blockquote>
+<p><strong>presmoother</strong> : {string or dict}</p>
+<blockquote>
+<p>Method used for presmoothing at each level.  Method-specific parameters
+may be passed in using a tuple, e.g.
+presmoother=(&#8216;gauss_seidel&#8217;,{&#8216;sweep&#8217;:&#8217;symmetric}), the default.</p>
+</blockquote>
+<p><strong>postsmoother</strong> : {string or dict}</p>
+<blockquote>
+<p>Postsmoothing method with the same usage as presmoother</p>
+</blockquote>
+<p><strong>max_levels: {integer}</strong> : default 10</p>
+<blockquote>
+<p>Maximum number of levels to be used in the multilevel solver.</p>
+</blockquote>
+<p><strong>max_coarse: {integer}</strong> : default 500</p>
+<blockquote>
+<p>Maximum number of variables permitted on the coarse grid.</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>ml</strong> : multilevel_solver</p>
+<blockquote class="last">
+<p>Multigrid hierarchy of matrices and prolongation operators</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><tt class="xref docutils literal"><span class="pre">smoothed_aggregation_solver</span></tt>, <tt class="xref docutils literal"><span class="pre">multilevel_solver</span></tt></p>
+</div>
+<p class="rubric">References</p>
+<table class="docutils footnote" frame="void" id="id3" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id3">[11]</a></td><td>Trottenberg, U., Oosterlee, C. W., and Schuller, A., 
+&#8220;Multigrid&#8221; San Diego: Academic Press, 2001.  Appendix A</td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery</span> <span class="k">import</span> <span class="n">poisson</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg</span> <span class="k">import</span> <span class="n">ruge_stuben_solver</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">poisson</span><span class="p">((</span><span class="mf">10</span><span class="p">,),</span><span class="n">format</span><span class="o">=</span><span class="s">&#39;csr&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ml</span> <span class="o">=</span> <span class="n">ruge_stuben_solver</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">max_coarse</span><span class="o">=</span><span class="mf">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pyamg.classical.split">
+<h2>The <tt class="xref docutils literal"><span class="pre">split</span></tt> Module<a class="headerlink" href="#module-pyamg.classical.split" title="Permalink to this headline">¶</a></h2>
+<p>Functions to compute C/F splittings for use in Classical AMG</p>
+<div class="section" id="overview">
+<h3>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h3>
+<p>A C/F splitting is a partitioning of the nodes in the graph of as connection
+matrix (denoted S for strength) into sets of C (coarse) and F (fine) nodes.
+The C-nodes are promoted to the coarser grid while the F-nodes are retained
+on the finer grid.  Ideally, the C-nodes, which represent the coarse-level
+unknowns, should be far fewer in number than the F-nodes.  Furthermore,
+algebraically smooth error must be well-approximated by the coarse level
+degrees of freedom.</p>
+</div>
+<div class="section" id="representation">
+<h3>Representation<a class="headerlink" href="#representation" title="Permalink to this headline">¶</a></h3>
+<p>C/F splitting is represented by an array with ones for all the C-nodes
+and zeros for the F-nodes.</p>
+</div>
+<div class="section" id="c-f-splitting-methods">
+<h3>C/F Splitting Methods<a class="headerlink" href="#c-f-splitting-methods" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>RS <span class="classifier-delimiter">:</span> <span class="classifier">Original Ruge-Stuben method</span></dt>
+<dd><ul class="first last simple">
+<li>Produces good C/F splittings but is inherently serial.</li>
+<li>May produce AMG hierarchies with relatively high operator complexities.</li>
+<li>See References [1,4]</li>
+</ul>
+</dd>
+<dt>PMIS: Parallel Modified Independent Set </dt>
+<dd><ul class="first last simple">
+<li>Very fast construction with low operator complexity.</li>
+<li>Convergence can deteriorate with increasing problem 
+size on structured meshes.</li>
+<li>Uses method similar to Luby&#8217;s Maximal Independent Set algorithm.</li>
+<li>See References [1,3]</li>
+</ul>
+</dd>
+<dt>PMISc: Parallel Modified Independent Set in Color</dt>
+<dd><ul class="first last simple">
+<li>Fast construction with low operator complexity.</li>
+<li>Better scalability than PMIS on structured meshes.</li>
+<li>Augments random weights with a (graph) vertex coloring</li>
+<li>See References [1]</li>
+</ul>
+</dd>
+<dt>CLJP: Clearly-Luby-Jones-Plassmann</dt>
+<dd><ul class="first last simple">
+<li>Parallel method with cost and complexity comparable to Ruge-Stuben.</li>
+<li>Convergence can deteriorate with increasing problem 
+size on structured meshes.</li>
+<li>See References [1,2]</li>
+</ul>
+</dd>
+<dt>CLJP-c: Clearly-Luby-Jones-Plassmann in Color</dt>
+<dd><ul class="first last simple">
+<li>Parallel method with cost and complexity comparable to Ruge-Stuben.</li>
+<li>Better scalability than CLJP on structured meshes.</li>
+<li>See References [1]</li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="summary">
+<h3>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h3>
+<p>In general, methods that use a graph coloring perform better on structured 
+meshes [1].  Unstructured meshes do not appear to benefit substaintially 
+from coloring.</p>
+<blockquote>
+<table border="1" class="docutils">
+<colgroup>
+<col width="24%" />
+<col width="24%" />
+<col width="24%" />
+<col width="29%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">method</th>
+<th class="head">parallel</th>
+<th class="head">in color</th>
+<th class="head">cost</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>RS</td>
+<td>no</td>
+<td>no</td>
+<td>moderate</td>
+</tr>
+<tr><td>PMIS</td>
+<td>yes</td>
+<td>no</td>
+<td>very low</td>
+</tr>
+<tr><td>PMISc</td>
+<td>yes</td>
+<td>yes</td>
+<td>low</td>
+</tr>
+<tr><td>CLJP</td>
+<td>yes</td>
+<td>no</td>
+<td>moderate</td>
+</tr>
+<tr><td>CLJPc</td>
+<td>yes</td>
+<td>yes</td>
+<td>moderate</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+</div>
+<div class="section" id="references">
+<h3>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h3>
+<table class="docutils footnote" frame="void" id="id4" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id4">[1]</a></td><td>David M. Alber and Luke N. Olson
+&#8220;Parallel coarse-grid selection&#8221;
+Numerical Linear Algebra with Applications 2007; 14:611-643.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id5" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id5">[2]</a></td><td>Cleary AJ, Falgout RD, Henson VE, Jones JE. 
+&#8220;Coarse-grid selection for parallel algebraic multigrid&#8221;
+Proceedings of the 5th International Symposium on Solving Irregularly 
+Structured Problems in Parallel. Springer: Berlin, 1998; 104-115.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id6" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id6">[3]</a></td><td>Hans De Sterck, Ulrike M Yang, and Jeffrey J Heys
+&#8220;Reducing complexity in parallel algebraic multigrid preconditioners&#8221; 
+SIAM Journal on Matrix Analysis and Applications 2006; 27:1019-1039.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id7" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id7">[4]</a></td><td>Ruge JW, Stuben K. 
+&#8220;Algebraic multigrid (AMG)&#8221;
+In Multigrid Methods, McCormick SF (ed.), Frontiers in Applied Mathematics, vol. 3. 
+SIAM: Philadelphia, PA, 1987; 73-130.</td></tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="pyamg.classical.split.RS">
+<!--[pyamg.classical.split.RS]--><tt class="descclassname">pyamg.classical.split.</tt><tt class="descname">RS</tt><big>(</big><em>S</em><big>)</big><a class="headerlink" href="#pyamg.classical.split.RS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute a C/F splitting using Ruge-Stuben coarsening</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>S</strong> : csr_matrix</p>
+<blockquote>
+<p>Strength of connection matrix indicating the strength between nodes i
+and j (S_ij)</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>splitting</strong> : ndarray</p>
+<blockquote class="last">
+<p>Array of length of S of ones (coarse) and zeros (fine)</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><tt class="xref docutils literal"><span class="pre">amg_core.rs_cf_splitting</span></tt></p>
+</div>
+<p class="rubric">References</p>
+<table class="docutils footnote" frame="void" id="id8" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id8">[12]</a></td><td>Ruge JW, Stuben K.  &#8220;Algebraic multigrid (AMG)&#8221;
+In Multigrid Methods, McCormick SF (ed.), Frontiers in Applied Mathematics, vol. 3. 
+SIAM: Philadelphia, PA, 1987; 73-130.</td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery</span> <span class="k">import</span> <span class="n">poisson</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.classical</span> <span class="k">import</span> <span class="n">RS</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span> <span class="o">=</span> <span class="n">poisson</span><span class="p">((</span><span class="mf">7</span><span class="p">,),</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;csr&#39;</span><span class="p">)</span> <span class="c"># 1D mesh with 7 vertices</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">splitting</span> <span class="o">=</span> <span class="n">RS</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.classical.split.PMIS">
+<!--[pyamg.classical.split.PMIS]--><tt class="descclassname">pyamg.classical.split.</tt><tt class="descname">PMIS</tt><big>(</big><em>S</em><big>)</big><a class="headerlink" href="#pyamg.classical.split.PMIS" title="Permalink to this definition">¶</a></dt>
+<dd><p>C/F splitting using the Parallel Modified Independent Set method</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>S</strong> : csr_matrix</p>
+<blockquote>
+<p>Strength of connection matrix indicating the strength between nodes i
+and j (S_ij)</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>splitting</strong> : ndarray</p>
+<blockquote class="last">
+<p>Array of length of S of ones (coarse) and zeros (fine)</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a title="pyamg.classical.split.MIS" class="reference" href="#pyamg.classical.split.MIS"><tt class="xref docutils literal"><span class="pre">MIS</span></tt></a></p>
+</div>
+<p class="rubric">References</p>
+<table class="docutils footnote" frame="void" id="id9" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id9">[13]</a></td><td>Hans De Sterck, Ulrike M Yang, and Jeffrey J Heys
+&#8220;Reducing complexity in parallel algebraic multigrid preconditioners&#8221; 
+SIAM Journal on Matrix Analysis and Applications 2006; 27:1019-1039.</td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery</span> <span class="k">import</span> <span class="n">poisson</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.classical</span> <span class="k">import</span> <span class="n">PMIS</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span> <span class="o">=</span> <span class="n">poisson</span><span class="p">((</span><span class="mf">7</span><span class="p">,),</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;csr&#39;</span><span class="p">)</span> <span class="c"># 1D mesh with 7 vertices</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">splitting</span> <span class="o">=</span> <span class="n">PMIS</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.classical.split.PMISc">
+<!--[pyamg.classical.split.PMISc]--><tt class="descclassname">pyamg.classical.split.</tt><tt class="descname">PMISc</tt><big>(</big><em>S</em>, <em>method='JP'</em><big>)</big><a class="headerlink" href="#pyamg.classical.split.PMISc" title="Permalink to this definition">¶</a></dt>
+<dd><p>C/F splitting using Parallel Modified Independent Set (in color)</p>
+<p>PMIS-c, or PMIS in color, improves PMIS by perturbing the initial 
+random weights with weights determined by a vertex coloring.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>S</strong> : csr_matrix</p>
+<blockquote>
+<p>Strength of connection matrix indicating the strength between nodes i
+and j (S_ij)</p>
+</blockquote>
+<p><strong>method</strong> : string</p>
+<blockquote>
+<dl class="docutils">
+<dt>Algorithm used to compute the initial vertex coloring:</dt>
+<dd><ul class="first last simple">
+<li>&#8216;MIS&#8217; - Maximal Independent Set</li>
+<li>&#8216;JP&#8217;  - Jones-Plassmann (parallel)</li>
+<li>&#8216;LDF&#8217; - Largest-Degree-First (parallel)</li>
+</ul>
+</dd>
+</dl>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>splitting</strong> : array</p>
+<blockquote class="last">
+<p>Array of length of S of ones (coarse) and zeros (fine)</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a title="pyamg.classical.split.MIS" class="reference" href="#pyamg.classical.split.MIS"><tt class="xref docutils literal"><span class="pre">MIS</span></tt></a></p>
+</div>
+<p class="rubric">References</p>
+<table class="docutils footnote" frame="void" id="id10" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a name="id10">[14]</a></td><td>David M. Alber and Luke N. Olson
+&#8220;Parallel coarse-grid selection&#8221;
+Numerical Linear Algebra with Applications 2007; 14:611-643.</td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery</span> <span class="k">import</span> <span class="n">poisson</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.classical</span> <span class="k">import</span> <span class="n">PMISc</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">S</span> <span class="o">=</span> <span class="n">poisson</span><span class="p">((</span><span class="mf">7</span><span class="p">,),</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;csr&#39;</span><span class="p">)</span> <span class="c"># 1D mesh with 7 vertices</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">splitting</span> <span class="o">=</span> <span class="n">PMISc</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyamg.classical.split.MIS">
+<!--[pyamg.classical.split.MIS]--><tt class="descclassname">pyamg.classical.split.</tt><tt class="descname">MIS</tt><big>(</big><em>G</em>, <em>weights</em>, <em>maxiter=None</em><big>)</big><a class="headerlink" href="#pyamg.classical.split.MIS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute a maximal independent set of a graph in parallel</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>G</strong> : csr_matrix</p>
+<blockquote>
+<p>Matrix graph, G[i,j] != 0 indicates an edge</p>
+</blockquote>
+<p><strong>weights</strong> : ndarray</p>
+<blockquote>
+<p>Array of weights for each vertex in the graph G</p>
+</blockquote>
+<p><strong>maxiter</strong> : int</p>
+<blockquote>
+<p>Maximum number of iterations (default: None)</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>mis</strong> : array</p>
+<blockquote class="last">
+<p>Array of length of G of zeros/ones indicating the independent set</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><tt class="xref docutils literal"><span class="pre">fn</span></tt></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery</span> <span class="k">import</span> <span class="n">poisson</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.classical</span> <span class="k">import</span> <span class="n">MIS</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">import</span> <span class="nn">numpy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">poisson</span><span class="p">((</span><span class="mf">7</span><span class="p">,),</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;csr&#39;</span><span class="p">)</span> <span class="c"># 1D mesh with 7 vertices</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">w</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">G</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">],</span><span class="mf">1</span><span class="p">))</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mis</span> <span class="o">=</span> <span class="n">MIS</span><span class="p">(</span><span class="n">G</span><span class="p">,</span><span class="n">w</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="module-pyamg.classical.interpolate">
+<h2>The <tt class="xref docutils literal"><span class="pre">interpolate</span></tt> Module<a class="headerlink" href="#module-pyamg.classical.interpolate" title="Permalink to this headline">¶</a></h2>
+<p>Classical AMG Interpolation methods</p>
+<dl class="function">
+<dt id="pyamg.classical.interpolate.direct_interpolation">
+<!--[pyamg.classical.interpolate.direct_interpolation]--><tt class="descclassname">pyamg.classical.interpolate.</tt><tt class="descname">direct_interpolation</tt><big>(</big><em>A</em>, <em>C</em>, <em>splitting</em><big>)</big><a class="headerlink" href="#pyamg.classical.interpolate.direct_interpolation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create prolongator using direct interpolation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>A</strong> : {csr_matrix}</p>
+<blockquote>
+<p>NxN matrix in CSR format</p>
+</blockquote>
+<p><strong>C</strong> : {csr_matrix}</p>
+<blockquote>
+<p>Strength-of-Connection matrix</p>
+</blockquote>
+<p><strong>splitting</strong> : array</p>
+<blockquote>
+<p>C/F splitting stored in an array of length N</p>
+</blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>P</strong> : {csr_matrix}</p>
+<blockquote class="last">
+<p>Prolongator using direct interpolation</p>
+</blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.gallery</span> <span class="k">import</span> <span class="n">poisson</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">from</span> <span class="nn">pyamg.classical</span> <span class="k">import</span> <span class="n">direct_interpolation</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">import</span> <span class="nn">numpy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">poisson</span><span class="p">((</span><span class="mf">5</span><span class="p">,),</span><span class="n">format</span><span class="o">=</span><span class="s">&#39;csr&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">splitting</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1</span><span class="p">,</span><span class="mf">0</span><span class="p">,</span><span class="mf">1</span><span class="p">,</span><span class="mf">0</span><span class="p">,</span><span class="mf">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s">&#39;intc&#39;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">P</span> <span class="o">=</span> <span class="n">direct_interpolation</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">splitting</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">P</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
+<span class="go">[[ 1.   0.   0. ]</span>
+<span class="go"> [ 0.5  0.5  0. ]</span>
+<span class="go"> [ 0.   1.   0. ]</span>
+<span class="go"> [ 0.   0.5  0.5]</span>
+<span class="go"> [ 0.   0.   1. ]]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo_dropshadow_small.png" alt="Logo"/>
+            </a></p>
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference" href="">Classical Documentation</a><ul>
+<li><a class="reference" href="#module-pyamg.classical.cr">The <tt class="docutils literal"><span class="pre">cr</span></tt> Module</a></li>
+<li><a class="reference" href="#module-pyamg.classical.setup">The <tt class="docutils literal"><span class="pre">setup</span></tt> Module</a></li>
+<li><a class="reference" href="#module-pyamg.classical.classical">The <tt class="docutils literal"><span class="pre">classical</span></tt> Module</a></li>
+<li><a class="reference" href="#module-pyamg.classical.split">The <tt class="docutils literal"><span class="pre">split</span></tt> Module</a><ul>
+<li><a class="reference" href="#overview">Overview</a></li>
+<li><a class="reference" href="#representation">Representation</a></li>
+<li><a class="reference" href="#c-f-splitting-methods">C/F Splitting Methods</a></li>
+<li><a class="reference" href="#summary">Summary</a></li>
+<li><a class="reference" href="#references">References</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#module-pyamg.classical.interpolate">The <tt class="docutils literal"><span class="pre">interpolate</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="pyamg.relaxation.html" title="previous chapter">Relaxation Documentation</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="pyamg.testing.html" title="next chapter">Testing Documentation</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/pyamg.classical.txt">Show Source</a></li>
+            </ul>
+          <h3>Quick search</h3>
+            <form class="search" action="search.html" method="get">
+              <input type="text" name="q" size="18" /> <input type="submit" value="Go" />
+              <input type="hidden" name="check_keywords" value="yes" />
+              <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="pyamg.testing.html" title="Testing Documentation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pyamg.relaxation.html" title="Relaxation Documentation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">PyAMG v1.0 documentation</a> &raquo;</li>
+          <li><a href="modules.html" accesskey="U">Project Documentation</a> &raquo;</li>
+          <li><a href="pyamg.html" accesskey="U">Pyamg Documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009, Nathan Bell, Luke Olson, Jacob Schroder.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.5.1.
+    </div>
+  </body>
+</html>
